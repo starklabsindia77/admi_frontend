@@ -67,7 +67,7 @@ const ProductManagerPage = () => {
 	 * For Tour
 	 */
 	useTourStep(6);
-	const serverUrl = "https://salty-scrubland-03771.herokuapp.com//api";
+	const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
 	// const serverUrl = "http://localhost:3001/api";
 	const [newGuid, setNewGuid] = useState();
 	const [productName, setProductName] = useState("");
