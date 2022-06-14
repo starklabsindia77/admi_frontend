@@ -41,7 +41,7 @@ const Login = ({ isSignUp }) => {
 	const [status, setStatus] = useState();
 	const [newPassword, setPassword] = useState();
 	const [newUser, setNewUser] = useState();
-	const serverUrl = "https://protected-castle-51275.herokuapp.com/api";
+	const serverUrl = "https://salty-scrubland-03771.herokuapp.com//api";
 	// const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
 	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
