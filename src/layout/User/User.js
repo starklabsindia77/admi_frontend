@@ -20,6 +20,8 @@ const User = () => {
 	const [collapseStatus, setCollapseStatus] = useState(false);
 
 	const { t } = useTranslation(['translation', 'menu']);
+	const username = localStorage.getItem('userName');
+	const role = localStorage.getItem('role');
 
 	return (
 		<>
@@ -27,7 +29,7 @@ const User = () => {
 				className={classNames('user', { open: collapseStatus })}
 				role='presentation'
 				onClick={() => setCollapseStatus(!collapseStatus)}>
-				<div className='user-avatar'>
+				{/* <div className='user-avatar'>
 					<img
 						srcSet={USERS.JOHN.srcSet}
 						src={USERS.JOHN.src}
@@ -35,13 +37,13 @@ const User = () => {
 						width={128}
 						height={128}
 					/>
-				</div>
+				</div> */}
 				<div className='user-info'>
 					<div className='user-name d-flex align-items-center'>
-						{`${USERS.JOHN.name} ${USERS.JOHN.surname}`}
+						{`${username}`}
 						<Icon icon='Verified' className='ms-1' color='info' />
 					</div>
-					<div className='user-sub-title'>{USERS.JOHN.position}</div>
+					<div className='user-sub-title'>{role}</div>
 				</div>
 			</div>
 			<DropdownMenu>

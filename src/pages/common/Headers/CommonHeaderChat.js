@@ -42,19 +42,20 @@ const CommonHeaderChat = () => {
 		setMsgCount(0);
 	}, [state]);
 
+	const username = localStorage.getItem('userName');
+	const role = localStorage.getItem('role');
+
 	return (
 		<>
 			<div
 				className='col d-flex align-items-center cursor-pointer'
-				onClick={() => setState(!state)}
+				// onClick={() => setState(!state)}
 				role='presentation'>
 				<div className='me-3'>
 					<div className='text-end'>
-						<div className='fw-bold fs-6 mb-0'>
-							{`${USERS.CHLOE.name} ${USERS.CHLOE.surname}`}
-						</div>
+						<div className='fw-bold fs-6 mb-0'>{`${username}`}</div>
 						<div className='text-muted'>
-							<small>{USERS.CHLOE.position}</small>
+							<small>{role}</small>
 						</div>
 					</div>
 				</div>

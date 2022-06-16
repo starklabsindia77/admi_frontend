@@ -63,6 +63,8 @@ const Login = ({ isSignUp }) => {
 					console.log('error msg', data.message);
 				} else {
 					localStorage.setItem('auth', data.token);
+					localStorage.setItem('userName', newUser.name);
+					localStorage.setItem('role', newUser.role);
 					navigate('dashboard');
 
 				}
@@ -88,6 +90,8 @@ const Login = ({ isSignUp }) => {
 					console.log('error msg', data.message);
 				} else {
 					localStorage.setItem('auth', data.token);
+					localStorage.setItem('userName', data.user.name);
+					localStorage.setItem('role', data.user.role);
 					navigate('dashboard');
 				}
 			});

@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-unused-vars */
 import React, { useContext, useLayoutEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -65,7 +67,7 @@ const CommonHeaderRight = ({ beforeChildren, afterChildren }) => {
 			<div className='row g-3'>
 				{beforeChildren}
 				{/* Tour Modal */}
-				{localStorage.getItem('tourModalStarted') === 'shown' && (
+				{/* {localStorage.getItem('tourModalStarted') === 'shown' && (
 					<div className='col-auto position-relative'>
 						<Popovers trigger='hover' desc='Start the "Facit" tour'>
 							<Button
@@ -85,7 +87,7 @@ const CommonHeaderRight = ({ beforeChildren, afterChildren }) => {
 							)}
 						/>
 					</div>
-				)}
+				)} */}
 
 				{/* Dark Mode */}
 				<div className='col-auto'>
@@ -119,7 +121,7 @@ const CommonHeaderRight = ({ beforeChildren, afterChildren }) => {
 				</div>
 
 				{/* Lang Selector */}
-				<div className='col-auto'>
+				{/* <div className='col-auto'>
 					<Dropdown>
 						<DropdownToggle hasIcon={false}>
 							{typeof getLangWithKey(i18n.language)?.icon === 'undefined' ? (
@@ -153,13 +155,12 @@ const CommonHeaderRight = ({ beforeChildren, afterChildren }) => {
 							))}
 						</DropdownMenu>
 					</Dropdown>
-				</div>
+				</div> */}
 
 				{/* Quick Panel */}
-				<div className='col-auto'>
+				{/* <div className='col-auto'>
 					<Dropdown>
 						<DropdownToggle hasIcon={false}>
-							{/* eslint-disable-next-line react/jsx-props-no-spreading */}
 							<Button {...styledBtn} icon='Tune' aria-label='Quick menu' />
 						</DropdownToggle>
 						<DropdownMenu isAlignmentEnd size='lg' className='py-0 overflow-hidden'>
@@ -225,7 +226,7 @@ const CommonHeaderRight = ({ beforeChildren, afterChildren }) => {
 							</div>
 						</DropdownMenu>
 					</Dropdown>
-				</div>
+				</div> */}
 
 				{/*	Notifications */}
 				<div className='col-auto'>
