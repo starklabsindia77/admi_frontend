@@ -42,26 +42,27 @@ export const dashboard = {
 export const Pages = {
 	auth: {
 		id: 'auth',
-		text: 'Auth Pages',
+		text: 'Pages',
 		icon: 'Extension',
 	},
+
 	ProductManager: {
 		id: 'ProductManagerPage',
-		text: 'Product Manager',
+		text: 'Programs',
 		path: 'ProductManagerPage',
-		icon: 'Login',
+		icon: 'menu_book',
 	},
 	page404: {
 		id: 'Page404',
-		text: '404 Page',
+		text: 'Applications',
 		path: 'auth-pages/404',
-		icon: 'ReportGmailerrorred',
+		icon: 'InsertDriveFile',
 	},
 	blank: {
 		id: 'blank',
-		text: 'Blank',
+		text: 'Shortlist',
 		path: 'page-layouts/blank',
-		icon: 'check_box_outline_blank ',
+		icon: 'favorite_border',
 	},
 };
 
