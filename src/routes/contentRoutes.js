@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages } from '../menu';
+import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages, AdminPages } from '../menu';
 import Login from '../pages/presentation/auth/Login';
 
 const LANDING = {
@@ -14,6 +14,8 @@ const SINGLE = {
 const LIST = {
 	BOXED: lazy(() => import('../pages/presentation/demo-pages/ListBoxedPage')),
 	PRODUCT: lazy(() => import('../pages/presentation/mypages/ProductManagerPage')),
+	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
+	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
 };
 const GRID = {
@@ -231,6 +233,16 @@ const presentation = [
 	{
 		path: Pages.ProductManager.path,
 		element: <LIST.PRODUCT />,
+		exact: true,
+	},
+	{
+		path: AdminPages.Student.path,
+		element: <LIST.STUDENTS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.Agent.path,
+		element: <LIST.AGENTS />,
 		exact: true,
 	},
 

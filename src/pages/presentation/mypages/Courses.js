@@ -62,7 +62,7 @@ import OffCanvas, {
 } from '../../../components/bootstrap/OffCanvas';
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 
-const ProductManagerPage = () => {
+const Courses = () => {
 	/**
 	 * For Tour
 	 */
@@ -794,4 +794,4 @@ const ProductManagerPage = () => {
 	);
 };
 
-export default ProductManagerPage;
+export default Courses;

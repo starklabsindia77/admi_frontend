@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-nested-ternary */
 import React, { useContext, useRef, useState } from 'react';
 import classNames from 'classnames';
 import { motion } from 'framer-motion';
@@ -5,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Brand from '../Brand/Brand';
 import Navigation, { NavigationLine } from '../Navigation/Navigation';
 import User from '../User/User';
-import { dashboard, Pages } from '../../menu';
+import { dashboard, Pages, AdminPages, AgentPages } from '../../menu';
 import ThemeContext from '../../contexts/themeContext';
 import Card, { CardBody } from '../../components/bootstrap/Card';
 
@@ -31,6 +33,7 @@ const Aside = () => {
 	const { t } = useTranslation(['translation', 'menu']);
 
 	const { darkModeStatus } = useDarkMode();
+	const role = localStorage.getItem('role');
 
 	return (
 		<>
@@ -53,7 +56,14 @@ const Aside = () => {
 					{!doc && (
 						<>
 							<NavigationLine />
-							<Navigation menu={Pages} id='aside-demo-pages' />
+							{role === 'admin' ? (
+								<Navigation menu={AdminPages} id='aside-demo-pages' />
+							) : role === 'agent' ? (
+								<Navigation menu={AgentPages} id='aside-demo-pages' />
+							) : (
+								<Navigation menu={Pages} id='aside-demo-pages' />
+							)}
+
 							<NavigationLine />
 							{/* <Navigation menu={layoutMenu} id='aside-menu' /> */}
 						</>

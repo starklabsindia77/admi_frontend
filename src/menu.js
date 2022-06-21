@@ -66,6 +66,140 @@ export const Pages = {
 	},
 };
 
+export const AdminPages = {
+	auth: {
+		id: 'auth',
+		text: 'Pages',
+		icon: 'Extension',
+	},
+
+	ProductManager: {
+		id: 'ProductManagerPage',
+		text: 'Courses',
+		path: 'ProductManagerPage',
+		icon: 'menu_book',
+		subMenu: {
+			listBoxed: {
+				id: 'listBoxed',
+				text: 'university',
+				path: 'list-pages/boxed-list',
+				icon: 'ViewArray',
+			},
+			listFluid: {
+				id: 'listFluid',
+				text: 'Programs',
+				path: 'list-pages/fluid-list',
+				icon: 'ViewDay',
+			},
+		},
+	},
+	Student: {
+		id: 'students',
+		text: 'Students',
+		path: 'students',
+		icon: 'person',
+	},
+	Agent: {
+		id: 'agents',
+		text: 'Agents',
+		path: 'agents',
+		icon: 'PersonLinesFill',
+	},
+	summary: {
+		id: 'summary',
+		text: 'Application',
+		path: 'Application',
+		icon: 'FileCheck',
+	},
+	crmDashboard: {
+		id: 'crmDashboard',
+		text: 'user',
+		path: 'user',
+		icon: 'SupervisedUserCircle',
+		subMenu: {
+			listBoxed: {
+				id: 'listBoxed',
+				text: 'Sub User',
+				path: 'list-pages/boxed-list',
+				icon: 'ViewArray',
+			},
+			listFluid: {
+				id: 'listFluid',
+				text: 'Department',
+				path: 'list-pages/fluid-list',
+				icon: 'ViewDay',
+			},
+		},
+	},
+};
+
+export const AgentPages = {
+	auth: {
+		id: 'auth',
+		text: 'Pages',
+		icon: 'Extension',
+	},
+
+	ProductManager: {
+		id: 'ProductManagerPage',
+		text: 'Courses',
+		path: 'ProductManagerPage',
+		icon: 'menu_book',
+		subMenu: {
+			listBoxed: {
+				id: 'listBoxed',
+				text: 'university',
+				path: 'list-pages/boxed-list',
+				icon: 'ViewArray',
+			},
+			listFluid: {
+				id: 'listFluid',
+				text: 'Programs',
+				path: 'list-pages/fluid-list',
+				icon: 'ViewDay',
+			},
+		},
+	},
+	Student: {
+		id: 'students',
+		text: 'Students',
+		path: 'students',
+		icon: 'person',
+	},
+	Agent: {
+		id: 'agents',
+		text: 'Agents',
+		path: 'agents',
+		icon: 'PersonLinesFill',
+	},
+	summary: {
+		id: 'summary',
+		text: 'Application',
+		path: 'Application',
+		icon: 'FileCheck',
+	},
+	crmDashboard: {
+		id: 'crmDashboard',
+		text: 'user',
+		path: 'user',
+		icon: 'SupervisedUserCircle',
+		subMenu: {
+			listBoxed: {
+				id: 'listBoxed',
+				text: 'Sub User',
+				path: 'list-pages/boxed-list',
+				icon: 'ViewArray',
+			},
+			listFluid: {
+				id: 'listFluid',
+				text: 'Department',
+				path: 'list-pages/fluid-list',
+				icon: 'ViewDay',
+			},
+		},
+	},
+};
+
 export const dashboardMenu = {
 	dashboard: {
 		id: 'dashboard',

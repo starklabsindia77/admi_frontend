@@ -1,5 +1,7 @@
+
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-console */
+/* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -38,20 +40,25 @@ const Login = ({ isSignUp }) => {
 	const [usernameInput, setUsernameInput] = useState(false);
 	const [isNewUser, setIsNewUser] = useState(isSignUp);
 	const [username, setUsername] = useState();
-	const [status, setStatus] = useState();
+	const [name, setName] = useState();
+	const [contact, setContact] = useState();
+	const [dob, setDob] = useState();
+	const [role, setRole] = useState('student');
 	const [newPassword, setPassword] = useState();
-	const [newUser, setNewUser] = useState();
-	const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	// const serverUrl = "http://localhost:3001/api";
+	const [newUser, setNewUser] = useState({});
+	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+	const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
 	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
 	const signup = () => {
+		const userData = { 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role };
+		console.log("data", userData);
 		const options = {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			body: JSON.stringify(newUser),
+			body: JSON.stringify(userData),
 		};
 
 		fetch(`${serverUrl}/auth/signup`, options)
@@ -59,12 +66,13 @@ const Login = ({ isSignUp }) => {
 			.then((data) => {
 				console.log('data', data);
 				if (data.message) {
-					setStatus();
+
 					console.log('error msg', data.message);
 				} else {
 					localStorage.setItem('auth', data.token);
-					localStorage.setItem('userName', newUser.name);
-					localStorage.setItem('role', newUser.role);
+					localStorage.setItem('userName', name);
+					localStorage.setItem('role', role);
+					localStorage.setItem('email', username);
 					navigate('dashboard');
 
 				}
@@ -86,17 +94,18 @@ const Login = ({ isSignUp }) => {
 			.then((data) => {
 				console.log('data', data);
 				if (data.message) {
-					setStatus();
+
 					console.log('error msg', data.message);
 				} else {
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', data.user.name);
 					localStorage.setItem('role', data.user.role);
+					localStorage.setItem('email', username);
 					navigate('dashboard');
 				}
 			});
 	};
-	console.log("status", status);
+	// console.log("status", status);
 
 	return (
 		<PageWrapper
@@ -165,7 +174,8 @@ const Login = ({ isSignUp }) => {
 													id='signup-email'
 													isFloating
 													label='Your Email'>
-													<Input type='email' autoComplete='email' onChange={(e) => setNewUser({ "email": e.target.value })} />
+													<Input type='email' autoComplete='email'
+														onChange={(e) => setUsername(e.target.value)} />
 												</FormGroup>
 											</div>
 											<div className='col-12'>
@@ -173,7 +183,8 @@ const Login = ({ isSignUp }) => {
 													id='signup-name'
 													isFloating
 													label='Your Name'>
-													<Input autoComplete='given-name' onChange={(e) => setNewUser({ "name": e.target.value })} />
+													<Input autoComplete='given-name'
+														onChange={(e) => setName(e.target.value)} />
 												</FormGroup>
 											</div>
 											<div className='col-12'>
@@ -181,7 +192,8 @@ const Login = ({ isSignUp }) => {
 													id='signup-surname'
 													isFloating
 													label='Your DOB'>
-													<Input autoComplete='family-name' onChange={(e) => setNewUser({ "dob": e.target.value })} />
+													<Input autoComplete='family-name' type='date'
+														onChange={(e) => setDob(e.target.value)} />
 												</FormGroup>
 											</div>
 											<div className='col-12'>
@@ -189,7 +201,8 @@ const Login = ({ isSignUp }) => {
 													id='signup-surname'
 													isFloating
 													label='Your Contact'>
-													<Input autoComplete='family-name' onChange={(e) => setNewUser({ "contact": e.target.value })} />
+													<Input autoComplete='family-name'
+														onChange={(e) => setContact(e.target.value)} />
 												</FormGroup>
 											</div>
 											<div className='col-12'>
@@ -200,7 +213,7 @@ const Login = ({ isSignUp }) => {
 													<Input
 														type='password'
 														autoComplete='password'
-														onChange={(e) => setNewUser({ "password": e.target.value })}
+														onChange={(e) => setPassword(e.target.value)}
 													/>
 												</FormGroup>
 											</div>
