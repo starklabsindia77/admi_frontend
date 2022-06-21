@@ -67,8 +67,8 @@ const Agents = () => {
 	 * For Tour
 	 */
 	useTourStep(6);
-	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	const serverUrl = "http://localhost:3001/api";
+	const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+	// const serverUrl = "http://localhost:3001/api";
 
 	const [studentList, setStudentList] = useState([]);
 

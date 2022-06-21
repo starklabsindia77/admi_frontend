@@ -46,8 +46,8 @@ const Login = ({ isSignUp }) => {
 	const [role, setRole] = useState('student');
 	const [newPassword, setPassword] = useState();
 	const [newUser, setNewUser] = useState({});
-	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	const serverUrl = "http://localhost:3001/api";
+	const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+	// const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
 	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
 	const signup = () => {
