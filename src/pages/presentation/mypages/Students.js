@@ -92,14 +92,14 @@ const Students = () => {
             },
         };
 
-        fetch(`${serverUrl}/auth/user`, options)
+        fetch(`${serverUrl}/auth/userall`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data', d);
                 if (d.error) {
                     console.log('error msg', d.error);
-                } else if (d.result.length > 0) {
-                    const ss = d.result.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
+                } else if (d.user.length > 0) {
+                    const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
                     if (UserRole === 'admin') {
                         setStudentList(ss)
                     } else {
@@ -192,14 +192,15 @@ const Students = () => {
                 console.log('data single', d);
                 if (d.error) {
                     console.log('error msg', d.error);
-                } else if (d.result.length > 0) {
+                } else if (d.success) {
                     // setStudents(d.result[0]);
-                    setGuid(d.result[0].guid)
-                    setName(d.result[0].name);
-                    setUsername(d.result[0].email);
-                    setDob(d.result[0].dob);
-                    setContact(d.result[0].contact);
-                    setAddProductEvent(true);
+                    console.log('data single2 ', d);
+                    setGuid(d.result.guid)
+                    setName(d.result.name);
+                    setUsername(d.result.email);
+                    setDob(d.result.dob);
+                    setContact(d.result.contact);
+                    setAddProductEvent(!addProductEvent);
                 }
             });
     }
@@ -367,7 +368,7 @@ const Students = () => {
                                         <td>
                                             <Button
                                                 isLight
-                                                color={item.statusColor}
+                                                // color={item.statusColor}
                                                 icon='Info'
 
                                             />
@@ -471,165 +472,7 @@ const Students = () => {
                                     />
                                 </FormGroup>
                             </div>
-                            {/* <div className='col-6'>
-                                <FormGroup id='time' label='UPC' isFloating>
-                                    <Input
-                                        placeholder='UPC'
-                                        onChange={(e) => { setUpc(e.target.value) }}
-                                        value={upc}
 
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='date' label='Manufacturer' isFloating>
-                                    <Input
-                                        placeholder='Manufacturer'
-                                        onChange={(e) => { setManufacturer(e.target.value) }}
-                                        value={manufacturer}
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='time' label='Cost Price' isFloating>
-                                    <Input
-                                        placeholder='Cost Price'
-                                        onChange={(e) => { setCostPrice(e.target.value) }}
-                                        value={costPrice}
-
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='date' label='Dimensions' isFloating>
-                                    <Input
-                                        placeholder='Dimensions'
-                                        onChange={(e) => { setDimensions(e.target.value) }}
-                                        value={dimensions}
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='time' label='Attributes' isFloating>
-                                    <Input
-                                        placeholder='Attributes'
-                                        onChange={(e) => { setAttributes(e.target.value) }}
-                                        value={attributes}
-
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='date' label='Listing Price' isFloating>
-                                    <Input
-                                        placeholder='Listing Price'
-                                        onChange={(e) => { setListingPrice(e.target.value) }}
-                                        value={listingPrice}
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='time' label='Map' isFloating>
-                                    <Input
-                                        placeholder='Map'
-                                        onChange={(e) => { setMap(e.target.value) }}
-                                        value={map}
-
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='date' label='Msrp' isFloating>
-                                    <Input
-                                        placeholder='Msrp'
-                                        onChange={(e) => { setMsrp(e.target.value) }}
-                                        value={msrp}
-
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                <FormGroup id='time' label='Shipping Cost' isFloating>
-                                    <Input
-                                        placeholder='Shipping Cost'
-                                        onChange={(e) => { setShippingCost(e.target.value) }}
-                                        value={shippingCost}
-
-                                    />
-                                </FormGroup>
-                            </div>
-
-                            <div className='col-6'>
-                                <FormGroup id='time' label='Product Quantity' isFloating>
-                                    <Input
-                                        placeholder='Product Quantity'
-                                        onChange={(e) => { setProductQuantity(e.target.value) }}
-                                        value={productQuantity}
-
-                                    />
-                                </FormGroup>
-                            </div>
-                            <div className='col-6'>
-                                
-                                <div className='col-auto'>
-                                    <Input
-                                        type='file'
-                                        autoComplete='photo'
-                                    />
-                                </div>
-                            </div>
-                            <div className='col-12'>
-                                <Card isCompact className='mb-0'>
-                                    <CardHeader>
-                                        <CardLabel>
-                                            <CardTitle>Product Description</CardTitle>
-                                        </CardLabel>
-                                    </CardHeader>
-                                    <CardBody>
-                                        <FormGroup id='note' label='Description' isFloating>
-                                            <Textarea
-                                                rows={8}
-                                                placeholder='Description'
-                                                onChange={(e) => { setProductDescription(e.target.value) }}
-                                                value={productDescription}
-                                            />
-                                        </FormGroup>
-                                    </CardBody>
-                                </Card>
-                            </div> */}
-                            {/* <div className='col-12'>
-								<Card isCompact className='mb-0'>
-									<CardHeader>
-										<CardLabel>
-											<CardTitle>Notification</CardTitle>
-										</CardLabel>
-									</CardHeader>
-									<CardBody>
-										<FormGroup>
-											<Checks
-												id='notify'
-												type='switch'
-												label={
-													<>
-														Notify the Customer
-														<Popovers
-															trigger='hover'
-															desc='Check this checkbox if you want your customer to receive an email about the scheduled appointment'>
-															<Icon
-																icon='Help'
-																size='lg'
-																className='ms-1 cursor-help'
-															/>
-														</Popovers>
-													</>
-												}
-												onChange={formik.handleChange}
-												checked={formik.values.notify}
-											/>
-										</FormGroup>
-									</CardBody>
-								</Card>
-							</div> */}
                         </div>
                     </ModalBody>
                     <ModalFooter className='bg-transparent'>

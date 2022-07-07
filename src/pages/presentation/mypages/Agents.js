@@ -89,14 +89,15 @@ const Agents = () => {
 			},
 		};
 
-		fetch(`${serverUrl}/auth/user`, options)
+		fetch(`${serverUrl}/auth/userall`, options)
 			.then((response) => response.json())
 			.then((d) => {
 				console.log('data', d);
 				if (d.error) {
 					console.log('error msg', d.error);
-				} else if (d.result.length > 0) {
-					const ss = d.result.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
+				} else if (d.user.length > 0) {
+					console.log('result', d.user)
+					const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("agent"))
 					setStudentList(ss)
 				}
 			});
@@ -184,7 +185,7 @@ const Agents = () => {
 					setUsername(d.result[0].email);
 					setDob(d.result[0].dob);
 					setContact(d.result[0].contact);
-					setAddProductEvent(true);
+					setAddProductEvent(!addProductEvent);
 				}
 			});
 	}
@@ -398,9 +399,9 @@ const Agents = () => {
 					size='lg'>
 					<ModalHeader setIsOpen={setAddProductEvent}>
 						{guid && guid.length > 0 ? (
-							<OffCanvasTitle id='upcomingEdit'>Edit Student</OffCanvasTitle>
+							<OffCanvasTitle id='upcomingEdit'>Edit Agent</OffCanvasTitle>
 						) : (
-							<OffCanvasTitle id='upcomingEdit'>Add Student</OffCanvasTitle>
+							<OffCanvasTitle id='upcomingEdit'>Add Agent</OffCanvasTitle>
 						)}
 						{/* <OffCanvasTitle id='upcomingEdit'>Add Product</OffCanvasTitle> */}
 					</ModalHeader>

@@ -14,6 +14,8 @@ const SINGLE = {
 const LIST = {
 	BOXED: lazy(() => import('../pages/presentation/demo-pages/ListBoxedPage')),
 	PRODUCT: lazy(() => import('../pages/presentation/mypages/ProductManagerPage')),
+	UNIVERSITY: lazy(() => import('../pages/presentation/mypages/University')),
+	COURSES: lazy(() => import('../pages/presentation/mypages/Courses')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
@@ -243,6 +245,16 @@ const presentation = [
 	{
 		path: AdminPages.Agent.path,
 		element: <LIST.AGENTS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.CoursesManager.subMenu.university.path,
+		element: <LIST.UNIVERSITY />,
+		exact: true,
+	},
+	{
+		path: AdminPages.CoursesManager.subMenu.courses.path,
+		element: <LIST.COURSES />,
 		exact: true,
 	},
 

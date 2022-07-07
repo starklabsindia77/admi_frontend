@@ -73,22 +73,22 @@ export const AdminPages = {
 		icon: 'Extension',
 	},
 
-	ProductManager: {
-		id: 'ProductManagerPage',
-		text: 'Courses',
-		path: 'ProductManagerPage',
+	CoursesManager: {
+		id: 'CoursesManagerPage',
+		text: 'Programs',
 		icon: 'menu_book',
+		path: 'ProductManagerPage',
 		subMenu: {
-			listBoxed: {
+			university: {
 				id: 'listBoxed',
 				text: 'university',
-				path: 'list-pages/boxed-list',
+				path: 'university',
 				icon: 'ViewArray',
 			},
-			listFluid: {
+			courses: {
 				id: 'listFluid',
-				text: 'Programs',
-				path: 'list-pages/fluid-list',
+				text: 'courses',
+				path: 'courses',
 				icon: 'ViewDay',
 			},
 		},

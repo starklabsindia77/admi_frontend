@@ -5,33 +5,16 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable array-callback-return */
-/* eslint-disable no-nested-ternary */
-/* eslint-disable vars-on-top */
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import Papa from 'papaparse';
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
 import classNames from 'classnames';
 import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
 import Checkbox from '@material-ui/core/Checkbox';
+import draftToHtml from 'draftjs-to-html';
 import htmlToDraft from 'html-to-draftjs';
 import { Editor } from "react-draft-wysiwyg";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
 import SubHeader, {
     SubHeaderLeft,
     SubHeaderRight,
@@ -64,7 +47,6 @@ import CommonFilterTag from '../../common/CommonFilterTag';
 import CommonTableRow from '../../common/CommonTableRow';
 import Select from '../../../components/bootstrap/forms/Select';
 import Popovers from '../../../components/bootstrap/Popovers';
-// import Button from "@material-ui/core/Button";
 
 import data from '../../../common/data/dummyProductData';
 import { demoPages } from '../../../menu';
@@ -87,7 +69,7 @@ import Textarea from '../../../components/bootstrap/forms/Textarea';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '../../../assets/css/editor.css';
 
-const Courses = () => {
+const University = () => {
     /**
      * For Tour
      */
@@ -97,7 +79,7 @@ const Courses = () => {
 
 
 
-    const [CoursesList, setCoursesList] = useState([]);
+    const [universityList, setUniversityList] = useState([]);
     const [state, setState] = useState({ editorState: EditorState.createEmpty() });
     const [students, setStudents] = useState({});
     const [username, setUsername] = useState();
@@ -109,15 +91,12 @@ const Courses = () => {
     const [stateName, setStateName] = useState();
     const [description, setDescription] = useState();
     const [shortDescription, setShortDescription] = useState();
-    const [CoursesData, setCoursesData] = useState({});
-    const [uploadedData, setUploadedData] = useState([]);
-    const [uploadedData2, setUploadedData2] = useState([]);
-    const [openData, setOpenData] = useState(false);
+    const [universityData, setUniversityData] = useState({});
 
     const authToken = localStorage.getItem("auth");
     const UserRole = localStorage.getItem("role");
     const AgentId = localStorage.getItem("email")
-    const getCourses = () => {
+    const getUniversity = () => {
         const options = {
             method: 'GET',
             headers: {
@@ -126,7 +105,7 @@ const Courses = () => {
             },
         };
 
-        fetch(`${serverUrl}/Courses`, options)
+        fetch(`${serverUrl}/university`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data', d);
@@ -134,16 +113,15 @@ const Courses = () => {
                     console.log('error msg', d.error);
                 } else if (d.result.length > 0) {
                     const ss = d.result;
-                    console.log('result', ss);
-                    setCoursesList(ss)
+                    setUniversityList(ss)
 
                 }
             });
     }
 
-    const saveCourses = () => {
+    const saveUniversity = () => {
         setDescription(draftToHtml(convertToRaw(state.editorState.getCurrentContent())));
-        // setCoursesData({ 'name': name, 'state': stateName, 'city': city, 'country': country, 'short_description': shortDescription, 'description': description });
+        // setUniversityData({ 'name': name, 'state': stateName, 'city': city, 'country': country, 'short_description': shortDescription, 'description': description });
 
         const body = { 'name': name, 'state': stateName, 'city': city, 'country': country, 'short_description': shortDescription, 'description': description }
 
@@ -156,7 +134,7 @@ const Courses = () => {
             body: JSON.stringify(body)
         };
 
-        fetch(`${serverUrl}/Courses/add`, options)
+        fetch(`${serverUrl}/university/add`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data', d);
@@ -165,25 +143,25 @@ const Courses = () => {
                     // alert('error msg', d.error);
                 }
                 // alert('done', d);
-                getCourses();
+                getUniversity();
                 setAddProductEvent(false)
             });
 
     }
 
-    const updateCourses = () => {
-        setCoursesData({ 'name': "varun" });
-        console.log("data", CoursesData);
+    const updateUniversity = () => {
+        setUniversityData({ 'name': "varun" });
+        console.log("data", universityData);
         const options = {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
                 'authorization': authToken
             },
-            body: JSON.stringify(CoursesData)
+            body: JSON.stringify(universityData)
         };
 
-        fetch(`${serverUrl}/Courses/${guid}`, options)
+        fetch(`${serverUrl}/university/${guid}`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data', d);
@@ -203,7 +181,7 @@ const Courses = () => {
 
     };
     useEffect(() => {
-        getCourses();
+        getUniversity();
     }, []);
     const { themeStatus, darkModeStatus } = useDarkMode();
     const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -212,7 +190,7 @@ const Courses = () => {
         setUpcomingEventsInfoOffcanvas(!upcomingEventsInfoOffcanvas);
     };
 
-    const getSingleCourses = (guidinfo) => {
+    const getSingleUniversity = (guidinfo) => {
         const options = {
             method: 'GET',
             headers: {
@@ -221,7 +199,7 @@ const Courses = () => {
             },
         };
 
-        fetch(`${serverUrl}/Courses/${guidinfo}`, options)
+        fetch(`${serverUrl}/university/${guidinfo}`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data single', d);
@@ -238,7 +216,7 @@ const Courses = () => {
 
     const editProduct = (guidinfo) => {
         console.log('guid', guidinfo)
-        getSingleCourses(guidinfo);
+        getSingleUniversity(guidinfo);
     }
 
     const [upcomingEventsEditOffcanvas, setUpcomingEventsEditOffcanvas] = useState(false);
@@ -291,131 +269,6 @@ const Courses = () => {
     const { items, requestSort, getClassNamesFor } = useSortableData(filteredData);
     const onCurrentPageItems = dataPagination(items, currentPage, perPage);
     const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
-    const [countUpdated, setCountUpdated] = useState(0);
-    const [countValid, setCountValid] = useState(false);
-    const [refresh, setRefresh] = useState(false)
-    const [totalCount1, setTotalCount] = useState(0);
-    // import csv code 
-
-    const handleClose = () => {
-
-        setOpenData(false);
-
-    };
-
-    const importCSV = (event) => {
-        const input = document.createElement('input');
-        input.type = 'file';
-        input.onchange = _ => {
-            // you can use this method to get file and perform respective operations
-            const files = Array.from(input.files);
-            console.log("files", files[0]);
-            // console.log("event.target.files[0]", event.target.files[0])
-            Papa.parse(files[0], {
-                complete: updateData,
-                header: true
-            });
-        };
-        input.click();
-    };
-
-    const reloadFun = () => {
-        window.location.reload();
-    };
-
-    const updateData = (result) => {
-
-        const { data } = result;
-        const finalData = [];
-        console.log("result data ::", data);
-
-        data.map((dat) => {
-            finalData.push({
-                "Course name": dat.Course,
-                "Application Fees": dat["Application Fees"],
-                "Study Level": dat["Study Level"],
-                "University": dat["Name of University/college"],
-            })
-        })
-
-        setUploadedData(finalData);
-        setUploadedData2(data);
-        setOpenData(true);
-
-    }
-
-    const updateUploadedData = async (appArr) => {
-        if (window.confirm("Only Validated Document will be processed...")) {
-            if (uploadedData2.length > 0) {
-                setTotalCount(uploadedData2.length);
-                setCountUpdated(1)
-                setRefresh(!refresh)
-            }
-            // let count = 0;
-            // for (const i = 0; i < totalCount1; i++){
-            //     const options = {
-            //         method: 'POST',
-            //         headers: {
-            //             'Content-Type': 'application/json;charset=utf-8',
-            //             'authorization': authToken
-            //         },
-            //         body: JSON.stringify(uploadedData2[i])
-            //     };
-
-            //     fetch(`${serverUrl}/Courses/csv`, options)
-            //         .then((response) => response.json())
-            //         .then((d) => {
-            //             console.log('data', d);
-            //             if (d.error) {
-            //                 console.log('error msg', d.error);
-            //             } else if (d.result == 'Done') {
-            //                 // const ss = d.result;
-            //                 // setCoursesList(ss)
-            //                 count = count + 1;
-            //                 i++
-            //                 if (count == totalCount1) {
-            //                     setCountValid(true)
-            //                 }
-            //                 setCountUpdated(count);
-            //                 setRefresh(!refresh)
-
-            //             }
-            //         });
-            // }
-
-            const options = {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json;charset=utf-8',
-                    'authorization': authToken
-                },
-                body: JSON.stringify(uploadedData2)
-            };
-
-            fetch(`${serverUrl}/Courses/csv`, options)
-                .then((response) => response.json())
-                .then((d) => {
-                    console.log('data', d);
-                    if (d.error) {
-                        console.log('error msg', d.error);
-                    } else if (d.result === 'Done') {
-                        // const ss = d.result;
-                        // setCoursesList(ss)
-                        // count = count + 1;
-                        // i++
-                        // if (count == totalCount1) {
-                        //     setCountValid(true)
-                        // }
-                        // setCountUpdated(count);
-                        setRefresh(!refresh)
-
-                    }
-                });
-
-        } else {
-            console.log("cancelled")
-        }
-    }
 
     return (
         <PageWrapper title={demoPages.listPages.subMenu.listBoxed.text}>
@@ -429,28 +282,19 @@ const Courses = () => {
                                     {selectTable.values.selectedList.length
                                         ? `${selectTable.values.selectedList.length} / `
                                         : null}
-                                    {CoursesList.length}
+                                    {universityList.length}
                                 </small>
                             </CardTitle>
                         </CardLabel>
                         <CardActions>
 
-                            {/* <Button
+                            <Button
                                 color={darkModeStatus ? 'light' : 'dark'}
                                 isLight
                                 icon='Add'
                                 onClick={handleAddProduct}
                             >
                                 Add New
-                            </Button> */}
-
-                            <Button
-                                color={darkModeStatus ? 'light' : 'dark'}
-                                isLight
-                                icon='Add'
-                                onClick={(event) => importCSV(event)}
-                            >
-                                Import CSV
                             </Button>
 
                         </CardActions>
@@ -460,19 +304,20 @@ const Courses = () => {
                             <thead>
                                 <tr>
                                     <th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th>
-                                    <th scope='col'>Courses Name</th>
-                                    <th scope='col'>Application Fees</th>
-                                    <th scope='col'>Study Level</th>
-                                    <th scope='col'>University</th>
-                                    {/* <th scope='col' >
+                                    <th scope='col'>University Name</th>
+                                    <th scope='col'>City</th>
+                                    <th scope='col'>State</th>
+                                    <th scope='col'>Country</th>
+                                    <th scope='col' >
                                         Actions
-                                    </th> */}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
 
-                                {CoursesList.length > 0 && CoursesList.map((item) => (
+                                {universityList.length > 0 && universityList.map((item) => (
                                     <tr key={item.guid}>
+
                                         <td>
                                             <Checkbox
                                                 id="myCheck"
@@ -480,10 +325,10 @@ const Courses = () => {
                                             />
                                         </td>
                                         <td>{item.name}</td>
-                                        <td>{item.applicationFees}</td>
-                                        <td>{item.studyLevel}</td>
-                                        <td>{item.university}</td>
-                                        {/* <td>
+                                        <td>{item.city}</td>
+                                        <td>{item.state}</td>
+                                        <td>{item.country}</td>
+                                        <td>
                                             <Button
                                                 isOutline={!darkModeStatus}
                                                 color='dark'
@@ -496,7 +341,7 @@ const Courses = () => {
                                             >
                                                 Edit
                                             </Button>
-                                        </td> */}
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
@@ -520,18 +365,18 @@ const Courses = () => {
                     size='lg'>
                     <ModalHeader setIsOpen={setAddProductEvent}>
                         {guid && guid.length > 0 ? (
-                            <OffCanvasTitle id='upcomingEdit'>Edit Courses</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Edit University</OffCanvasTitle>
                         ) : (
-                            <OffCanvasTitle id='upcomingEdit'>Add Courses</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Add University</OffCanvasTitle>
                         )}
                         {/* <OffCanvasTitle id='upcomingEdit'>Add Product</OffCanvasTitle> */}
                     </ModalHeader>
                     <ModalBody>
                         <div className='row g-4'>
                             <div className='col-12'>
-                                <FormGroup id='customerName' label='Courses Name' isFloating>
+                                <FormGroup id='customerName' label='University Name' isFloating>
                                     <Input
-                                        placeholder='Courses Name'
+                                        placeholder='University Name'
                                         onChange={(e) => setName(e.target.value)}
                                         value={name}
                                         type='text'
@@ -597,7 +442,7 @@ const Courses = () => {
                             <Button
                                 color='info'
                                 className='w-100'
-                            // onClick={updateCourses}
+                            // onClick={updateUniversity}
                             >
                                 Update
                             </Button>
@@ -605,7 +450,7 @@ const Courses = () => {
                             <Button
                                 color='info'
                                 className='w-100'
-                                onClick={saveCourses}
+                                onClick={saveUniversity}
                             >
                                 Save
                             </Button>
@@ -613,73 +458,9 @@ const Courses = () => {
 
                     </ModalFooter>
                 </Modal>
-
-                <Dialog
-                    maxWidth="lg"
-                    open={openData}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle id="alert-dialog-title">
-                        {countUpdated === 0 && !countValid ?
-                            <>
-                                Check the data uploaded...
-                            </> : countUpdated === totalCount1 && countValid ?
-                                <>
-                                    All records have been updated. Please click reload button to refresh the screen.
-                                </> :
-                                <>
-                                    Please wait while your record {countUpdated} of {totalCount1} is being is processed
-                                </>
-                        }
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id="alert-dialog-description">
-                            <TableContainer>
-                                <Table aria-label="customized table" size="large">
-                                    <TableHead>
-                                        <TableRow style={{ backgroundColor: '#ebedef' }}>
-                                            {uploadedData.length > 0 && Object.keys(uploadedData[0]).map((key) => (
-                                                <TableCell style={{ border: "1px solid black" }} align="center"><b>{key}</b></TableCell >
-                                            ))}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {uploadedData.length > 0 && uploadedData.map((data, idx) =>
-                                            <TableRow >
-                                                {Object.keys(data).map((key) => (
-                                                    <TableCell style={{ border: "1px solid black" }} align="center"><b style={{ color: (data && data[key] && data[key].toString().includes("Error")) ? "red" : "#000" }}>{data[key]}</b></TableCell >
-                                                ))}
-                                            </TableRow>
-                                        )}
-
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        {countUpdated === 0 && !countValid ?
-                            <>
-                                <Button onClick={() => updateUploadedData()} color="primary">
-                                    Update
-                                </Button>
-                                <Button onClick={handleClose} color="danger" autoFocus>
-                                    Close
-                                </Button>
-                            </>
-                            : countUpdated === totalCount1 && countValid ? <Button onClick={reloadFun} color="primary">
-                                Reload
-                            </Button> : <Button color="primary">
-                                please wait...
-                            </Button>
-                        }
-                    </DialogActions>
-                </Dialog>
             </Page>
         </PageWrapper>
     );
 };
 
-export default Courses;
+export default University;
