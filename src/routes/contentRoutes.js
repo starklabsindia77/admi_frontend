@@ -1,6 +1,7 @@
 import React, { lazy } from 'react';
 import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages, AdminPages } from '../menu';
 import Login from '../pages/presentation/auth/Login';
+import Signup from '../pages/presentation/auth/Signup';
 
 const LANDING = {
 	DASHBOARD: lazy(() => import('../pages/dashboard/DashboardPage')),
@@ -16,6 +17,8 @@ const LIST = {
 	PRODUCT: lazy(() => import('../pages/presentation/mypages/ProductManagerPage')),
 	UNIVERSITY: lazy(() => import('../pages/presentation/mypages/University')),
 	COURSES: lazy(() => import('../pages/presentation/mypages/Courses')),
+	PROGRAMS: lazy(() => import('../pages/presentation/mypages/Programs')),
+	SHORTLIST: lazy(() => import('../pages/presentation/mypages/ShortList')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
@@ -233,10 +236,16 @@ const presentation = [
 		exact: true,
 	},
 	{
-		path: Pages.ProductManager.path,
-		element: <LIST.PRODUCT />,
+		path: Pages.Programs.path,
+		element: <LIST.PROGRAMS />,
 		exact: true,
 	},
+	{
+		path: Pages.Shortlist.path,
+		element: <LIST.SHORTLIST />,
+		exact: true,
+	},
+
 	{
 		path: AdminPages.Student.path,
 		element: <LIST.STUDENTS />,
@@ -326,7 +335,7 @@ const presentation = [
 	},
 	{
 		path: demoPages.signUp.path,
-		element: <Login isSignUp />,
+		element: <Signup isSignUp />,
 		exact: true,
 	},
 

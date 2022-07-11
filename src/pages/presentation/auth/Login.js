@@ -7,6 +7,11 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
@@ -43,15 +48,16 @@ const Login = ({ isSignUp }) => {
 	const [name, setName] = useState();
 	const [contact, setContact] = useState();
 	const [dob, setDob] = useState();
-	const [role, setRole] = useState('student');
+	const [role, setRole] = useState('Student');
 	const [newPassword, setPassword] = useState();
+	const [openData, setOpenData] = useState(false);
 	const [newUser, setNewUser] = useState({});
-	const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	// const serverUrl = "http://localhost:3001/api";
+	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+	const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
 	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
 	const signup = () => {
-		const userData = { 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role };
+		const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
 		console.log("data", userData);
 		const options = {
 			method: 'POST',
@@ -65,16 +71,17 @@ const Login = ({ isSignUp }) => {
 			.then((response) => response.json())
 			.then((data) => {
 				console.log('data', data);
-				if (data.message) {
-
+				if (data.message !== 'Successfully created a new user') {
 					console.log('error msg', data.message);
 				} else {
+					setOpenData(true);
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', name);
 					localStorage.setItem('role', role);
 					localStorage.setItem('email', username);
-					navigate('dashboard');
-
+					setTimeout(() => {
+						navigate('dashboard');
+					}, 1000);
 				}
 			});
 	}
@@ -107,6 +114,12 @@ const Login = ({ isSignUp }) => {
 	};
 	// console.log("status", status);
 
+	const handleClose = () => {
+		setOpenData(false);
+	};
+	const handleOnClick = () => {
+		navigate('auth/sign-up');
+	};
 	return (
 		<PageWrapper
 			title={isNewUser ? 'Sign Up' : 'Login'}
@@ -187,7 +200,7 @@ const Login = ({ isSignUp }) => {
 														onChange={(e) => setName(e.target.value)} />
 												</FormGroup>
 											</div>
-											<div className='col-12'>
+											{/* <div className='col-12'>
 												<FormGroup
 													id='signup-surname'
 													isFloating
@@ -195,7 +208,7 @@ const Login = ({ isSignUp }) => {
 													<Input autoComplete='family-name' type='date'
 														onChange={(e) => setDob(e.target.value)} />
 												</FormGroup>
-											</div>
+											</div> */}
 											<div className='col-12'>
 												<FormGroup
 													id='signup-surname'
@@ -277,8 +290,9 @@ const Login = ({ isSignUp }) => {
 									)}
 
 									{/* BEGIN :: Social Login */}
-									{/* {!usernameInput && (
-										<>
+									{!usernameInput && (
+
+										<div>
 											<div className='col-12 mt-3 text-center text-muted'>
 												OR
 											</div>
@@ -290,12 +304,13 @@ const Login = ({ isSignUp }) => {
 														'border-light': !darkModeStatus,
 														'border-dark': darkModeStatus,
 													})}
-													icon='CustomApple'
-													onClick={handleOnClick}>
-													Sign in with Apple
+													// icon='CustomApple'
+													onClick={handleOnClick}
+												>
+													Signup as Agent
 												</Button>
 											</div>
-											<div className='col-12'>
+											{/* <div className='col-12'>
 												<Button
 													isOutline
 													color={darkModeStatus ? 'light' : 'dark'}
@@ -304,12 +319,14 @@ const Login = ({ isSignUp }) => {
 														'border-dark': darkModeStatus,
 													})}
 													icon='CustomGoogle'
-													onClick={handleOnClick}>
+												// onClick={handleOnClick}
+												>
 													Continue with Google
 												</Button>
-											</div>
-										</>
-									)} */}
+											</div> */}
+										</div>
+
+									)}
 									{/* END :: Social Login */}
 								</form>
 							</CardBody>
@@ -334,6 +351,27 @@ const Login = ({ isSignUp }) => {
 						</div>
 					</div>
 				</div>
+				<Dialog
+					maxWidth="lg"
+					open={openData}
+					onClose={handleClose}
+					aria-labelledby="alert-dialog-title"
+					aria-describedby="alert-dialog-description"
+				>
+					<DialogTitle id="alert-dialog-title">
+						<h3>.</h3>
+					</DialogTitle>
+					<DialogContent>
+						<DialogContentText id="alert-dialog-description">
+							<h1>You have created your account successfully</h1>
+						</DialogContentText>
+					</DialogContent>
+					<DialogActions>
+						<Button onClick={handleClose} color="primary">
+							Thank You
+						</Button>
+					</DialogActions>
+				</Dialog>
 			</Page>
 		</PageWrapper>
 	);

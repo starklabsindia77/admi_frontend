@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-unused-vars */
 import React, { useCallback, useEffect, useState } from 'react';
 import moment from 'moment';
 
@@ -76,7 +78,6 @@ const TableRow = ({ id, image, name, category, series, color, stock, price, stor
 			},
 			y: {
 				title: {
-					// eslint-disable-next-line no-unused-vars
 					formatter(seriesName) {
 						return '';
 					},
@@ -183,11 +184,11 @@ const AnswerCustomer = ({ id, imgWebp, img, name, job, value, color }) => {
 			},
 			colors: [
 				(color === 'primary' && process.env.REACT_APP_PRIMARY_COLOR) ||
-					(color === 'secondary' && process.env.REACT_APP_SECONDARY_COLOR) ||
-					(color === 'success' && process.env.REACT_APP_SUCCESS_COLOR) ||
-					(color === 'info' && process.env.REACT_APP_INFO_COLOR) ||
-					(color === 'warning' && process.env.REACT_APP_WARNING_COLOR) ||
-					(color === 'danger' && process.env.REACT_APP_DANGER_COLOR),
+				(color === 'secondary' && process.env.REACT_APP_SECONDARY_COLOR) ||
+				(color === 'success' && process.env.REACT_APP_SUCCESS_COLOR) ||
+				(color === 'info' && process.env.REACT_APP_INFO_COLOR) ||
+				(color === 'warning' && process.env.REACT_APP_WARNING_COLOR) ||
+				(color === 'danger' && process.env.REACT_APP_DANGER_COLOR),
 			],
 		},
 	});
@@ -261,11 +262,14 @@ const DashboardPage = () => {
 				localStorage.setItem('tourModalStarted', 'shown');
 			}, 3000);
 		}
-		return () => {};
+		return () => { };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, []);
 
 	const { themeStatus, darkModeStatus } = useDarkMode();
+
+	const username = localStorage.getItem('userName');
+	const role = localStorage.getItem('role');
 
 	const navigate = useNavigate();
 	const handleOnClickToEmployeeListPage = useCallback(
@@ -306,7 +310,6 @@ const DashboardPage = () => {
 				},
 				y: {
 					title: {
-						// eslint-disable-next-line no-unused-vars
 						formatter(seriesName) {
 							return '';
 						},
@@ -394,7 +397,7 @@ const DashboardPage = () => {
 				options: sales.options,
 			});
 		}
-		return () => {};
+		return () => { };
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [activeTab]);
 
@@ -770,7 +773,8 @@ const DashboardPage = () => {
 				<SubHeaderLeft>
 					<span className='h4 mb-0 fw-bold'>Overview</span>
 					<SubheaderSeparator />
-					<ButtonGroup>
+					<span className='h4 mb-0 fw-bold'>{role}</span>
+					{/* <ButtonGroup>
 						{Object.keys(TABS).map((key) => (
 							<Button
 								key={key}
@@ -779,13 +783,13 @@ const DashboardPage = () => {
 								{TABS[key]}
 							</Button>
 						))}
-					</ButtonGroup>
+					</ButtonGroup> */}
 				</SubHeaderLeft>
-				<SubHeaderRight>
+				{/* <SubHeaderRight>
 					<CommonAvatarTeam>
 						<strong>Marketing</strong> Team
 					</CommonAvatarTeam>
-				</SubHeaderRight>
+				</SubHeaderRight> */}
 			</SubHeader>
 			<Page container='fluid'>
 				<div className='row'>
@@ -798,7 +802,7 @@ const DashboardPage = () => {
 							className='shadow-3d-primary'
 							isDismissible>
 							<AlertHeading tag='h2' className='h4'>
-								Congratulations! 🎉
+								Welcome {username}! 🎉
 							</AlertHeading>
 							<span>You have reached your monthly sales targets.</span>
 						</Alert>
@@ -1407,8 +1411,8 @@ const DashboardPage = () => {
 													`${moment()
 														.startOf('week')
 														.format('MMM Do')} - ${moment()
-														.endOf('week')
-														.format('MMM Do')}`) ||
+															.endOf('week')
+															.format('MMM Do')}`) ||
 												(topSellerFilter === TOP_SELLER_FILTER.MONTH &&
 													moment().format('MMM YYYY'))}
 										</Button>

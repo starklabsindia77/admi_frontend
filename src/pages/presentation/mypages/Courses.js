@@ -92,8 +92,8 @@ const Courses = () => {
      * For Tour
      */
     useTourStep(6);
-    const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-    // const serverUrl = "http://localhost:3001/api";
+    // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+    const serverUrl = "http://localhost:3001/api";
 
 
 
@@ -298,9 +298,7 @@ const Courses = () => {
     // import csv code 
 
     const handleClose = () => {
-
         setOpenData(false);
-
     };
 
     const importCSV = (event) => {
@@ -408,6 +406,7 @@ const Courses = () => {
                         // }
                         // setCountUpdated(count);
                         setRefresh(!refresh)
+                        reloadFun();
 
                     }
                 });

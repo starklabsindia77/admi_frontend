@@ -10,6 +10,7 @@ import moment from 'moment';
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
 import classNames from 'classnames';
+import Checkbox from '@material-ui/core/Checkbox';
 import SubHeader, {
     SubHeaderLeft,
     SubHeaderRight,
@@ -67,8 +68,8 @@ const Students = () => {
      * For Tour
      */
     useTourStep(6);
-    const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-    // const serverUrl = "http://localhost:3001/api";
+    // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+    const serverUrl = "http://localhost:3001/api";
 
     const [studentList, setStudentList] = useState([]);
     const [students, setStudents] = useState({});
@@ -77,7 +78,7 @@ const Students = () => {
     const [name, setName] = useState();
     const [contact, setContact] = useState();
     const [dob, setDob] = useState();
-    const [role, setRole] = useState('student');
+    const [role, setRole] = useState('Student');
     const [userData, setUserData] = useState({});
     const [newPassword, setPassword] = useState();
     const authToken = localStorage.getItem("auth");
@@ -366,11 +367,9 @@ const Students = () => {
                                 {studentList.length > 0 && studentList.map((item) => (
                                     <tr key={item.guid}>
                                         <td>
-                                            <Button
-                                                isLight
-                                                // color={item.statusColor}
-                                                icon='Info'
-
+                                            <Checkbox
+                                                id="myCheck"
+                                                checked={item.checked}
                                             />
                                         </td>
                                         <td>{item.name}</td>

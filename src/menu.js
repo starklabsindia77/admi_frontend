@@ -46,10 +46,10 @@ export const Pages = {
 		icon: 'Extension',
 	},
 
-	ProductManager: {
+	Programs: {
 		id: 'ProductManagerPage',
 		text: 'Programs',
-		path: 'ProductManagerPage',
+		path: 'Programs',
 		icon: 'menu_book',
 	},
 	page404: {
@@ -58,10 +58,10 @@ export const Pages = {
 		path: 'auth-pages/404',
 		icon: 'InsertDriveFile',
 	},
-	blank: {
+	Shortlist: {
 		id: 'blank',
 		text: 'Shortlist',
-		path: 'page-layouts/blank',
+		path: 'Shortlist',
 		icon: 'favorite_border',
 	},
 };
@@ -355,7 +355,7 @@ export const demoPages = {
 	signUp: {
 		id: 'signUp',
 		text: 'Sign Up',
-		path: 'auth-pages/sign-up',
+		path: 'auth/sign-up',
 		icon: 'PersonAdd',
 	},
 
