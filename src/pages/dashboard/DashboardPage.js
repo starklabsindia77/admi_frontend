@@ -54,7 +54,7 @@ import useSortableData from '../../hooks/useSortableData';
 import useDarkMode from '../../hooks/useDarkMode';
 import Timeline, { TimelineItem } from '../../components/extras/Timeline';
 import CommonTodo from '../common/CommonTodo';
-
+import { serverUrl } from '../../config';
 // eslint-disable-next-line react/prop-types
 const TableRow = ({ id, image, name, category, series, color, stock, price, store }) => {
 	const { darkModeStatus } = useDarkMode();

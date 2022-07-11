@@ -20,6 +20,7 @@ import Input from '../../../components/bootstrap/forms/Input';
 import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
+import { serverUrl } from '../../../config';
 
 // eslint-disable-next-line react/prop-types
 const LoginHeader = ({ isNewUser }) => {
@@ -52,8 +53,8 @@ const Login = ({ isSignUp }) => {
 	const [newPassword, setPassword] = useState();
 	const [openData, setOpenData] = useState(false);
 	const [newUser, setNewUser] = useState({});
-	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	const serverUrl = "http://localhost:3001/api";
+	// // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+	// const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
 	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
 	const signup = () => {

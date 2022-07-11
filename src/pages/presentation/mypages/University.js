@@ -68,14 +68,15 @@ import OffCanvas, {
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '../../../assets/css/editor.css';
+import { serverUrl } from '../../../config';
 
 const University = () => {
     /**
      * For Tour
      */
     useTourStep(6);
-    // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-    const serverUrl = "http://localhost:3001/api";
+    // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+    // const serverUrl = "http://localhost:3001/api";
 
 
 

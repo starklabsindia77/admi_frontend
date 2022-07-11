@@ -17,6 +17,7 @@ import { Typography, Button } from '@mui/material';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Icon from '../../../../components/icon/Icon';
+import { serverUrl } from '../../../../config';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -25,7 +26,7 @@ function CourseCard({ data, wishData }) {
 	// const username = localStorage.getItem('userName');
 	// const role = localStorage.getItem('role');
 	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	const serverUrl = 'http://localhost:3001/api';
+	// const serverUrl = 'http://localhost:3001/api';
 	const [wishListData, setWishListData] = useState(wishData);
 
 	const authToken = localStorage.getItem('auth');

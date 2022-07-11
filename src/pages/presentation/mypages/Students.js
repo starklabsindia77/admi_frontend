@@ -62,14 +62,15 @@ import OffCanvas, {
     OffCanvasTitle,
 } from '../../../components/bootstrap/OffCanvas';
 import Textarea from '../../../components/bootstrap/forms/Textarea';
+import { serverUrl } from '../../../config';
 
 const Students = () => {
     /**
      * For Tour
      */
     useTourStep(6);
-    // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-    const serverUrl = "http://localhost:3001/api";
+    // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
+    // const serverUrl = "http://localhost:3001/api";
 
     const [studentList, setStudentList] = useState([]);
     const [students, setStudents] = useState({});
