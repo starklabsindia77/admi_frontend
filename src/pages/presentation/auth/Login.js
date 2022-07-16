@@ -42,6 +42,7 @@ const LoginHeader = ({ isNewUser }) => {
 
 const Login = ({ isSignUp }) => {
 	const { darkModeStatus } = useDarkMode();
+	
 
 	const [usernameInput, setUsernameInput] = useState(false);
 	const [isNewUser, setIsNewUser] = useState(isSignUp);
