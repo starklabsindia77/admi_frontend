@@ -1,5 +1,5 @@
 import React, { lazy } from 'react';
-import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages, AdminPages } from '../menu';
+import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages, AdminPages, Forms } from '../menu';
 import Login from '../pages/presentation/auth/Login';
 import Signup from '../pages/presentation/auth/Signup';
 
@@ -19,6 +19,7 @@ const LIST = {
 	COURSES: lazy(() => import('../pages/presentation/mypages/Courses')),
 	PROGRAMS: lazy(() => import('../pages/presentation/mypages/Programs')),
 	SHORTLIST: lazy(() => import('../pages/presentation/mypages/ShortList')),
+	APPFORM: lazy(() => import('../pages/presentation/mypages/AppForm')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
@@ -244,6 +245,12 @@ const presentation = [
 		path: Pages.Shortlist.path,
 		element: <LIST.SHORTLIST />,
 		exact: true,
+	},
+	{
+		path: Forms.ApplicationsForm.path,
+		element: <LIST.APPFORM />,
+		exact: true,
+
 	},
 
 	{
@@ -925,7 +932,7 @@ const documentation = [
 		element: <EXTRA.HOOKS />,
 		exact: true,
 	},
-	
+
 ];
 const contents = [...presentation, ...documentation];
 

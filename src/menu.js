@@ -39,6 +39,16 @@ export const dashboard = {
 	},
 };
 
+export const Forms = {
+	ApplicationsForm: {
+		id: 'ApplicationsForm',
+		text: 'Applications Form',
+		path: 'Programs/ApplicationsForm',
+		icon: 'menu_book',
+		subMenu: null,
+	}
+}
+
 export const Pages = {
 	auth: {
 		id: 'auth',
