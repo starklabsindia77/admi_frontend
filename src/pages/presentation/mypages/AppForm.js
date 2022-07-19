@@ -11,6 +11,8 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Papa from 'papaparse';
+import {  Typography, Grid ,Box ,Stack ,Link} from '@mui/material';
+
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
 import classNames from 'classnames';
@@ -43,6 +45,7 @@ import UserImage from '../../../assets/img/wanna/wanna1.png';
 import Button from '../../../components/bootstrap/Button';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
+
 import Card, {
     CardActions,
     CardBody,
@@ -88,6 +91,9 @@ import Textarea from '../../../components/bootstrap/forms/Textarea';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '../../../assets/css/editor.css';
 import { serverUrl } from '../../../config';
+import LabTabs from '../component/courseCard/appForm/tab';
+
+
 
 const AppForm = () => {
     /**
@@ -101,20 +107,38 @@ const AppForm = () => {
     return (
         <PageWrapper title={Forms.ApplicationsForm.text}>
             <Page>
-                <Card stretch data-tour='list' style={{ backgroundColor: "#f1f2f5" }}>
-                    <CardHeader style={{ backgroundColor: "#f1f2f5" }}>
-                        <CardLabel iconColor='info'>
-                            <CardTitle>
-                                <h3>{Forms.ApplicationsForm.text}</h3>
-                            </CardTitle>
-                        </CardLabel>
-                    </CardHeader>
-                    <CardBody className='table-responsive' isScrollable />
+            <Stack maxWidth="100%">
+            <h3>{Forms.ApplicationsForm.text}</h3>
+            <Stack direction="row" justifyContent="space-around">
+                <Stack>
+                
+                    <LabTabs/>
+                </Stack >
+                <Stack   minWidth="60%">
+                <Box  p={2} borderBottom="1px solid teal">
+						<img src='src\common\data\photoOfLogo.png' alt='rishav' />
+						<Typography variant="h4" mb={2}>Academies Australasia Polytechnic</Typography>
+						<Typography variant='h5'>College Website</Typography>
+						<Link href="http://www.aapoly.edu.au" variant="h6" mb={2}>http://www.aapoly.edu.au</Link>
+					</Box>
+					<Box mt={2} pl={2}>
+                        <Typography variant="h4" mb={2} >Bachelor of Tourism and Hospitality Management</Typography>
+						<Link href="https://aapoly.edu.au/courses/bachelor-degree/" variant='h6'>https://aapoly.edu.au/courses/bachelor-degree/</Link>
+						
+					</Box>
 
-
-
-                </Card>
+					<Grid container mt={2} p={2}>
+						<Grid item xs={6} variant="h4" mb={2}>Tuition Fee:15000 AUD</Grid>
+						<Grid item  xs={6} mb={2}>Application Fee:0 AUD</Grid>
+						<Grid item xs={6}>Duration:36 Months</Grid>
+						<Grid item xs={6}>Intake:Jul,Nov,Feb</Grid>
+					</Grid>
+                </Stack>
+            </Stack>
+            </Stack>
+                
             </Page>
+           
         </PageWrapper>
     );
 };
