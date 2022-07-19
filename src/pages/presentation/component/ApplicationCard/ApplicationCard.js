@@ -108,6 +108,21 @@ function ApplicationCard({ data, wishData }) {
                     <h6>Academies Australasia Polytechnic, Australia</h6>
                     <p>Intake: Jan 2023</p>
                 </Grid>
+                <Grid item xs={6}>
+                    <Stack direction='row' justifyContent='flex-end' p={1}>
+                        <Button
+                            variant='contained'
+                            style={{
+                                backgroundColor: '#f1f2f5',
+                                marginLeft: '12px',
+                                color: '#000000',
+                                height: '20px',
+                            }}
+                        >
+                            Started & Submitted for options
+                        </Button>
+                    </Stack>
+                </Grid>
             </Grid>
             <Grid container spacing={2} p={1}>
                 <Grid item xs={12}>

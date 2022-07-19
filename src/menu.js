@@ -74,6 +74,12 @@ export const Pages = {
 		path: 'Shortlist',
 		icon: 'favorite_border',
 	},
+	Communication: {
+		id: 'Communication',
+		text: 'Communication',
+		path: 'Communication',
+		icon: 'Message',
+	},
 };
 
 export const AdminPages = {
@@ -81,6 +87,12 @@ export const AdminPages = {
 		id: 'auth',
 		text: 'Pages',
 		icon: 'Extension',
+	},
+	Communication: {
+		id: 'Communication',
+		text: 'Communication',
+		path: 'Communication',
+		icon: 'Message',
 	},
 
 	CoursesManager: {
@@ -120,6 +132,12 @@ export const AdminPages = {
 		text: 'Applications',
 		path: 'applications',
 		icon: 'InsertDriveFile',
+	},
+	Commission: {
+		id: 'commission',
+		text: 'commission',
+		path: 'commission',
+		icon: 'AttachMoney',
 	},
 	user: {
 		id: 'user',
