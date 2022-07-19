@@ -16,7 +16,7 @@ const Footer = () => {
 			<div className='container-fluid'>
 				<div className='row'>
 					<div className='col'>
-						<span className='fw-light'>Copyright © 2022 - Version 2.2.4</span>
+						{/* <span className='fw-light'>Copyright © 2022 - Version 2.2.4</span> */}
 					</div>
 					<div className='col-auto'>
 						<a

@@ -27,7 +27,7 @@ import { serverUrl } from '../../../../config';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function CourseCard({ data, wishData }) {
-	console.log('data body', data, wishData);
+
 	const navigate = useNavigate();
 	const [wishCheck, setWishCheck] = useState(false);
 	// const username = localStorage.getItem('userName');
