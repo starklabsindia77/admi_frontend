@@ -62,10 +62,10 @@ export const Pages = {
 		path: 'Programs',
 		icon: 'menu_book',
 	},
-	page404: {
-		id: 'Page404',
+	Application: {
+		id: 'application',
 		text: 'Applications',
-		path: 'auth-pages/404',
+		path: 'applications',
 		icon: 'InsertDriveFile',
 	},
 	Shortlist: {
@@ -115,11 +115,11 @@ export const AdminPages = {
 		path: 'agents',
 		icon: 'PersonLinesFill',
 	},
-	summary: {
-		id: 'summary',
-		text: 'Application',
-		path: 'Application',
-		icon: 'FileCheck',
+	Application: {
+		id: 'application',
+		text: 'Applications',
+		path: 'applications',
+		icon: 'InsertDriveFile',
 	},
 	user: {
 		id: 'user',
