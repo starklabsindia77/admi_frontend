@@ -20,6 +20,7 @@ import Input from '../../../components/bootstrap/forms/Input';
 import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
+import PlaceholderImage from '../../../components/extras/PlaceholderImage';
 import { serverUrl } from '../../../config';
 
 // eslint-disable-next-line react/prop-types
@@ -48,7 +49,7 @@ const Signup = ({ isSignUp }) => {
     const [username, setUsername] = useState();
     const [name, setName] = useState();
     const [contact, setContact] = useState();
-    const [dob, setDob] = useState();
+    const [image, setImage] = useState();
     const [role, setRole] = useState('Agent');
     const [newPassword, setPassword] = useState();
     const [openData, setOpenData] = useState(false);
@@ -149,20 +150,20 @@ const Signup = ({ isSignUp }) => {
                                         'bg-lo10-dark': darkModeStatus,
                                     })}>
                                     <div className='row row-cols-2 g-3 pb-3 px-3 mt-0'>
-                                        {/* <div className='col'>
-											<Button
-												color={darkModeStatus ? 'light' : 'dark'}
-												isLight={!!isNewUser}
-												className='rounded-1 w-100'
-												size='lg'
-												onClick={() => {
-													setUsernameInput(false);
-													setIsNewUser(!isNewUser);
-												}}>
-												Login
-											</Button>
-										</div> */}
-                                        <div className='col-12'>
+                                        <div className='col'>
+                                            <Button
+                                                color={darkModeStatus ? 'light' : 'dark'}
+                                                isLight={!!isNewUser}
+                                                className='rounded-1 w-100'
+                                                size='lg'
+                                                onClick={() => {
+                                                    setUsernameInput(false);
+                                                    setIsNewUser(!isNewUser);
+                                                }}>
+                                                Login
+                                            </Button>
+                                        </div>
+                                        <div className='col'>
                                             <Button
                                                 color={darkModeStatus ? 'light' : 'dark'}
                                                 isLight={!isNewUser}
@@ -202,6 +203,24 @@ const Signup = ({ isSignUp }) => {
                                                 </FormGroup>
                                             </div>
                                             {/* <div className='col-12'>
+                                                {image ? (
+                                                    <img
+                                                        src={image}
+                                                        alt=''
+                                                        width={128}
+                                                        height={128}
+                                                        className='mx-auto d-block img-fluid mb-3'
+                                                    />
+                                                ) : (
+                                                    <PlaceholderImage
+                                                        width={128}
+                                                        height={128}
+                                                        className='mx-auto d-block img-fluid mb-3 rounded'
+                                                    />
+                                                )}
+                                            </div> */}
+
+                                            {/* <div className='col-12'>
 												<FormGroup
 													id='signup-surname'
 													isFloating
@@ -230,6 +249,24 @@ const Signup = ({ isSignUp }) => {
                                                         onChange={(e) => setPassword(e.target.value)}
                                                     />
                                                 </FormGroup>
+                                            </div>
+                                            <div className='col-12'>
+                                                <div className='row g-4'>
+                                                    <div className='col-12'>
+                                                        <Input type='file' autoComplete='photo' />
+                                                    </div>
+                                                    {/* <div className='col-12'>
+                                                        <Button
+                                                            color='dark'
+                                                            isLight
+                                                            icon='Delete'
+                                                            className='w-100'
+                                                        
+                                                        >
+                                                            Delete Image
+                                                        </Button>
+                                                    </div> */}
+                                                </div>
                                             </div>
                                             <div className='col-12'>
                                                 <Button
@@ -306,7 +343,7 @@ const Signup = ({ isSignUp }) => {
                                                     })}
                                                     // icon='CustomApple'
                                                     onClick={handleOnClick}>
-                                                    Login
+                                                    Student Login
                                                 </Button>
                                             </div>
                                             {/* <div className='col-12'>

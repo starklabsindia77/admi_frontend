@@ -121,22 +121,22 @@ export const AdminPages = {
 		path: 'Application',
 		icon: 'FileCheck',
 	},
-	crmDashboard: {
-		id: 'crmDashboard',
+	user: {
+		id: 'user',
 		text: 'user',
 		path: 'user',
 		icon: 'SupervisedUserCircle',
 		subMenu: {
-			listBoxed: {
-				id: 'listBoxed',
+			sub: {
+				id: 'sub',
 				text: 'Sub User',
-				path: 'list-pages/boxed-list',
+				path: 'sub/user',
 				icon: 'ViewArray',
 			},
-			listFluid: {
-				id: 'listFluid',
-				text: 'Department',
-				path: 'list-pages/fluid-list',
+			role: {
+				id: 'role',
+				text: 'Role',
+				path: 'sub/role',
 				icon: 'ViewDay',
 			},
 		},

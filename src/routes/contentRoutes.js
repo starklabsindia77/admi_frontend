@@ -21,6 +21,8 @@ const LIST = {
 	SHORTLIST: lazy(() => import('../pages/presentation/mypages/ShortList')),
 	APPFORM: lazy(() => import('../pages/presentation/mypages/AppForm')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
+	USERS: lazy(() => import('../pages/presentation/mypages/Users')),
+	ROLES: lazy(() => import('../pages/presentation/mypages/Roles')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
 };
@@ -261,6 +263,16 @@ const presentation = [
 	{
 		path: AdminPages.Agent.path,
 		element: <LIST.AGENTS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.user.subMenu.sub.path,
+		element: <LIST.USERS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.user.subMenu.role.path,
+		element: <LIST.ROLES />,
 		exact: true,
 	},
 	{

@@ -215,7 +215,7 @@ const Programs = () => {
         window.location.reload();
     };
 
-    console.log('wish result', wishData);
+    
 
     return (
         <PageWrapper title={Pages.Programs.text}>
