@@ -1,14 +1,14 @@
 import React, { useContext, useState } from 'react';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
-import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
+// import { useNavigate } from 'react-router-dom';
+// import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Button from '../../../components/bootstrap/Button';
 import Page from '../../../layout/Page/Page';
 import Card, {
 	CardActions,
 	CardBody,
 	CardFooter,
-	CardFooterLeft,
+	// CardFooterLeft,
 	CardHeader,
 	CardLabel,
 	CardSubTitle,
@@ -19,14 +19,14 @@ import Chat, { ChatAvatar, ChatGroup, ChatListItem } from '../../../components/C
 import InputGroup from '../../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import USERS from '../../../common/data/userDummyData';
-import Icon from '../../../components/icon/Icon';
+// import Icon from '../../../components/icon/Icon';
 import ThemeContext from '../../../contexts/themeContext';
 import { demoPages } from '../../../menu';
 import CHATS from '../../../common/data/chatDummyData';
-import CommonChatStatus from '../../common/CommonChatStatus';
+// import CommonChatStatus from '../../common/CommonChatStatus';
 
 const WithListChatPage = () => {
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 
 	const TABS = {
 		CHLOE: USERS.CHLOE,
@@ -73,7 +73,7 @@ const WithListChatPage = () => {
 
 	return (
 		<PageWrapper title={demoPages.chat.subMenu.withListChat.text}>
-			<SubHeader>
+			{/* <SubHeader>
 				<SubHeaderLeft>
 					<span>
 						<Icon icon='Info' className='me-2' size='2x' color='danger' />
@@ -97,7 +97,7 @@ const WithListChatPage = () => {
 						</Button>
 					)}
 				</SubHeaderRight>
-			</SubHeader>
+			</SubHeader> */}
 			<Page>
 				<div className='row h-100'>
 					{(listShow || !mobileDesign) && (
@@ -213,7 +213,7 @@ const WithListChatPage = () => {
 										</CardBody>
 									</Card>
 								</CardBody>
-								<CardFooter>
+								{/* <CardFooter>
 									<CardFooterLeft className='w-100'>
 										<Button
 											icon='Logout'
@@ -224,7 +224,7 @@ const WithListChatPage = () => {
 											Logout
 										</Button>
 									</CardFooterLeft>
-								</CardFooter>
+								</CardFooter> */}
 							</Card>
 						</div>
 					)}

@@ -78,7 +78,7 @@ export const Pages = {
 		id: 'Communication',
 		text: 'Communication',
 		path: 'Communication',
-		icon: 'Message',
+		icon: 'Forum',
 	},
 };
 
@@ -92,7 +92,8 @@ export const AdminPages = {
 		id: 'Communication',
 		text: 'Communication',
 		path: 'Communication',
-		icon: 'Message',
+		icon: 'Forum',
+
 	},
 
 	CoursesManager: {

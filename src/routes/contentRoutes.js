@@ -468,7 +468,7 @@ const presentation = [
 	 * App > Chat
 	 */
 	{
-		path: demoPages.chat.subMenu.withListChat.path,
+		path: Pages.Communication.path,
 		element: <APP.CHAT.WITH_LIST />,
 		exact: true,
 	},

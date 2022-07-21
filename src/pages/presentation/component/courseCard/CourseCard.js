@@ -1,4 +1,3 @@
-
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable react/function-component-definition */
 /* eslint-disable react/prop-types */
@@ -27,7 +26,6 @@ import { serverUrl } from '../../../../config';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function CourseCard({ data, wishData }) {
-
 	const navigate = useNavigate();
 	const [wishCheck, setWishCheck] = useState(false);
 	// const username = localStorage.getItem('userName');
@@ -35,6 +33,7 @@ function CourseCard({ data, wishData }) {
 	const [wishListData, setWishListData] = useState(wishData);
 
 	const authToken = localStorage.getItem('auth');
+	const UserRole = localStorage.getItem('role');
 	const apply = () => {
 		navigate('ApplicationsForm');
 	};
@@ -131,13 +130,25 @@ function CourseCard({ data, wishData }) {
 							<IconButton size='large'>
 								<TextSnippetIcon fontSize='large' />
 							</IconButton>
-							<Button
-								style={{ width: '150px', height: '50px', mt: '30px' }}
-								variant='contained'
-								color='info'
-								onClick={apply}>
-								Apply Now
-							</Button>
+							{UserRole === 'admin' ? (
+								<Button
+									style={{ width: '150px', height: '50px', mt: '30px' }}
+									variant='contained'
+									color='info'
+								// onClick={apply}
+								>
+									View Application
+								</Button>
+							) : (
+								<Button
+									style={{ width: '150px', height: '50px', mt: '30px' }}
+									variant='contained'
+									color='info'
+									onClick={apply}
+								>
+									Apply Now
+								</Button>
+							)}
 						</Stack>
 					</Stack>
 					<Stack

@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import moment from 'moment';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
-import SubHeader, {
-	SubHeaderLeft,
-	SubHeaderRight,
-	SubheaderSeparator,
-} from '../../../layout/SubHeader/SubHeader';
-import Icon from '../../../components/icon/Icon';
+// import SubHeader, {
+// 	SubHeaderLeft,
+// 	SubHeaderRight,
+// 	SubheaderSeparator,
+// } from '../../../layout/SubHeader/SubHeader';
+// import Icon from '../../../components/icon/Icon';
 import Button from '../../../components/bootstrap/Button';
 import Page from '../../../layout/Page/Page';
 import Card, {
@@ -24,10 +24,10 @@ import InputGroup from '../../../components/bootstrap/forms/InputGroup';
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import { demoPages } from '../../../menu';
 import CHATS from '../../../common/data/chatDummyData';
-import CommonChatStatus from '../../common/CommonChatStatus';
+// import CommonChatStatus from '../../common/CommonChatStatus';
 
 const OnlyListChatPage = () => {
-	const navigate = useNavigate();
+	// const navigate = useNavigate();
 	const [canvasStatus, setCanvasStatus] = useState(false);
 
 	const TABS = {
@@ -71,12 +71,12 @@ const OnlyListChatPage = () => {
 		if (!canvasStatus) {
 			setActiveTab(null);
 		}
-		return () => {};
+		return () => { };
 	}, [canvasStatus]);
 
 	return (
 		<PageWrapper title={demoPages.chat.subMenu.onlyListChat.text}>
-			<SubHeader>
+			{/* <SubHeader>
 				<SubHeaderLeft>
 					<span>
 						<Icon icon='Info' className='me-2' size='2x' color='danger' />
@@ -97,10 +97,10 @@ const OnlyListChatPage = () => {
 						Logout
 					</Button>
 				</SubHeaderRight>
-			</SubHeader>
+			</SubHeader> */}
 			<Page>
 				<div className='row h-100'>
-					<div className='col-md-6'>
+					<div className='col-md-12'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='AccountCircle' iconColor='success'>
@@ -152,7 +152,7 @@ const OnlyListChatPage = () => {
 							</CardBody>
 						</Card>
 					</div>
-					<div className='col-md-6'>
+					{/* <div className='col-md-6'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='AccountCircle' iconColor='danger'>
@@ -202,7 +202,7 @@ const OnlyListChatPage = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</div>
+					</div> */}
 				</div>
 
 				<OffCanvas
