@@ -122,7 +122,9 @@ const Roles = () => {
                     // alert('error msg', d.error);
                 }
                 // alert('done', d);
+                getStudent();
                 setAddProductEvent(false)
+               
             });
 
     }
@@ -146,7 +148,9 @@ const Roles = () => {
                 if (d.error) {
                     console.log('error msg', d.error);
                 }
+                getStudent();
                 setAddProductEvent(false)
+                
             });
 
     }

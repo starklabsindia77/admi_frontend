@@ -146,7 +146,9 @@ const Users = () => {
                     // alert('error msg', d.error);
                 }
                 // alert('done', d);
+                getStudent();
                 setAddProductEvent(false)
+
             });
 
     }
@@ -170,6 +172,7 @@ const Users = () => {
                 if (d.error) {
                     console.log('error msg', d.error);
                 }
+                getStudent();
                 setAddProductEvent(false)
             });
 

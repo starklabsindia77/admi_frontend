@@ -41,6 +41,7 @@ import User1Webp from '../../../../assets/img/wanna/wanna2.webp';
 import User1Img from '../../../../assets/img/wanna/wanna2.png';
 // import Button from '../../../../components/bootstrap/Button';
 import { serverUrl } from '../../../../config';
+import { _selectOptions } from '../../../documentation/forms/SelectPage';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
@@ -79,7 +80,7 @@ function ApplicationForm({ data, wishData }) {
 									Personal Information
 								</Typography>
 							</div>
-							<div className='col-md-6'>
+							<div className='col-md-4'>
 								<FormGroup id='firstName' label='First Name' isFloating>
 									<Input
 										placeholder='First Name'
@@ -94,7 +95,22 @@ function ApplicationForm({ data, wishData }) {
 									/>
 								</FormGroup>
 							</div>
-							<div className='col-md-6'>
+							<div className='col-md-4'>
+								<FormGroup id='middleName' label='Middle Name' isFloating>
+									<Input
+										placeholder='Middle Name'
+										autoComplete='additional-name'
+										// onChange={formik.handleChange}
+										// onBlur={formik.handleBlur}
+										// value={formik.values.firstName}
+										// isValid={formik.isValid}
+										// isTouched={formik.touched.firstName}
+										// invalidFeedback={formik.errors.firstName}
+										validFeedback='Looks good!'
+									/>
+								</FormGroup>
+							</div>
+							<div className='col-md-4'>
 								<FormGroup id='lastName' label='Last Name' isFloating>
 									<Input
 										placeholder='Last Name'
@@ -106,6 +122,46 @@ function ApplicationForm({ data, wishData }) {
 										// isTouched={formik.touched.lastName}
 										// invalidFeedback={formik.errors.lastName}
 										validFeedback='Looks good!'
+									/>
+								</FormGroup>
+							</div>
+							<div className='col-md-4'>
+								<FormGroup id='firstName' label='Date Of Birth' isFloating>
+									<Input
+										placeholder='Date Of Birth'
+										autoComplete='additional-name'
+										// onChange={formik.handleChange}
+										// onBlur={formik.handleBlur}
+										// value={formik.values.firstName}
+										// isValid={formik.isValid}
+										// isTouched={formik.touched.firstName}
+										// invalidFeedback={formik.errors.firstName}
+										validFeedback='Looks good!'
+									/>
+								</FormGroup>
+							</div>
+							<div className='col-md-4'>
+								<FormGroup id='middleName' label='First Language' isFloating>
+									<Input
+										placeholder='First Language'
+										autoComplete='additional-name'
+										// onChange={formik.handleChange}
+										// onBlur={formik.handleBlur}
+										// value={formik.values.firstName}
+										// isValid={formik.isValid}
+										// isTouched={formik.touched.firstName}
+										// invalidFeedback={formik.errors.firstName}
+										validFeedback='Looks good!'
+									/>
+								</FormGroup>
+							</div>
+							<div className='col-md-4'>
+								<FormGroup id='lastName'  isFloating>
+									<Select
+										id='inputGroupSelect01'
+										ariaLabel='Default select example'
+										placeholder='Country of Citizenship'
+										list={_selectOptions}
 									/>
 								</FormGroup>
 							</div>

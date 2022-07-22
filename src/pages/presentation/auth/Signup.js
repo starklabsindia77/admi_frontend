@@ -6,6 +6,7 @@ import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -45,6 +46,18 @@ const Signup = ({ isSignUp }) => {
     const { darkModeStatus } = useDarkMode();
 
     const [usernameInput, setUsernameInput] = useState(false);
+    const loader = {
+		position: "fixed",	
+		top: "0",	
+		left: "0",	
+		right: "0",	
+		bottom: "0",	
+		background: "rgba(255,255,255,0.4)",
+		zIndex: "100",	
+		display: "table",	
+		width: "100%",	
+		height: "100%"	
+	  }
     const [isNewUser, setIsNewUser] = useState(isSignUp);
     const [username, setUsername] = useState();
     const [name, setName] = useState();
@@ -54,6 +67,7 @@ const Signup = ({ isSignUp }) => {
     const [newPassword, setPassword] = useState();
     const [openData, setOpenData] = useState(false);
     const [newUser, setNewUser] = useState({});
+    const [Isloader, setIsloader] = useState(false);
     // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
     // const serverUrl = "http://localhost:3001/api";
     const navigate = useNavigate();
@@ -63,6 +77,7 @@ const Signup = ({ isSignUp }) => {
         // createPdfFromHtml("<h1>Hello World</h1>");
         const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
         console.log("data", userData);
+        setIsloader(true);
         const options = {
             method: 'POST',
             headers: {
@@ -83,15 +98,17 @@ const Signup = ({ isSignUp }) => {
                     localStorage.setItem('userName', name);
                     localStorage.setItem('role', role);
                     localStorage.setItem('email', username);
-                    // setTimeout(() => {
-                    //     navigate('dashboard');
-                    // }, 1000);
+                    setTimeout(() => {
+                        setIsloader(false);
+                        navigate('dashboard');
+                    }, 1000);
                 }
             });
     }
 
     const LoginClick = () => {
         console.log('username', username, newPassword);
+        setIsloader(true);
         const options = {
             method: 'POST',
             headers: {
@@ -113,6 +130,7 @@ const Signup = ({ isSignUp }) => {
                     localStorage.setItem('role', data.user.role);
                     localStorage.setItem('email', username);
                     navigate('dashboard');
+                    setIsloader(false);
                 }
             });
     };
@@ -363,6 +381,11 @@ const Signup = ({ isSignUp }) => {
                                     )}
                                     {/* END :: Social Login */}
                                 </form>
+                                {Isloader  && (
+                                    <div style={loader}>
+                                        <CircularProgress style={{ margin: "22% auto", display: "block" }} />
+                                    </div>
+                                )}
                             </CardBody>
                         </Card>
                         <div className='text-center'>
