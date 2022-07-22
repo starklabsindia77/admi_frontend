@@ -92,6 +92,7 @@ import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '../../../assets/css/editor.css';
 import { serverUrl } from '../../../config';
 import LabTabs from '../component/courseCard/appForm/tab';
+import ApplicationForm from '../component/ApplicationForm/ApplicationForm';
 
 
 
@@ -109,7 +110,9 @@ const AppForm = () => {
             <Page>
                 <Stack maxWidth="100%">
                     <h3>{Forms.ApplicationsForm.text}</h3>
-                    <Stack direction="row" justifyContent="space-around">
+                    <ApplicationForm />
+                    {/* <Stack direction="row" justifyContent="space-around">
+                        
                         <Stack>
                             <LabTabs />
                         </Stack >
@@ -133,7 +136,7 @@ const AppForm = () => {
                                 <Grid item xs={6}>Intake:Jul,Nov,Feb</Grid>
                             </Grid>
                         </Stack>
-                    </Stack>
+                    </Stack> */}
                 </Stack>
             </Page>
 

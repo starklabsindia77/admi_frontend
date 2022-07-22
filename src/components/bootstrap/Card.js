@@ -175,7 +175,7 @@ export const CardBody = forwardRef(({ tag, className, isScrollable, children, ..
 		<TagWrapper
 			ref={ref}
 			tag={tag}
-			className={classNames('card-body', { 'card-body-scrollable': isScrollable }, className)}
+			className={classNames('card-body', className)}
 			// eslint-disable-next-line react/jsx-props-no-spreading
 			{...props}>
 			{children}

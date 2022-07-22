@@ -1142,7 +1142,7 @@ const DashboardPage = () => {
 									{/* <CardSubTitle>last 2 weeks</CardSubTitle> */}
 								</CardLabel>
 							</CardHeader>
-							<CardBody isScrollable>
+							<CardBody >
 								<Timeline>
 									<TimelineItem
 										label={moment().add(-0.25, 'hours').format('LT')}
