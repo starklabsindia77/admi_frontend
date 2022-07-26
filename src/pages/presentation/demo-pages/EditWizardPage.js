@@ -147,7 +147,7 @@ const EditWizardPage = () => {
 			</SubHeader>
 			<Page>
 				<div className='row h-100 pb-3'>
-					<div className='col-lg-4 col-md-6'>
+					{/* <div className='col-lg-4 col-md-6'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='AccountCircle'>
@@ -200,15 +200,15 @@ const EditWizardPage = () => {
 								</CardFooterLeft>
 							</CardFooter>
 						</Card>
-					</div>
-					<div className='col-lg-8 col-md-6'>
+					</div> */}
+					<div className='col-lg-12 col-md-12'>
 						{TABS.ACCOUNT_DETAIL === activeTab && (
 							<Wizard
 								isHeader
 								stretch
 								color='info'
-								noValidate
-								onSubmit={formik.handleSubmit}
+								// noValidate
+								// onSubmit={formik.handleSubmit}
 								className='shadow-3d-info'>
 								<WizardItem id='step1' title='Account Detail'>
 									<Card>

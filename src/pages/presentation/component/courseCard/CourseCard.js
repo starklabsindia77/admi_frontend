@@ -4,6 +4,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/jsx-props-no-spreading */
 // import { Stack } from '@material-ui/core';
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -25,18 +26,23 @@ import { serverUrl } from '../../../../config';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function CourseCard({ data, wishData }) {
-	console.log('Course Data', data, wishData);
 	const navigate = useNavigate();
+	const [wishCheck, setWishCheck] = useState(false);
 	// const username = localStorage.getItem('userName');
 	// const role = localStorage.getItem('role');
-	// const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-	// const serverUrl = 'http://localhost:3001/api';
 	const [wishListData, setWishListData] = useState(wishData);
 
 	const authToken = localStorage.getItem('auth');
+	const UserRole = localStorage.getItem('role');
 	const apply = () => {
 		navigate('ApplicationsForm');
-	}
+	};
+	const checkWishList = () => {
+		const valueData = wishData.filter((item) => item.courseId === data.guid);
+		if (valueData.length > 0) {
+			setWishCheck(true);
+		}
+	};
 	const saveWishlist = (newData) => {
 		const options = {
 			method: 'POST',
@@ -55,6 +61,7 @@ function CourseCard({ data, wishData }) {
 				} else if (d.result.length > 0) {
 					const ss = d.result;
 					console.log('result', ss);
+					setWishCheck(true);
 					// setWishListData(ss.wishlist);
 					// reloadFun();
 				}
@@ -83,13 +90,18 @@ function CourseCard({ data, wishData }) {
 			saveWishlist(dataList);
 		}
 	};
+
+	useEffect(() => {
+		checkWishList();
+	}, []);
+
 	return (
 		<div className='post'>
 			<Stack direction='row' justifyContent='space-between' p={2}>
 				<Typography variant='h6' p={2} style={{ width: '180px', height: '150px' }} mt={4}>
 					{data.name}
 				</Typography>
-				<Stack minWidth='1000px' p={1}>
+				<Stack minWidth='900px' p={1}>
 					<Stack direction='row' justifyContent='space-between' p={1}>
 						<Stack>
 							{data.img ? (
@@ -112,19 +124,31 @@ function CourseCard({ data, wishData }) {
 								icon={<FavoriteBorder />}
 								checkedIcon={<Favorite />}
 								onClick={wishlist}
+								checked={wishCheck}
 								size='large'
 							/>
 							<IconButton size='large'>
 								<TextSnippetIcon fontSize='large' />
 							</IconButton>
-							<Button
-								style={{ width: '150px', height: '50px', mt: '30px' }}
-								variant='contained'
-								color='info'
-								onClick={apply}
-							>
-								Apply Now
-							</Button>
+							{UserRole === 'admin' ? (
+								<Button
+									style={{ width: '150px', height: '50px', mt: '30px' }}
+									variant='contained'
+									color='info'
+								// onClick={apply}
+								>
+									View Application
+								</Button>
+							) : (
+								<Button
+									style={{ width: '150px', height: '50px', mt: '30px' }}
+									variant='contained'
+									color='info'
+									onClick={apply}
+								>
+									Apply Now
+								</Button>
+							)}
 						</Stack>
 					</Stack>
 					<Stack
@@ -133,53 +157,47 @@ function CourseCard({ data, wishData }) {
 						p={2}
 						style={{ backgroundColor: '#F1F2F5', borderRadius: '10px' }}>
 						<Stack style={{ bgColor: 'D6D6D6' }}>
-							<Typography ml={2} color='#6b7280'>
-								TUITION FEE{' '}
-							</Typography>
+							<Typography color='#6b7280'>TUITION FEE </Typography>
 							<Typography variant='h6' fontWeight='600'>
-								≈ $ 15000 AUD
+								{data.averageFees === 'NA'
+									? data.averageFees
+									: `${data.averageFees} AUD`}
 							</Typography>
 						</Stack>
 						<Stack>
-							<Typography ml={2} color='#6b7280'>
-								TUITION FEE{' '}
-							</Typography>
+							<Typography color='#6b7280'>APPLICATION FEE </Typography>
 							<Typography variant='h6' fontWeight='600'>
-								≈ $ 15000 AUD
+								{data.applicationFees === 'NA'
+									? data.applicationFees
+									: `${data.applicationFees} AUD`}
 							</Typography>
 						</Stack>
 						<Stack>
-							<Typography ml={2} color='#6b7280'>
-								TUITION FEE{' '}
-							</Typography>
+							<Typography color='#6b7280'>INTAKE </Typography>
 							<Typography variant='h6' fontWeight='600'>
-								≈ $ 15000 AUD
+								{data.intake}
 							</Typography>
 						</Stack>
 						<Stack>
-							<Typography ml={2} color='#6b7280'>
-								TUITION FEE{' '}
-							</Typography>
+							<Typography color='#6b7280'>WORK PERMIT</Typography>
 							<Typography variant='h6' fontWeight='600'>
-								≈ $ 15000 AUD
+								{data.durationOfWorkPermit}
 							</Typography>
 						</Stack>
 						<Stack>
+							<Typography color='#6b7280'>SCHOLARSHIP</Typography>
+							<Typography variant='h6' fontWeight='600'>
+								{data.Scholarship}
+							</Typography>
+						</Stack>
+						{/* <Stack>
 							<Typography ml={2} color='#6b7280'>
 								TUITION FEE{' '}
 							</Typography>
 							<Typography variant='h6' fontWeight='600'>
 								≈ $ 15000 AUD
 							</Typography>
-						</Stack>
-						<Stack>
-							<Typography ml={2} color='#6b7280'>
-								TUITION FEE{' '}
-							</Typography>
-							<Typography variant='h6' fontWeight='600'>
-								≈ $ 15000 AUD
-							</Typography>
-						</Stack>
+						</Stack> */}
 					</Stack>
 				</Stack>
 			</Stack>

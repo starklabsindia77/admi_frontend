@@ -6,6 +6,7 @@ import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import CircularProgress from '@mui/material/CircularProgress';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -20,6 +21,7 @@ import Input from '../../../components/bootstrap/forms/Input';
 import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
+import PlaceholderImage from '../../../components/extras/PlaceholderImage';
 import { serverUrl } from '../../../config';
 
 // eslint-disable-next-line react/prop-types
@@ -44,15 +46,28 @@ const Signup = ({ isSignUp }) => {
     const { darkModeStatus } = useDarkMode();
 
     const [usernameInput, setUsernameInput] = useState(false);
+    const loader = {
+		position: "fixed",	
+		top: "0",	
+		left: "0",	
+		right: "0",	
+		bottom: "0",	
+		background: "rgba(255,255,255,0.4)",
+		zIndex: "100",	
+		display: "table",	
+		width: "100%",	
+		height: "100%"	
+	  }
     const [isNewUser, setIsNewUser] = useState(isSignUp);
     const [username, setUsername] = useState();
     const [name, setName] = useState();
     const [contact, setContact] = useState();
-    const [dob, setDob] = useState();
+    const [image, setImage] = useState();
     const [role, setRole] = useState('Agent');
     const [newPassword, setPassword] = useState();
     const [openData, setOpenData] = useState(false);
     const [newUser, setNewUser] = useState({});
+    const [Isloader, setIsloader] = useState(false);
     // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
     // const serverUrl = "http://localhost:3001/api";
     const navigate = useNavigate();
@@ -62,6 +77,7 @@ const Signup = ({ isSignUp }) => {
         // createPdfFromHtml("<h1>Hello World</h1>");
         const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
         console.log("data", userData);
+        setIsloader(true);
         const options = {
             method: 'POST',
             headers: {
@@ -82,15 +98,17 @@ const Signup = ({ isSignUp }) => {
                     localStorage.setItem('userName', name);
                     localStorage.setItem('role', role);
                     localStorage.setItem('email', username);
-                    // setTimeout(() => {
-                    //     navigate('dashboard');
-                    // }, 1000);
+                    setTimeout(() => {
+                        setIsloader(false);
+                        navigate('dashboard');
+                    }, 1000);
                 }
             });
     }
 
     const LoginClick = () => {
         console.log('username', username, newPassword);
+        setIsloader(true);
         const options = {
             method: 'POST',
             headers: {
@@ -112,6 +130,7 @@ const Signup = ({ isSignUp }) => {
                     localStorage.setItem('role', data.user.role);
                     localStorage.setItem('email', username);
                     navigate('dashboard');
+                    setIsloader(false);
                 }
             });
     };
@@ -149,20 +168,20 @@ const Signup = ({ isSignUp }) => {
                                         'bg-lo10-dark': darkModeStatus,
                                     })}>
                                     <div className='row row-cols-2 g-3 pb-3 px-3 mt-0'>
-                                        {/* <div className='col'>
-											<Button
-												color={darkModeStatus ? 'light' : 'dark'}
-												isLight={!!isNewUser}
-												className='rounded-1 w-100'
-												size='lg'
-												onClick={() => {
-													setUsernameInput(false);
-													setIsNewUser(!isNewUser);
-												}}>
-												Login
-											</Button>
-										</div> */}
-                                        <div className='col-12'>
+                                        <div className='col'>
+                                            <Button
+                                                color={darkModeStatus ? 'light' : 'dark'}
+                                                isLight={!!isNewUser}
+                                                className='rounded-1 w-100'
+                                                size='lg'
+                                                onClick={() => {
+                                                    setUsernameInput(false);
+                                                    setIsNewUser(!isNewUser);
+                                                }}>
+                                                Login
+                                            </Button>
+                                        </div>
+                                        <div className='col'>
                                             <Button
                                                 color={darkModeStatus ? 'light' : 'dark'}
                                                 isLight={!isNewUser}
@@ -202,6 +221,24 @@ const Signup = ({ isSignUp }) => {
                                                 </FormGroup>
                                             </div>
                                             {/* <div className='col-12'>
+                                                {image ? (
+                                                    <img
+                                                        src={image}
+                                                        alt=''
+                                                        width={128}
+                                                        height={128}
+                                                        className='mx-auto d-block img-fluid mb-3'
+                                                    />
+                                                ) : (
+                                                    <PlaceholderImage
+                                                        width={128}
+                                                        height={128}
+                                                        className='mx-auto d-block img-fluid mb-3 rounded'
+                                                    />
+                                                )}
+                                            </div> */}
+
+                                            {/* <div className='col-12'>
 												<FormGroup
 													id='signup-surname'
 													isFloating
@@ -230,6 +267,24 @@ const Signup = ({ isSignUp }) => {
                                                         onChange={(e) => setPassword(e.target.value)}
                                                     />
                                                 </FormGroup>
+                                            </div>
+                                            <div className='col-12'>
+                                                <div className='row g-4'>
+                                                    <div className='col-12'>
+                                                        <Input type='file' autoComplete='photo' />
+                                                    </div>
+                                                    {/* <div className='col-12'>
+                                                        <Button
+                                                            color='dark'
+                                                            isLight
+                                                            icon='Delete'
+                                                            className='w-100'
+                                                        
+                                                        >
+                                                            Delete Image
+                                                        </Button>
+                                                    </div> */}
+                                                </div>
                                             </div>
                                             <div className='col-12'>
                                                 <Button
@@ -306,7 +361,7 @@ const Signup = ({ isSignUp }) => {
                                                     })}
                                                     // icon='CustomApple'
                                                     onClick={handleOnClick}>
-                                                    Login
+                                                    Student Login
                                                 </Button>
                                             </div>
                                             {/* <div className='col-12'>
@@ -326,6 +381,11 @@ const Signup = ({ isSignUp }) => {
                                     )}
                                     {/* END :: Social Login */}
                                 </form>
+                                {Isloader  && (
+                                    <div style={loader}>
+                                        <CircularProgress style={{ margin: "22% auto", display: "block" }} />
+                                    </div>
+                                )}
                             </CardBody>
                         </Card>
                         <div className='text-center'>

@@ -25,6 +25,7 @@ import CommonStoryBtn from '../../../components/common/CommonStoryBtn';
 import { componentsMenu } from '../../../menu';
 
 export const _selectOptions = [
+	{ value: 0, text: 'Country of Citizenship'}, 
 	{ value: 1, text: 'One' },
 	{ value: 2, text: 'Two' },
 	{ value: 3, text: 'Three' },

@@ -21,6 +21,9 @@ const LIST = {
 	SHORTLIST: lazy(() => import('../pages/presentation/mypages/ShortList')),
 	APPFORM: lazy(() => import('../pages/presentation/mypages/AppForm')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
+	APPLICATIONS: lazy(() => import('../pages/presentation/mypages/Application')),
+	USERS: lazy(() => import('../pages/presentation/mypages/Users')),
+	ROLES: lazy(() => import('../pages/presentation/mypages/Roles')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
 };
@@ -259,8 +262,24 @@ const presentation = [
 		exact: true,
 	},
 	{
+		path: Pages.Application.path,
+		element: <LIST.APPLICATIONS />,
+		exact: true,
+	},
+
+	{
 		path: AdminPages.Agent.path,
 		element: <LIST.AGENTS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.user.subMenu.sub.path,
+		element: <LIST.USERS />,
+		exact: true,
+	},
+	{
+		path: AdminPages.user.subMenu.role.path,
+		element: <LIST.ROLES />,
 		exact: true,
 	},
 	{
@@ -449,7 +468,7 @@ const presentation = [
 	 * App > Chat
 	 */
 	{
-		path: demoPages.chat.subMenu.withListChat.path,
+		path: Pages.Communication.path,
 		element: <APP.CHAT.WITH_LIST />,
 		exact: true,
 	},

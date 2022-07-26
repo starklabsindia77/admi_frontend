@@ -5,12 +5,15 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable no-plusplus */
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
 import classNames from 'classnames';
 import Checkbox from '@material-ui/core/Checkbox';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import SubHeader, {
     SubHeaderLeft,
     SubHeaderRight,
@@ -43,9 +46,8 @@ import CommonFilterTag from '../../common/CommonFilterTag';
 import CommonTableRow from '../../common/CommonTableRow';
 import Select from '../../../components/bootstrap/forms/Select';
 import Popovers from '../../../components/bootstrap/Popovers';
-
 import data from '../../../common/data/dummyProductData';
-import { demoPages } from '../../../menu';
+import { AdminPages } from '../../../menu';
 import PaginationButtons, {
     dataPagination,
     PER_COUNT,
@@ -64,27 +66,23 @@ import OffCanvas, {
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import { serverUrl } from '../../../config';
 
-const Students = () => {
+const Users = () => {
     /**
      * For Tour
      */
     useTourStep(6);
-    // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
-    // const serverUrl = "http://localhost:3001/api";
-
     const [studentList, setStudentList] = useState([]);
-    const [students, setStudents] = useState({});
+
     const [username, setUsername] = useState();
     const [guid, setGuid] = useState();
     const [name, setName] = useState();
     const [contact, setContact] = useState();
     const [dob, setDob] = useState();
-    const [role, setRole] = useState('Student');
-    const [userData, setUserData] = useState({});
+    const [role, setRole] = useState();
     const [newPassword, setPassword] = useState();
+    const [inputValue, setInputValue] = useState('');
     const authToken = localStorage.getItem("auth");
-    const UserRole = localStorage.getItem("role");
-    const AgentId = localStorage.getItem("email")
+    const [roleList, setRoleList] = useState([]);
     const getStudent = () => {
         const options = {
             method: 'GET',
@@ -97,32 +95,39 @@ const Students = () => {
         fetch(`${serverUrl}/auth/userall`, options)
             .then((response) => response.json())
             .then((d) => {
-                console.log('data', d);
                 if (d.error) {
                     console.log('error msg', d.error);
                 } else if (d.user.length > 0) {
-                    const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
-                    if (UserRole === 'admin') {
-                        setStudentList(ss)
-                    } else {
-                        ss.filter(val => val.AgentId && val.AgentId.toString().toLowerCase().includes(AgentId.toLowerCase()))
-                        setStudentList(ss)
-                    }
+                    const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase() !== 'agent' && val.role.toString().toLowerCase() !== 'student')
+                    setStudentList(ss)
+                }
+            });
+    }
+
+    const getAllRoles = () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'authorization': authToken
+            },
+        };
+
+        fetch(`${serverUrl}/role`, options)
+            .then((response) => response.json())
+            .then((d) => {
+                if (d.error) {
+                    console.log('error msg', d.error);
+                } else if (d.result.length > 0) {
+                    setRoleList(d.result);
                 }
             });
     }
 
     const saveStudent = () => {
 
-        if (UserRole === 'admin') {
-            setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role });
-            console.log("data", userData);
-        } else if (UserRole === 'agent') {
-            setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role, 'AgentId': AgentId });
-            console.log("data", userData);
-        }
-
-
+        const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
+        console.log("userdatainput", userData);
         const options = {
             method: 'POST',
             headers: {
@@ -143,14 +148,14 @@ const Students = () => {
                 // alert('done', d);
                 getStudent();
                 setAddProductEvent(false)
-                
+
             });
 
     }
 
     const updateStudent = () => {
-        setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact });
-        console.log("data", userData);
+        const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
+        console.log("updatedata", userData);
         const options = {
             method: 'PUT',
             headers: {
@@ -169,12 +174,12 @@ const Students = () => {
                 }
                 getStudent();
                 setAddProductEvent(false)
-                
             });
 
     }
     useEffect(() => {
         getStudent();
+        getAllRoles();
     }, []);
     const { themeStatus, darkModeStatus } = useDarkMode();
     const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -198,14 +203,13 @@ const Students = () => {
                 console.log('data single', d);
                 if (d.error) {
                     console.log('error msg', d.error);
-                } else if (d.success) {
-                    // setStudents(d.result[0]);
-                    console.log('data single2 ', d);
-                    setGuid(d.result.guid)
-                    setName(d.result.name);
-                    setUsername(d.result.email);
-                    setDob(d.result.dob);
-                    setContact(d.result.contact);
+                } else if (d.result.length > 0) {
+
+                    setGuid(d.result[0].guid)
+                    setName(d.result[0].name);
+                    setUsername(d.result[0].email);
+                    setDob(d.result[0].dob);
+                    setContact(d.result[0].contact);
                     setAddProductEvent(!addProductEvent);
                 }
             });
@@ -268,7 +272,7 @@ const Students = () => {
     const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
 
     return (
-        <PageWrapper title={demoPages.listPages.subMenu.listBoxed.text}>
+        <PageWrapper title={AdminPages.user.subMenu.sub.text}>
             <Page>
                 <Card stretch data-tour='list'>
                     <CardHeader>
@@ -284,50 +288,6 @@ const Students = () => {
                             </CardTitle>
                         </CardLabel>
                         <CardActions>
-                            {/* <Dropdown isButtonGroup>
-                                <Popovers
-                                    desc={
-                                        <DatePicker
-                                            onChange={(item) => setDate(item)}
-                                            date={date}
-                                            color={process.env.REACT_APP_PRIMARY_COLOR}
-                                        />
-                                    }
-                                    placement='bottom-end'
-                                    className='mw-100'
-                                    trigger='click'>
-                                    <Button color='success' isLight icon='WaterfallChart'>
-                                        {moment(date).format('MMM Do')}
-                                    </Button>
-                                </Popovers>
-                                <DropdownToggle>
-                                    <Button color='success' isLight />
-                                </DropdownToggle>
-                                <DropdownMenu isAlignmentEnd>
-                                    <DropdownItem>
-                                        <span>Last Hour</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Day</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Week</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Month</span>
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <Button
-                                color='info'
-                                icon='CloudDownload'
-                                isLight
-                                tag='a'
-                                to='/somefile.txt'
-                                target='_blank'
-                                download>
-                                Export
-                            </Button> */}
                             <Button
                                 color={darkModeStatus ? 'light' : 'dark'}
                                 isLight
@@ -336,19 +296,6 @@ const Students = () => {
                             >
                                 Add New
                             </Button>
-                            {/* <Dropdown className='d-inline'>
-								<DropdownToggle hasIcon={false}>
-									<Button color={themeStatus} icon='MoreHoriz' />
-								</DropdownToggle>
-								<DropdownMenu isAlignmentEnd>
-									<DropdownItem>
-										<Button icon='Edit'>Edit</Button>
-									</DropdownItem>
-									<DropdownItem>
-										<Button icon='Delete'>Delete</Button>
-									</DropdownItem>
-								</DropdownMenu>
-							</Dropdown> */}
                         </CardActions>
                     </CardHeader>
                     <CardBody className='table-responsive' isScrollable>
@@ -356,11 +303,9 @@ const Students = () => {
                             <thead>
                                 <tr>
                                     <th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th>
-
-
                                     <th scope='col'>Name</th>
                                     <th scope='col'>Email</th>
-                                    <th scope='col'>DOB</th>
+                                    <th scope='col'>Role</th>
                                     <th scope='col'>Contact</th>
                                     <th scope='col' >
                                         Actions
@@ -379,7 +324,7 @@ const Students = () => {
                                         </td>
                                         <td>{item.name}</td>
                                         <td>{item.email}</td>
-                                        <td>{item.dob}</td>
+                                        <td>{item.role}</td>
                                         <td>{item.contact}</td>
                                         <td>
                                             <Button
@@ -418,11 +363,11 @@ const Students = () => {
                     size='lg'>
                     <ModalHeader setIsOpen={setAddProductEvent}>
                         {guid && guid.length > 0 ? (
-                            <OffCanvasTitle id='upcomingEdit'>Edit Student</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Edit Sub User</OffCanvasTitle>
                         ) : (
-                            <OffCanvasTitle id='upcomingEdit'>Add Student</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Add Sub User</OffCanvasTitle>
                         )}
-                        {/* <OffCanvasTitle id='upcomingEdit'>Add Product</OffCanvasTitle> */}
+
                     </ModalHeader>
                     <ModalBody>
                         <div className='row g-4'>
@@ -465,8 +410,24 @@ const Students = () => {
                                     />
                                 </FormGroup>
                             </div>
-                            <div className='col-6'>
-                                <FormGroup id='date' label='DOB' isFloating>
+                            <div className='col-12'>
+                                <FormGroup id='role' isFloating>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        options={roleList.map((option) => option.name)}
+                                        value={role}
+                                        onChange={(event, newValue) => {
+                                            setRole(newValue);
+                                        }}
+                                        inputValue={inputValue}
+                                        onInputChange={(event, newInputValue) => {
+                                            setInputValue(newInputValue);
+                                        }}
+                                        renderInput={(params) => <TextField {...params} label="Role" />}
+                                    />
+                                </FormGroup>
+                                {/* <FormGroup id='date' label='DOB' isFloating>
                                     <Input
                                         placeholder='DOB'
                                         onChange={(e) => setDob(e.target.value)}
@@ -474,9 +435,8 @@ const Students = () => {
                                         type='date'
 
                                     />
-                                </FormGroup>
+                                </FormGroup> */}
                             </div>
-
                         </div>
                     </ModalBody>
                     <ModalFooter className='bg-transparent'>
@@ -503,4 +463,4 @@ const Students = () => {
     );
 };
 
-export default Students;
+export default Users;

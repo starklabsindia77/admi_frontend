@@ -808,7 +808,7 @@ const DashboardPage = () => {
 						</Alert>
 					</div>
 
-					<div className='col-xl-4'>
+					{/* <div className='col-xl-4'>
 						<UserContact
 							name={`${USERS.SAM.name} ${USERS.SAM.surname}`}
 							position='Team Lead'
@@ -936,9 +936,9 @@ const DashboardPage = () => {
 								</AvatarGroup>
 							</CardBody>
 						</Card>
-					</div>
+					</div> */}
 
-					<div className='col-xxl-6'>
+					{/* <div className='col-xxl-6'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='PointOfSale' iconColor='success'>
@@ -1131,18 +1131,18 @@ const DashboardPage = () => {
 								</div>
 							</CardBody>
 						</Card>
-					</div>
+					</div> */}
 					<div className='col-xxl-3'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='NotificationsActive' iconColor='warning'>
 									<CardTitle tag='h4' className='h5'>
-										Recent Activities
+										Notifications
 									</CardTitle>
-									<CardSubTitle>last 2 weeks</CardSubTitle>
+									{/* <CardSubTitle>last 2 weeks</CardSubTitle> */}
 								</CardLabel>
 							</CardHeader>
-							<CardBody isScrollable>
+							<CardBody >
 								<Timeline>
 									<TimelineItem
 										label={moment().add(-0.25, 'hours').format('LT')}
@@ -1208,7 +1208,7 @@ const DashboardPage = () => {
 							</CardBody>
 						</Card>
 					</div>
-					<div className='col-xxl-3'>
+					{/* <div className='col-xxl-3'>
 						<CommonTodo />
 					</div>
 
@@ -1538,7 +1538,7 @@ const DashboardPage = () => {
 								setPerPage={setPerPage}
 							/>
 						</Card>
-					</div>
+					</div> */}
 				</div>
 			</Page>
 		</PageWrapper>

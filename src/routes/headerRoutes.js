@@ -81,16 +81,16 @@ const headers = [
 		element: <ProfilePageHeader />,
 		exact: true,
 	},
-	{
-		path: demoPages.chat.subMenu.withListChat.path,
-		element: <ProfilePageHeader />,
-		exact: true,
-	},
-	{
-		path: demoPages.chat.subMenu.onlyListChat.path,
-		element: <ProfilePageHeader />,
-		exact: true,
-	},
+	// {
+	// 	path: demoPages.chat.subMenu.withListChat.path,
+	// 	element: <ProfilePageHeader />,
+	// 	exact: true,
+	// },
+	// {
+	// 	path: demoPages.chat.subMenu.onlyListChat.path,
+	// 	element: <ProfilePageHeader />,
+	// 	exact: true,
+	// },
 	{
 		path: `${demoPages.knowledge.subMenu.itemID.path}/:id`,
 		element: <ProfilePageHeader />,

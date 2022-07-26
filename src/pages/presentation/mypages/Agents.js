@@ -126,6 +126,7 @@ const Agents = () => {
 					// alert('error msg', d.error);
 				}
 				// alert('done', d);
+				getStudent();
 				setAddProductEvent(false)
 			});
 
@@ -150,6 +151,7 @@ const Agents = () => {
 				if (d.error) {
 					console.log('error msg', d.error);
 				}
+				getStudent();
 				setAddProductEvent(false)
 			});
 

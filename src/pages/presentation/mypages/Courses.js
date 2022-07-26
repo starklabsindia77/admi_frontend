@@ -67,7 +67,7 @@ import Popovers from '../../../components/bootstrap/Popovers';
 // import Button from "@material-ui/core/Button";
 
 import data from '../../../common/data/dummyProductData';
-import { demoPages } from '../../../menu';
+import { AdminPages } from '../../../menu';
 import PaginationButtons, {
     dataPagination,
     PER_COUNT,
@@ -86,6 +86,7 @@ import OffCanvas, {
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import '../../../assets/css/editor.css';
+import CourseCard from "../component/courseCard/CourseCard";
 import { serverUrl } from '../../../config';
 
 const Courses = () => {
@@ -114,10 +115,32 @@ const Courses = () => {
     const [uploadedData, setUploadedData] = useState([]);
     const [uploadedData2, setUploadedData2] = useState([]);
     const [openData, setOpenData] = useState(false);
+    const [wishData, setWishData] = useState([]);
 
     const authToken = localStorage.getItem("auth");
     const UserRole = localStorage.getItem("role");
-    const AgentId = localStorage.getItem("email")
+    const AgentId = localStorage.getItem("email");
+    const getWishlist = () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                authorization: authToken,
+            },
+        };
+        fetch(`${serverUrl}/wishlist`, options)
+            .then((response) => response.json())
+            .then((d) => {
+                console.log('data', d);
+                if (d.error) {
+                    console.log('error msg', d.error);
+                } else if (d.result.length > 0) {
+                    const ss = d.result[0];
+                    console.log('result', ss);
+                    setWishData(ss.wishlist);
+                }
+            });
+    };
     const getCourses = () => {
         const options = {
             method: 'GET',
@@ -127,10 +150,10 @@ const Courses = () => {
             },
         };
 
-        fetch(`${serverUrl}/Courses`, options)
+        fetch(`${serverUrl}/courses/all`, options)
             .then((response) => response.json())
             .then((d) => {
-                console.log('data', d);
+                // console.log('data', d);
                 if (d.error) {
                     console.log('error msg', d.error);
                 } else if (d.result.length > 0) {
@@ -144,8 +167,6 @@ const Courses = () => {
 
     const saveCourses = () => {
         setDescription(draftToHtml(convertToRaw(state.editorState.getCurrentContent())));
-        // setCoursesData({ 'name': name, 'state': stateName, 'city': city, 'country': country, 'short_description': shortDescription, 'description': description });
-
         const body = { 'name': name, 'state': stateName, 'city': city, 'country': country, 'short_description': shortDescription, 'description': description }
 
         const options = {
@@ -205,6 +226,7 @@ const Courses = () => {
     };
     useEffect(() => {
         getCourses();
+        getWishlist();
     }, []);
     const { themeStatus, darkModeStatus } = useDarkMode();
     const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
@@ -255,43 +277,37 @@ const Courses = () => {
     const [date, setDate] = useState(new Date());
 
     const [filterMenu, setFilterMenu] = useState(false);
-    const formik = useFormik({
-        initialValues: {
-            minPrice: '',
-            maxPrice: '',
-            categoryName: '3D Shapes',
-            companyA: true,
-            companyB: true,
-            companyC: true,
-            companyD: true,
-        },
+    // const formik = useFormik({
+    //     initialValues: {
+    //         minPrice: '',
+    //         maxPrice: '',
+    //         categoryName: '3D Shapes',
+    //         companyA: true,
+    //         companyB: true,
+    //         companyC: true,
+    //         companyD: true,
+    //     },
 
-        onSubmit: (values) => {
-            setFilterMenu(false);
-            // alert(JSON.stringify(values, null, 2));
-        },
-    });
+    //     onSubmit: (values) => {
+    //         setFilterMenu(false);
+    //         // alert(JSON.stringify(values, null, 2));
+    //     },
+    // });
 
-    const filteredData = data.filter(
-        (f) =>
-            // Category
-            f.category === formik.values.categoryName &&
-            // Price
-            (formik.values.minPrice === '' || f.price > formik.values.minPrice) &&
-            (formik.values.maxPrice === '' || f.price < formik.values.maxPrice) &&
-            //	Company
-            ((formik.values.companyA ? f.store === 'Company A' : false) ||
-                (formik.values.companyB ? f.store === 'Company B' : false) ||
-                (formik.values.companyC ? f.store === 'Company C' : false) ||
-                (formik.values.companyD ? f.store === 'Company D' : false)),
-    );
+    // const filteredData = data.filter(
+    //     (f) =>
+    //         // Category
+    //         f.category === formik.values.categoryName &&
+    //         // Price
+    //         (formik.values.minPrice === '' || f.price > formik.values.minPrice) &&
+    //         (formik.values.maxPrice === '' || f.price < formik.values.maxPrice) &&
+    //         //	Company
+    //         ((formik.values.companyA ? f.store === 'Company A' : false) ||
+    //             (formik.values.companyB ? f.store === 'Company B' : false) ||
+    //             (formik.values.companyC ? f.store === 'Company C' : false) ||
+    //             (formik.values.companyD ? f.store === 'Company D' : false)),
+    // );
 
-    const [currentPage, setCurrentPage] = useState(1);
-    const [perPage, setPerPage] = useState(PER_COUNT['10']);
-
-    const { items, requestSort, getClassNamesFor } = useSortableData(filteredData);
-    const onCurrentPageItems = dataPagination(items, currentPage, perPage);
-    const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
     const [countUpdated, setCountUpdated] = useState(0);
     const [countValid, setCountValid] = useState(false);
     const [refresh, setRefresh] = useState(false)
@@ -418,32 +434,20 @@ const Courses = () => {
     }
 
     return (
-        <PageWrapper title={demoPages.listPages.subMenu.listBoxed.text}>
+        <PageWrapper title={AdminPages.CoursesManager.subMenu.courses.text}>
             <Page>
                 <Card stretch data-tour='list'>
                     <CardHeader>
                         <CardLabel iconColor='info'>
                             <CardTitle>
-                                Rows:{' '}
-                                <small className='ms-2'>
-                                    {selectTable.values.selectedList.length
-                                        ? `${selectTable.values.selectedList.length} / `
-                                        : null}
-                                    {CoursesList.length}
-                                </small>
+                                <h3>Courses:{' '}
+                                    <small className='ms-2'>
+                                        {CoursesList.length}
+                                    </small>
+                                </h3>
                             </CardTitle>
                         </CardLabel>
                         <CardActions>
-
-                            {/* <Button
-                                color={darkModeStatus ? 'light' : 'dark'}
-                                isLight
-                                icon='Add'
-                                onClick={handleAddProduct}
-                            >
-                                Add New
-                            </Button> */}
-
                             <Button
                                 color={darkModeStatus ? 'light' : 'dark'}
                                 isLight
@@ -456,60 +460,11 @@ const Courses = () => {
                         </CardActions>
                     </CardHeader>
                     <CardBody className='table-responsive' isScrollable>
-                        <table className='table table-modern table-hover'>
-                            <thead>
-                                <tr>
-                                    <th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th>
-                                    <th scope='col'>Courses Name</th>
-                                    <th scope='col'>Application Fees</th>
-                                    <th scope='col'>Study Level</th>
-                                    <th scope='col'>University</th>
-                                    {/* <th scope='col' >
-                                        Actions
-                                    </th> */}
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                                {CoursesList.length > 0 && CoursesList.map((item) => (
-                                    <tr key={item.guid}>
-                                        <td>
-                                            <Checkbox
-                                                id="myCheck"
-                                                checked={item.checked}
-                                            />
-                                        </td>
-                                        <td>{item.name}</td>
-                                        <td>{item.applicationFees}</td>
-                                        <td>{item.studyLevel}</td>
-                                        <td>{item.university}</td>
-                                        {/* <td>
-                                            <Button
-                                                isOutline={!darkModeStatus}
-                                                color='dark'
-                                                isLight={darkModeStatus}
-                                                className={classNames('text-nowrap', {
-                                                    'border-light': !darkModeStatus,
-                                                })}
-                                                icon='Edit'
-                                                onClick={() => editProduct(item.guid)}
-                                            >
-                                                Edit
-                                            </Button>
-                                        </td> */}
-                                    </tr>
-                                ))}
-                            </tbody>
-                        </table>
+                        {CoursesList.length > 0 && CoursesList.map((item) => (
+                            <CourseCard data={item} wishData={wishData} />
+                        ))}
                     </CardBody>
-                    <PaginationButtons
-                        data={items}
-                        label='items'
-                        setCurrentPage={setCurrentPage}
-                        currentPage={currentPage}
-                        perPage={perPage}
-                        setPerPage={setPerPage}
-                    />
+
                 </Card>
                 <Modal
                     setIsOpen={setAddProductEvent}

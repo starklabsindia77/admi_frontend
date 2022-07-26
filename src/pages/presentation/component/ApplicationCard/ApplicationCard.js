@@ -15,7 +15,7 @@ import LocalPhoneIcon from '@mui/icons-material/LocalPhone';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import EditIcon from '@mui/icons-material/Edit';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import './ApplicationCard.css';
 import Checkbox from '@mui/material/Checkbox';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
@@ -27,6 +27,7 @@ import BookmarkIcon from '@mui/icons-material/Bookmark';
 import Icon from '../../../../components/icon/Icon';
 // import Button from '../../../../components/bootstrap/Button';
 import { serverUrl } from '../../../../config';
+
 import HorizontalLabelPositionBelowStepper from './appstepper';
 
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
@@ -165,6 +166,6 @@ function ApplicationCard({ data, wishData }) {
 				</Grid>
 			</Grid>
 		</div>
-	);
+	);   
 }
 export default ApplicationCard;

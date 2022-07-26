@@ -1,4 +1,4 @@
-import { Box} from '@mui/material';
+import { Box } from '@mui/material';
 
 import Tab from '@material-ui/core/Tab';
 import React from 'react';
@@ -8,11 +8,10 @@ import TabList from '@material-ui/lab/TabList';
 import TabPanel from '@material-ui/lab/TabPanel';
 import TabTab from './tabtab';
 
-
 const LabTabs = () => {
 	const [value, setValue] = React.useState('1');
 
-	const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+	const handleChange = (event, newValue) => {
 		setValue(newValue);
 	};
 
@@ -26,10 +25,10 @@ const LabTabs = () => {
 					</TabList>
 				</Box>
 				<TabPanel value='1'>
-					<TabTab/>
+					<TabTab />
 				</TabPanel>
 				<TabPanel value='2'>
-			<TabTab/>
+					<TabTab />
 				</TabPanel>
 			</TabContext>
 		</Box>

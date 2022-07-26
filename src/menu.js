@@ -62,10 +62,10 @@ export const Pages = {
 		path: 'Programs',
 		icon: 'menu_book',
 	},
-	page404: {
-		id: 'Page404',
+	Application: {
+		id: 'application',
 		text: 'Applications',
-		path: 'auth-pages/404',
+		path: 'applications',
 		icon: 'InsertDriveFile',
 	},
 	Shortlist: {
@@ -74,6 +74,12 @@ export const Pages = {
 		path: 'Shortlist',
 		icon: 'favorite_border',
 	},
+	Communication: {
+		id: 'Communication',
+		text: 'Communication',
+		path: 'Communication',
+		icon: 'Forum',
+	},
 };
 
 export const AdminPages = {
@@ -81,6 +87,13 @@ export const AdminPages = {
 		id: 'auth',
 		text: 'Pages',
 		icon: 'Extension',
+	},
+	Communication: {
+		id: 'Communication',
+		text: 'Communication',
+		path: 'Communication',
+		icon: 'Forum',
+
 	},
 
 	CoursesManager: {
@@ -115,28 +128,34 @@ export const AdminPages = {
 		path: 'agents',
 		icon: 'PersonLinesFill',
 	},
-	summary: {
-		id: 'summary',
-		text: 'Application',
-		path: 'Application',
-		icon: 'FileCheck',
+	Application: {
+		id: 'application',
+		text: 'Applications',
+		path: 'applications',
+		icon: 'InsertDriveFile',
 	},
-	crmDashboard: {
-		id: 'crmDashboard',
+	Commission: {
+		id: 'commission',
+		text: 'commission',
+		path: 'commission',
+		icon: 'AttachMoney',
+	},
+	user: {
+		id: 'user',
 		text: 'user',
 		path: 'user',
 		icon: 'SupervisedUserCircle',
 		subMenu: {
-			listBoxed: {
-				id: 'listBoxed',
+			sub: {
+				id: 'sub',
 				text: 'Sub User',
-				path: 'list-pages/boxed-list',
+				path: 'sub/user',
 				icon: 'ViewArray',
 			},
-			listFluid: {
-				id: 'listFluid',
-				text: 'Department',
-				path: 'list-pages/fluid-list',
+			role: {
+				id: 'role',
+				text: 'Role',
+				path: 'sub/role',
 				icon: 'ViewDay',
 			},
 		},
