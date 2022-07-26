@@ -63,7 +63,7 @@ function CourseCard({ data, wishData }) {
 					console.log('result', ss);
 					setWishCheck(true);
 					// setWishListData(ss.wishlist);
-					// reloadFun();
+					reloadFun();
 				}
 			});
 	};
@@ -135,7 +135,7 @@ function CourseCard({ data, wishData }) {
 									style={{ width: '150px', height: '50px', mt: '30px' }}
 									variant='contained'
 									color='info'
-								// onClick={apply}
+									// onClick={apply}
 								>
 									View Application
 								</Button>

@@ -140,30 +140,32 @@ function ApplicationCard({ data, wishData }) {
 			<Grid container spacing={2} p={1}>
 				<Grid item xs={12}>
 					<Stack direction='row'>
-						<Stack gap={6}>
+						{/* <Stack gap={6}>
 							<Typography>est. date</Typography>
 							<Typography mt='8px'>actual date</Typography>
-						</Stack>
+						</Stack> */}
 						<Stack>
-							<Stack direction='row' gap={6} ml='38px'>
+							{/* <Stack direction='row' gap={6} ml='38px'>
 								{date.map((dat) => (
 									<Typography variant='h6'>{dat.date1}</Typography>
 								))}
-							</Stack>
+							</Stack> */}
 
 							<HorizontalLabelPositionBelowStepper />
-                            <Stack direction='row' gap={6} ml='38px' mt='8px'>
+                            {/* <Stack direction='row' gap={6} ml='38px' mt='8px'>
 								{date.map((dat) => (
 									<Typography variant='h6'>{dat.date1}</Typography>
 								))}
-							</Stack>
+							</Stack> */}
 							
 						</Stack>
-					</Stack>
-					<Button variant='text' endIcon={<KeyboardArrowDownIcon />}>
+					</Stack>					
+				</Grid>
+                <Grid item xs={12}>
+                    <Button variant='text' endIcon={<KeyboardArrowDownIcon />}>
 						View More{' '}
 					</Button>
-				</Grid>
+                </Grid>
 			</Grid>
 		</div>
 	);   
