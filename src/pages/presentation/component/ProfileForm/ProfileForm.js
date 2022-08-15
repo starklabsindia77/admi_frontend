@@ -12,6 +12,8 @@ import { IconButton } from '@material-ui/core';
 import { Grid, Divider, Paper, Box, Typography } from '@mui/material';
 import classNames from 'classnames';
 
+import { FileUploader } from 'react-drag-drop-files';
+import moment from 'moment';
 import Card, {
 	CardBody,
 	CardFooter,
@@ -56,10 +58,67 @@ const PreviewItem = ({ title, value }) => {
 		</>
 	);
 };
+const fileTypes = ['JPEG', 'PNG', 'GIF'];
 
-function ApplicationForm({ data, wishData }) {
+function ProfileForm({ data, wishData }) {
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
+
+	const [personalInformation, setPersonalInformation] = useState({
+		fName: '',
+		mName: '',
+		lName: '',
+		dob: '',
+		firstLanguages: '',
+		country: '',
+		gender: '',
+		martialStatus: '',
+		passportNumber: '',
+		passportExpiryDate: '',
+	});
+
+	const [addressInformation, setAddressInformation] = useState({
+		address: '',
+		addressLine: '',
+	});
+	const [contactInformation, setContactInformation] = useState({
+		email: localStorage.getItem('email'),
+		phoneNumber: '',
+	});
+	const [file, setFile] = useState(null);
+	const [testScore, setTestScore] = useState(null);
+	const [workExperience, setWorkExperience] = useState(null);
+	const [passport, setPassport] = useState(null);
+	const [otherDoc, setOtherDoc] = useState(null);
+	const handleChange = (value) => {
+		setFile(value);
+	};
+
+	const testHandleChange = (value) => {
+		setTestScore(value);
+	};
+
+	const workHandleChange = (value) => {
+		setWorkExperience(value);
+	};
+
+	const passportHandleChange = (value) => {
+		setPassport(value);
+	};
+
+	const otherHandleChange = (value) => {
+		setOtherDoc(value);
+	};
+
+	const gernalSubmit = () => {
+		const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+		const info = { 
+			...personalInformation, 
+			...addressInformation, 
+			...contactInformation,
+			userId: userInfo.guid
+		};
+	};
 
 	return (
 		<Wizard
@@ -91,56 +150,108 @@ function ApplicationForm({ data, wishData }) {
 								<div className='col-md-4'>
 									<FormGroup id='firstName' label='First Name' isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													fName: e.target.value,
+												});
+											}}
 											placeholder='First Name'
 											autoComplete='additional-name'
 											validFeedback='Looks good!'
+											value={personalInformation.fName}
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-4'>
 									<FormGroup id='middleName' label='Middle Name' isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													mName: e.target.value,
+												});
+											}}
 											placeholder='Middle Name'
 											autoComplete='additional-name'
 											validFeedback='Looks good!'
+											value={personalInformation.mName}
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-4'>
 									<FormGroup id='lastName' label='Last Name' isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													lName: e.target.value,
+												});
+											}}
 											placeholder='Last Name'
 											autoComplete='family-name'
 											validFeedback='Looks good!'
+											value={personalInformation.lName}
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-4'>
 									<FormGroup id='firstName' label='Date Of Birth' isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													dob: e.target.value,
+												});
+											}}
 											placeholder='Date Of Birth'
 											autoComplete='additional-name'
 											validFeedback='Looks good!'
+											value={personalInformation.dob}
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-4'>
 									<FormGroup id='language' label='First Language' isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													firstLanguages: e.target.value,
+												});
+											}}
 											placeholder='First Language'
 											autoComplete='additional-name'
 											validFeedback='Looks good!'
+											value={personalInformation.firstLanguages}
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-4'>
-									<Select
+									<FormGroup
+										id='country'
+										label='Country of Citizenship'
+										isFloating>
+										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													country: e.target.value,
+												});
+											}}
+											placeholder='Country of Citizenship'
+											autoComplete='additional-name'
+											validFeedback='Looks good!'
+											value={personalInformation.country}
+										/>
+									</FormGroup>
+									{/* <Select
 										id='category'
 										size='lg'
 										ariaLabel='Category'
 										placeholder='Country of Citizenship'
 										list={_selectOptions}
-									/>
+									/> */}
 								</div>
 								<div className='col-md-6'>
 									<Typography variant='p'>Gender</Typography>
@@ -149,15 +260,29 @@ function ApplicationForm({ data, wishData }) {
 											type='radio'
 											id='inlineRadioOne'
 											label='Male'
-											name='radios'
-											value='male'
+											name='male'
+											onChange={(e) => {
+												if (e.target.name === 'male') {
+													setPersonalInformation({
+														...personalInformation,
+														gender: e.target.name,
+													});
+												}
+											}}
 										/>
 										<Checks
 											type='radio'
 											id='inlineRadioTwo'
 											label='Female'
-											name='radios'
-											value='female'
+											name='female'
+											onChange={(e) => {
+												if (e.target.name === 'female') {
+													setPersonalInformation({
+														...personalInformation,
+														gender: e.target.name,
+													});
+												}
+											}}
 										/>
 									</ChecksGroup>
 								</div>
@@ -168,14 +293,30 @@ function ApplicationForm({ data, wishData }) {
 											type='radio'
 											id='inlineRadioOne'
 											label='Married'
-											name='radios'
+											name='married'
+											onChange={(e) => {
+												if (e.target.name === 'married') {
+													setPersonalInformation({
+														...personalInformation,
+														martialStatus: e.target.name,
+													});
+												}
+											}}
 											value='married'
 										/>
 										<Checks
 											type='radio'
 											id='inlineRadioTwo'
 											label='Unmarried'
-											name='radios'
+											name='Unmarried'
+											onChange={(e) => {
+												if (e.target.name === 'Unmarried') {
+													setPersonalInformation({
+														...personalInformation,
+														martialStatus: e.target.name,
+													});
+												}
+											}}
 											value='unmarried'
 										/>
 									</ChecksGroup>
@@ -186,9 +327,16 @@ function ApplicationForm({ data, wishData }) {
 										label='Passport Number'
 										isFloating>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													passportNumber: e.target.value,
+												});
+											}}
 											placeholder='Passport Number'
 											autoComplete='passport'
 											validFeedback='Looks good!'
+											value={personalInformation.passportNumber}
 										/>
 									</FormGroup>
 								</div>
@@ -200,10 +348,19 @@ function ApplicationForm({ data, wishData }) {
 										// formText='This will be how your name will be displayed in the account section and in reviews'
 									>
 										<Input
+											onChange={(e) => {
+												setPersonalInformation({
+													...personalInformation,
+													passportExpiryDate: moment(
+														new Date(e.target.value),
+													).format('YYYY-MM-DD'),
+												});
+											}}
 											type='date'
 											placeholder='Passport Expiry Date'
 											autoComplete='Passport-Expiry-Date'
 											validFeedback='Looks good!'
+											// value={personalInformation.passportExpiryDate}
 										/>
 									</FormGroup>
 								</div>
@@ -233,6 +390,13 @@ function ApplicationForm({ data, wishData }) {
 									<FormGroup id='phoneNumber' label='Phone Number' isFloating>
 										<Input
 											placeholder='Phone Number'
+											onChange={(e) => {
+												setContactInformation({
+													...contactInformation,
+													phoneNumber: e.target.value,
+												});
+											}}
+											value={contactInformation.phoneNumber}
 											type='tel'
 											autoComplete='tel'
 											validFeedback='Looks good!'
@@ -243,9 +407,17 @@ function ApplicationForm({ data, wishData }) {
 									<FormGroup id='emailAddress' label='Email address' isFloating>
 										<Input
 											type='email'
+											disabled
+											onChange={(e) => {
+												setContactInformation({
+													...contactInformation,
+													email: e.target.value,
+												});
+											}}
 											placeholder='Email address'
 											autoComplete='email'
 											validFeedback='Looks good!'
+											value={contactInformation.email}
 										/>
 									</FormGroup>
 								</div>
@@ -274,6 +446,13 @@ function ApplicationForm({ data, wishData }) {
 								<div className='col-lg-12'>
 									<FormGroup id='addressLine' label='Address Line' isFloating>
 										<Input
+											onChange={(e) => {
+												setAddressInformation({
+													...addressInformation,
+													address: e.target.value,
+												});
+											}}
+											value={addressInformation.address}
 											// onChange={formik.handleChange}
 											// onBlur={formik.handleBlur}
 											// value={formik.values.addressLine}
@@ -287,6 +466,13 @@ function ApplicationForm({ data, wishData }) {
 								<div className='col-lg-12'>
 									<FormGroup id='addressLine2' label='Address Line 2' isFloating>
 										<Input
+											onChange={(e) => {
+												setAddressInformation({
+													...addressInformation,
+													addressLine: e.target.value,
+												});
+											}}
+											value={addressInformation.addressLine}
 											// onChange={formik.handleChange}
 											// onBlur={formik.handleBlur}
 											// value={formik.values.addressLine2}
@@ -301,6 +487,13 @@ function ApplicationForm({ data, wishData }) {
 								<div className='col-lg-6'>
 									<FormGroup id='city' label='City' isFloating>
 										<Input
+											onChange={(e) => {
+												setAddressInformation({
+													...addressInformation,
+													city: e.target.value,
+												});
+											}}
+											value={addressInformation.city}
 											// onChange={formik.handleChange}
 											// onBlur={formik.handleBlur}
 											// value={formik.values.city}
@@ -313,31 +506,40 @@ function ApplicationForm({ data, wishData }) {
 								</div>
 								<div className='col-md-3'>
 									<FormGroup id='state' label='State' isFloating>
-										<Select
-											ariaLabel='State'
-											placeholder='Choose...'
-											list={[
-												{ value: 'usa', text: 'USA' },
-												{ value: 'ca', text: 'Canada' },
-											]}
+										<Input
+											onChange={(e) => {
+												setAddressInformation({
+													...addressInformation,
+													state: e.target.value,
+												});
+											}}
+											value={addressInformation.state}
 											// onChange={formik.handleChange}
 											// onBlur={formik.handleBlur}
-											// value={formik.values.state}
+											// value={formik.values.city}
 											// isValid={formik.isValid}
-											// isTouched={formik.touched.state}
-											// invalidFeedback={formik.errors.state}
+											// isTouched={formik.touched.city}
+											// invalidFeedback={formik.errors.city}
+											validFeedback='Looks good!'
 										/>
 									</FormGroup>
 								</div>
 								<div className='col-md-3'>
 									<FormGroup id='zip' label='Zip' isFloating>
 										<Input
-										// onChange={formik.handleChange}
-										// onBlur={formik.handleBlur}
-										// value={formik.values.zip}
-										// isValid={formik.isValid}
-										// isTouched={formik.touched.zip}
-										// invalidFeedback={formik.errors.zip}
+											onChange={(e) => {
+												setAddressInformation({
+													...addressInformation,
+													zip: e.target.value,
+												});
+											}}
+											value={addressInformation.zip}
+											// onChange={formik.handleChange}
+											// onBlur={formik.handleBlur}
+											// value={formik.values.zip}
+											// isValid={formik.isValid}
+											// isTouched={formik.touched.zip}
+											// invalidFeedback={formik.errors.zip}
 										/>
 									</FormGroup>
 								</div>
@@ -345,140 +547,96 @@ function ApplicationForm({ data, wishData }) {
 						</div>
 					</Grid>
 				</Grid>
+				<Grid>
+				<Button onClick={gernalSubmit} variant='contained' size='large'>
+					SUBMIT
+				</Button>
+				</Grid>
 			</WizardItem>
 			<WizardItem id='step2' title='Education History'>
 				<div className='row g-4'>
 					<div className='col-lg-12'>
-						<FormGroup id='addressLine' label='Address Line' isFloating>
-							<Input
-								// onChange={formik.handleChange}
-								// onBlur={formik.handleBlur}
-								// value={formik.values.addressLine}
-								// isValid={formik.isValid}
-								// isTouched={formik.touched.addressLine}
-								// invalidFeedback={formik.errors.addressLine}
-								validFeedback='Looks good!'
-							/>
-						</FormGroup>
+						<FileUploader
+							multiple
+							handleChange={handleChange}
+							name='file'
+							types={fileTypes}
+						/>
 					</div>
 					<div className='col-lg-12'>
-						<FormGroup id='addressLine2' label='Address Line 2' isFloating>
-							<Input
-								// onChange={formik.handleChange}
-								// onBlur={formik.handleBlur}
-								// value={formik.values.addressLine2}
-								// isValid={formik.isValid}
-								// isTouched={formik.touched.addressLine2}
-								// invalidFeedback={formik.errors.addressLine2}
-								validFeedback='Looks good!'
-							/>
-						</FormGroup>
-					</div>
-
-					<div className='col-lg-6'>
-						<FormGroup id='city' label='City' isFloating>
-							<Input
-								// onChange={formik.handleChange}
-								// onBlur={formik.handleBlur}
-								// value={formik.values.city}
-								// isValid={formik.isValid}
-								// isTouched={formik.touched.city}
-								// invalidFeedback={formik.errors.city}
-								validFeedback='Looks good!'
-							/>
-						</FormGroup>
-					</div>
-					<div className='col-md-3'>
-						<FormGroup id='state' label='State' isFloating>
-							<Select
-								ariaLabel='State'
-								placeholder='Choose...'
-								list={[
-									{ value: 'usa', text: 'USA' },
-									{ value: 'ca', text: 'Canada' },
-								]}
-								// onChange={formik.handleChange}
-								// onBlur={formik.handleBlur}
-								// value={formik.values.state}
-								// isValid={formik.isValid}
-								// isTouched={formik.touched.state}
-								// invalidFeedback={formik.errors.state}
-							/>
-						</FormGroup>
-					</div>
-					<div className='col-md-3'>
-						<FormGroup id='zip' label='Zip' isFloating>
-							<Input
-							// onChange={formik.handleChange}
-							// onBlur={formik.handleBlur}
-							// value={formik.values.zip}
-							// isValid={formik.isValid}
-							// isTouched={formik.touched.zip}
-							// invalidFeedback={formik.errors.zip}
-							/>
-						</FormGroup>
+						<p>{file ? `File name: ${file[0].name}` : 'no files uploaded yet'}</p>
 					</div>
 				</div>
 			</WizardItem>
-			<WizardItem id='step3' title='Test Scores'>
+			<WizardItem id='step3' title='English Test Scores'>
 				<div className='row g-4'>
-					<div className='col-12'>
-						<FormGroup>
-							<Label>Email Notifications</Label>
-							{/* <ChecksGroup>
-								{notificationTypes.map((cat) => (
-									<Checks
-										type='switch'
-										key={cat.id}
-										id={cat.id.toString()}
-										name='emailNotification'
-										label={cat.name}
-										value={cat.id}
-										onChange={formik.handleChange}
-										checked={formik.values.emailNotification.includes(
-											cat.id.toString(),
-										)}
-									/>
-								))}
-							</ChecksGroup> */}
-						</FormGroup>
+					<div className='col-lg-12'>
+						<FileUploader
+							multiple
+							handleChange={testHandleChange}
+							name='file'
+							types={fileTypes}
+						/>
 					</div>
-					<div className='col-12'>
-						<FormGroup>
-							<Label>Push Notifications</Label>
-							{/* <ChecksGroup>
-								{notificationTypes.map((cat) => (
-									<Checks
-										type='switch'
-										key={cat.id}
-										id={cat.id.toString()}
-										name='pushNotification'
-										label={cat.name}
-										value={cat.id}
-										onChange={formik.handleChange}
-										checked={formik.values.pushNotification.includes(
-											cat.id.toString(),
-										)}
-									/>
-								))}
-							</ChecksGroup> */}
-						</FormGroup>
+					<div className='col-lg-12'>
+						<p>
+							{testScore
+								? `File name: ${testScore[0].name}`
+								: 'no files uploaded yet'}
+						</p>
 					</div>
 				</div>
 			</WizardItem>
-			<WizardItem id='step4' title='Background Information'>
-				<div className='row g-3'>
-					<div className='col-9 offset-3'>
-						<h3 className='mt-4'>Account Detail</h3>
-						<h4 className='mt-4'>Personal Information</h4>
+			<WizardItem id='step4' title='Work Experience'>
+				<div className='row g-4'>
+					<div className='col-lg-12'>
+						<FileUploader
+							multiple
+							handleChange={workHandleChange}
+							name='file'
+							types={fileTypes}
+						/>
+					</div>
+					<div className='col-lg-12'>
+						<p>
+							{workExperience
+								? `File name: ${workExperience[0].name}`
+								: 'no files uploaded yet'}
+						</p>
 					</div>
 				</div>
 			</WizardItem>
-			<WizardItem id='step5' title='Upload Documents'>
-				<div className='row g-3'>
-					<div className='col-9 offset-3'>
-						<h3 className='mt-4'>Account Detail</h3>
-						<h4 className='mt-4'>Personal Information</h4>
+			<WizardItem id='step5' title='Passport & Travel History'>
+				<div className='row g-4'>
+					<div className='col-lg-12'>
+						<FileUploader
+							multiple
+							handleChange={passportHandleChange}
+							name='file'
+							types={fileTypes}
+						/>
+					</div>
+					<div className='col-lg-12'>
+						<p>
+							{passport ? `File name: ${passport[0].name}` : 'no files uploaded yet'}
+						</p>
+					</div>
+				</div>
+			</WizardItem>
+			<WizardItem id='step6' title='Emergency Contact & Other Documents'>
+				<div className='row g-4'>
+					<div className='col-lg-12'>
+						<FileUploader
+							multiple
+							handleChange={otherHandleChange}
+							name='file'
+							types={fileTypes}
+						/>
+					</div>
+					<div className='col-lg-12'>
+						<p>
+							{otherDoc ? `File name: ${otherDoc[0].name}` : 'no files uploaded yet'}
+						</p>
 					</div>
 				</div>
 			</WizardItem>
@@ -486,4 +644,4 @@ function ApplicationForm({ data, wishData }) {
 	);
 }
 
-export default ApplicationForm;
+export default ProfileForm;

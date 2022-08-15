@@ -14,7 +14,7 @@ import ContentHeader from '../pages/common/Headers/ContentHeader';
 import UtilitiesHeader from '../pages/common/Headers/UtilitiesHeader';
 import IconHeader from '../pages/common/Headers/IconHeader';
 import ExtrasHeader from '../pages/common/Headers/ExtrasHeader';
-import DefaultHeader from '../pages/common/Headers/DefaultHeader';
+// import DefaultHeader from '../pages/common/Headers/DefaultHeader';
 
 const headers = [
 	{ path: layoutMenu.pageLayout.subMenu.onlySubheader.path, element: null, exact: true },
@@ -191,7 +191,7 @@ const headers = [
 	},
 	{
 		path: `*`,
-		element: <DefaultHeader />,
+		element: <DashboardBookingHeader />,
 	},
 ];
 

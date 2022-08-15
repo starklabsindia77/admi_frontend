@@ -101,7 +101,8 @@ Select.propTypes = {
 	name: PropTypes.string,
 	children: PropTypes.node,
 	ariaLabel: PropTypes.string.isRequired,
-	placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	// placeholder: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	placeholder: PropTypes.string,
 	size: PropTypes.oneOf(['lg', 'sm']),
 	multiple: PropTypes.bool,
 	/**

@@ -35,7 +35,7 @@ function CourseCard({ data, wishData }) {
 	const authToken = localStorage.getItem('auth');
 	const UserRole = localStorage.getItem('role');
 	const apply = () => {
-		navigate('ApplicationsForm');
+		navigate('ApplicationsForm', { state: { data } });
 	};
 	const checkWishList = () => {
 		const valueData = wishData.filter((item) => item.courseId === data.guid);
@@ -111,10 +111,10 @@ function CourseCard({ data, wishData }) {
 							)}
 							<Stack direction='row'>
 								<Button variant='text' size='large' startIcon={<BusinessIcon />}>
-									{data.university[0].name}
+									{data.university.name}
 								</Button>
 								<Button variant='text' size='large' startIcon={<PinDropIcon />}>
-									{data.university[0].country}
+									{data.university.country}
 								</Button>
 							</Stack>
 						</Stack>

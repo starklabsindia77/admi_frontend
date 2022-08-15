@@ -59,7 +59,7 @@ export const Pages = {
 	Programs: {
 		id: 'ProductManagerPage',
 		text: 'Programs',
-		path: 'Programs',
+		path: 'search',
 		icon: 'menu_book',
 	},
 	Application: {
@@ -259,11 +259,26 @@ export const dashboardMenu = {
 	},
 };
 
+export const extraMenu = {
+	Profile: {
+		id: 'extraMenu1',
+		text: 'Student Profile',
+		path: 'student/profile',
+		icon: 'menu_book',
+	},
+};
+
 export const demoPages = {
 	pages: {
 		id: 'pages',
 		text: 'Pages',
 		icon: 'Extension',
+	},
+	Programs: {
+		id: 'ProductManagerPage',
+		text: 'Programs',
+		path: 'Programs',
+		icon: 'menu_book',
 	},
 	singlePages: {
 		id: 'singlePages',

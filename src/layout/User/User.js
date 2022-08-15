@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
 import USERS from '../../common/data/userDummyData';
-import { demoPages } from '../../menu';
+import { demoPages, extraMenu } from '../../menu';
 import { DropdownItem, DropdownMenu } from '../../components/bootstrap/Dropdown';
 import Button from '../../components/bootstrap/Button';
 import useDarkMode from '../../hooks/useDarkMode';
@@ -16,8 +16,19 @@ const User = () => {
 	const navigate = useNavigate();
 	const handleItem = useNavigationItemHandle();
 	const { darkModeStatus, setDarkModeStatus } = useDarkMode();
+	const UserRole = localStorage.getItem('role');
 
 	const [collapseStatus, setCollapseStatus] = useState(false);
+	const link = () => {
+		if (UserRole === 'Student') {
+			navigate(`../${extraMenu.Profile.path}`);
+		} else {
+			navigate(
+				`../${demoPages.appointment.subMenu.employeeID.path}/${USERS.JOHN.id}`,
+				handleItem(),
+			);
+		}
+	};
 
 	const { t } = useTranslation(['translation', 'menu']);
 	const username = localStorage.getItem('userName');
@@ -48,13 +59,7 @@ const User = () => {
 			</div>
 			<DropdownMenu>
 				<DropdownItem>
-					<Button
-						icon='AccountBox'
-						onClick={() =>
-							navigate(
-								`../${demoPages.appointment.subMenu.employeeID.path}/${USERS.JOHN.id}`,
-							)
-						}>
+					<Button icon='AccountBox' onClick={() => link()}>
 						Profile
 					</Button>
 				</DropdownItem>
@@ -74,12 +79,7 @@ const User = () => {
 						<div
 							role='presentation'
 							className='navigation-item cursor-pointer'
-							onClick={() =>
-								navigate(
-									`../${demoPages.appointment.subMenu.employeeID.path}/${USERS.JOHN.id}`,
-									handleItem(),
-								)
-							}>
+							onClick={() => link()}>
 							<span className='navigation-link navigation-link-pill'>
 								<span className='navigation-link-info'>
 									<Icon icon='AccountBox' className='navigation-icon' />

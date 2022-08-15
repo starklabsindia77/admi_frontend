@@ -150,7 +150,7 @@ const Courses = () => {
             },
         };
 
-        fetch(`${serverUrl}/courses/all`, options)
+        fetch(`${serverUrl}/courses`, options)
             .then((response) => response.json())
             .then((d) => {
                 // console.log('data', d);
@@ -339,7 +339,6 @@ const Courses = () => {
     };
 
     const updateData = (result) => {
-
         const { data } = result;
         const finalData = [];
         console.log("result data ::", data);

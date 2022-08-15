@@ -10,6 +10,7 @@
 /* eslint-disable vars-on-top */
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { useLocation } from "react-router-dom";
 import Papa from 'papaparse';
 import { Typography, Grid, Box, Stack, Link } from '@mui/material';
 
@@ -101,7 +102,8 @@ const AppForm = () => {
      * For Tour
      */
     useTourStep(6);
-
+    const location = useLocation();
+    // console.log('Location Form Data ', location);
 
 
 
@@ -110,33 +112,12 @@ const AppForm = () => {
             <Page>
                 <Stack maxWidth="100%">
                     <h3>{Forms.ApplicationsForm.text}</h3>
-                    <ApplicationForm />
-                    {/* <Stack direction="row" justifyContent="space-around">
+                    {/* <ApplicationForm /> */}
                         
-                        <Stack>
-                            <LabTabs />
-                        </Stack >
-                        <Stack minWidth="60%">
-                            <Box p={2} borderBottom="1px solid teal">
-                                <img src='https://app.dfavo.com//uploads/college_logo/130.png' alt='rishav' style={{ width: '150px' }} />
-                                <Typography variant="h4" mb={2}>Academies Australasia Polytechnic</Typography>
-                                <Typography variant='h5'>College Website</Typography>
-                                <Link href="http://www.aapoly.edu.au" variant="h6" mb={2}>http://www.aapoly.edu.au</Link>
-                            </Box>
-                            <Box mt={2} pl={2}>
-                                <Typography variant="h4" mb={2} >Bachelor of Tourism and Hospitality Management</Typography>
-                                <Link href="https://aapoly.edu.au/courses/bachelor-degree/" variant='h6'>https://aapoly.edu.au/courses/bachelor-degree/</Link>
-
-                            </Box>
-
-                            <Grid container mt={2} p={2}>
-                                <Grid item xs={6} variant="h4" mb={2}>Tuition Fee:15000 AUD</Grid>
-                                <Grid item xs={6} mb={2}>Application Fee:0 AUD</Grid>
-                                <Grid item xs={6}>Duration:36 Months</Grid>
-                                <Grid item xs={6}>Intake:Jul,Nov,Feb</Grid>
-                            </Grid>
-                        </Stack>
-                    </Stack> */}
+                    <Stack>
+                        <LabTabs data={location.state.data} />
+                    </Stack >
+                        
                 </Stack>
             </Page>
 

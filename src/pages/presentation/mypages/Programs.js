@@ -9,37 +9,39 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable vars-on-top */
 import React, { useState, useEffect } from 'react';
-import moment from 'moment';
-import Papa from 'papaparse';
-import { useFormik } from 'formik';
-import { Calendar as DatePicker } from 'react-date-range';
-import classNames from 'classnames';
-import { EditorState, convertToRaw } from 'draft-js';
-import draftToHtml from 'draftjs-to-html';
-import Checkbox from '@material-ui/core/Checkbox';
-import htmlToDraft from 'html-to-draftjs';
-import { Editor } from "react-draft-wysiwyg";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import DialogTitle from "@material-ui/core/DialogTitle";
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TablePagination from '@material-ui/core/TablePagination';
-import TableRow from '@material-ui/core/TableRow';
-import TableSortLabel from '@material-ui/core/TableSortLabel';
-import SubHeader, {
-    SubHeaderLeft,
-    SubHeaderRight,
-    SubheaderSeparator,
-} from '../../../layout/SubHeader/SubHeader';
-import Avatar from '../../../components/Avatar';
-import UserImageWebp from '../../../assets/img/wanna/wanna1.webp';
-import UserImage from '../../../assets/img/wanna/wanna1.png';
+import { useLocation } from "react-router-dom";
+import CircularProgress from '@mui/material/CircularProgress';
+// import moment from 'moment';
+// import Papa from 'papaparse';
+// import { useFormik } from 'formik';
+// import { Calendar as DatePicker } from 'react-date-range';
+// import classNames from 'classnames';
+// import { EditorState, convertToRaw } from 'draft-js';
+// import draftToHtml from 'draftjs-to-html';
+// import Checkbox from '@material-ui/core/Checkbox';
+// import htmlToDraft from 'html-to-draftjs';
+// import { Editor } from "react-draft-wysiwyg";
+// import Dialog from "@material-ui/core/Dialog";
+// import DialogActions from "@material-ui/core/DialogActions";
+// import DialogContent from "@material-ui/core/DialogContent";
+// import DialogContentText from "@material-ui/core/DialogContentText";
+// import DialogTitle from "@material-ui/core/DialogTitle";
+// import Table from '@material-ui/core/Table';
+// import TableBody from '@material-ui/core/TableBody';
+// import TableCell from '@material-ui/core/TableCell';
+// import TableContainer from '@material-ui/core/TableContainer';
+// import TableHead from '@material-ui/core/TableHead';
+// import TablePagination from '@material-ui/core/TablePagination';
+// import TableRow from '@material-ui/core/TableRow';
+// import TableSortLabel from '@material-ui/core/TableSortLabel';
+// import SubHeader, {
+//     SubHeaderLeft,
+//     SubHeaderRight,
+//     SubheaderSeparator,
+// } from '../../../layout/SubHeader/SubHeader';
+// import Avatar from '../../../components/Avatar';
+// import UserImageWebp from '../../../assets/img/wanna/wanna1.webp';
+// import UserImage from '../../../assets/img/wanna/wanna1.png';
 import Button from '../../../components/bootstrap/Button';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
@@ -50,32 +52,32 @@ import Card, {
     CardLabel,
     CardTitle,
 } from '../../../components/bootstrap/Card';
-import Dropdown, {
-    DropdownItem,
-    DropdownMenu,
-    DropdownToggle,
-} from '../../../components/bootstrap/Dropdown';
-import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
-import InputGroup, { InputGroupText } from '../../../components/bootstrap/forms/InputGroup';
-import Input from '../../../components/bootstrap/forms/Input';
-import FormGroup from '../../../components/bootstrap/forms/FormGroup';
-import Label from '../../../components/bootstrap/forms/Label';
-import CommonFilterTag from '../../common/CommonFilterTag';
-import CommonTableRow from '../../common/CommonTableRow';
-import Select from '../../../components/bootstrap/forms/Select';
-import Popovers from '../../../components/bootstrap/Popovers';
+// import Dropdown, {
+//     DropdownItem,
+//     DropdownMenu,
+//     DropdownToggle,
+// } from '../../../components/bootstrap/Dropdown';
+// import Checks, { ChecksGroup } from '../../../components/bootstrap/forms/Checks';
+// import InputGroup, { InputGroupText } from '../../../components/bootstrap/forms/InputGroup';
+// import Input from '../../../components/bootstrap/forms/Input';
+// import FormGroup from '../../../components/bootstrap/forms/FormGroup';
+// import Label from '../../../components/bootstrap/forms/Label';
+// import CommonFilterTag from '../../common/CommonFilterTag';
+// import CommonTableRow from '../../common/CommonTableRow';
+// import Select from '../../../components/bootstrap/forms/Select';
+// import Popovers from '../../../components/bootstrap/Popovers';
 // import Button from "@material-ui/core/Button";
 import CourseCard from "../component/courseCard/CourseCard";
 
-import data from '../../../common/data/dummyProductData';
+// import data from '../../../common/data/dummyProductData';
 import { demoPages, Pages } from '../../../menu';
-import PaginationButtons, {
-    dataPagination,
-    PER_COUNT,
-} from '../../../components/PaginationButtons';
-import useSortableData from '../../../hooks/useSortableData';
-import Icon from '../../../components/icon/Icon';
-import useSelectTable from '../../../hooks/useSelectTable';
+// import PaginationButtons, {
+//     dataPagination,
+//     PER_COUNT,
+// } from '../../../components/PaginationButtons';
+// import useSortableData from '../../../hooks/useSortableData';
+// import Icon from '../../../components/icon/Icon';
+// import useSelectTable from '../../../hooks/useSelectTable';
 import useDarkMode from '../../../hooks/useDarkMode';
 import useTourStep from '../../../hooks/useTourStep';
 import Modal, { ModalBody, ModalFooter, ModalHeader } from '../../../components/bootstrap/Modal';
@@ -97,7 +99,8 @@ const Programs = () => {
     // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
     // const serverUrl = "http://localhost:3001/api";
 
-
+    const location = useLocation();
+    // console.log("location", location);
 
     const [CoursesList, setCoursesList] = useState([]);
 
@@ -105,27 +108,31 @@ const Programs = () => {
 
 
     const authToken = localStorage.getItem("auth");
+    const [Isloader, setIsloader] = useState(true);
     const UserRole = localStorage.getItem("role");
     const AgentId = localStorage.getItem("email")
     const getCourses = () => {
+        // setIsloader(true);
         const options = {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Content-Type': 'application/json;charset=utf-8',
                 'authorization': authToken
             },
+            body: JSON.stringify(location.state),
         };
 
         fetch(`${serverUrl}/courses/all`, options)
             .then((response) => response.json())
             .then((d) => {
-                console.log('data', d);
+                // console.log('data', d);
                 if (d.error) {
                     console.log('error msg', d.error);
                 } else if (d.result.length > 0) {
                     const ss = d.result;
-                    console.log('result', ss);
+                    // console.log('result', ss);
                     setCoursesList(ss)
+                    setIsloader(false);
 
                 }
             });
@@ -140,9 +147,22 @@ const Programs = () => {
     const [upcomingEventsInfoOffcanvas, setUpcomingEventsInfoOffcanvas] = useState(false);
     const [addProductEvent, setAddProductEvent] = useState(false);
     const [wishData, setWishData] = useState([]);
+    
     const handleUpcomingDetails = () => {
         setUpcomingEventsInfoOffcanvas(!upcomingEventsInfoOffcanvas);
     };
+    const loader = {
+		position: "fixed",	
+		top: "0",	
+		left: "0",	
+		right: "0",	
+		bottom: "0",	
+		background: "rgba(255,255,255,0.4)",
+		zIndex: "100",	
+		display: "table",	
+		width: "100%",	
+		height: "100%"	
+	  }
     const getWishlist = () => {
         const options = {
             method: 'GET',
@@ -154,12 +174,12 @@ const Programs = () => {
         fetch(`${serverUrl}/wishlist`, options)
             .then((response) => response.json())
             .then((d) => {
-                console.log('data', d);
+                // console.log('data', d);
                 if (d.error) {
                     console.log('error msg', d.error);
                 } else if (d.result.length > 0) {
                     const ss = d.result[0];
-                    console.log('result', ss);
+                    // console.log('result', ss);
                     setWishData(ss.wishlist);
                 }
             });
@@ -228,8 +248,12 @@ const Programs = () => {
                             </CardTitle>
                         </CardLabel>
                     </CardHeader>
+                    {/* {Isloader  && (
+                        <div style={loader}>
+                            <CircularProgress style={{ margin: "22% auto", display: "block" }} />
+                        </div>
+                    )} */}
                     <CardBody className='table-responsive' isScrollable >
-
                         {CoursesList.length > 0 && CoursesList.map((item) => (
                             <CourseCard data={item} wishData={wishData} />
                         ))}

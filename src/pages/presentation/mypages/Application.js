@@ -1,3 +1,4 @@
+
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
@@ -5,6 +6,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable no-shadow */
 /* eslint-disable react-hooks/exhaustive-deps */
+/* eslint-disable react/no-array-index-key */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
@@ -76,6 +78,7 @@ const Application = () => {
 
 
     const authToken = localStorage.getItem("auth");
+    const [applicationList, setApplicationList] = useState([]);
 
 
 
@@ -102,6 +105,60 @@ const Application = () => {
         navigate('/Programs/ApplicationsForm');
     };
 
+    const userInfoName = JSON.parse(localStorage.getItem('userInfo'));
+    const getApplication = () => {
+        const options = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+		};
+
+		fetch(`${serverUrl}/application/${userInfoName.guid}`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result.length > 0) {
+					const ss = d.result;
+                    setApplicationList(ss)
+				}
+			});
+    }
+
+    const getAllApplication = () => {
+        const options = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+		};
+
+		fetch(`${serverUrl}/application`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result.length > 0) {
+					const ss = d.result;
+                    setApplicationList(ss)
+				}
+			});
+    }
+
+    useEffect(() => {
+        if(userInfoName.role === 'Student'){
+            getApplication();
+        }else if (userInfoName.role === 'admin'){
+            getAllApplication();
+        }
+        
+    }, [])
+
 
 
 
@@ -116,7 +173,7 @@ const Application = () => {
                                 <h3>Applications</h3>
                             </CardTitle>
                         </CardLabel>
-                        <CardActions>
+                        {/* <CardActions>
                             <Button
                                 color={darkModeStatus ? 'light' : 'dark'}
                                 isLight
@@ -126,12 +183,15 @@ const Application = () => {
                                 Add New
                             </Button>
 
-                        </CardActions>
+                        </CardActions> */}
                     </CardHeader>
                     <CardBody className='table-responsive' isScrollable>
-                        <ApplicationCard />
-                        <ApplicationCard />
-                        <ApplicationCard />
+                        {applicationList && applicationList.length > 0 && applicationList.map((item, index) => (
+                             <div key={index}>
+                                <ApplicationCard data={item} />
+                             </div>                            
+                        ))}
+                        
                     </CardBody>
                 </Card>
             </Page>

@@ -113,6 +113,7 @@ const Login = ({ isSignUp }) => {
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', data.user.name);
 					localStorage.setItem('role', data.user.role);
+					localStorage.setItem('userInfo', JSON.stringify(data.user));
 					localStorage.setItem('email', username);
 					navigate('dashboard');
 					setIsloader(false);

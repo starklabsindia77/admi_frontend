@@ -1,103 +1,206 @@
+
 /* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable react/destructuring-assignment */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable react/jsx-props-no-spreading */
 /* eslint-disable no-unused-vars */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
-import { Stack, Button } from '@mui/material';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
-// import { TextField } from '@material-ui/core';
-import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import { useNavigate } from 'react-router-dom';
+import { Stack, Button, Typography, Grid, Link } from '@mui/material';
 import FormGroup from '../../../../../components/bootstrap/forms/FormGroup';
+import Input from '../../../../../components/bootstrap/forms/Input';
+import Textarea from '../../../../../components/bootstrap/forms/Textarea';
+import { serverUrl } from '../../../../../config';
 
-import BasicSelect from './tabdata';
+const TabTab = (data) => {
+	const navigate = useNavigate();
+	const [inputValue, setInputValue] = useState('');
+	const [role, setRole] = useState();
+	const [one, setOne] = useState(data.data.data);
+	const [collegeInfo, setcollegeInfo] = useState({
+		country: one.university.country,
+		preferCollege: one.university.name,
+		preferCourse: one.name,
+		Intake: '',
+		Year: '',
+		remark: '',
+		ApplicationID:
+			Math.random().toString(36).substring(2, 15) +
+			Math.random().toString(36).substring(2, 15),
+		StudentID: '',
+		CourseID: one._id,
+		AppType: 'general',
+	});
+	const [openData, setOpenData] = useState(false);
+	const authToken = localStorage.getItem('auth');
+	const handleClose = () => {
+		setOpenData(false);
+	};
+	const userInfo = () => {
+		const userInfoName = JSON.parse(localStorage.getItem('userInfo'));
+		if (userInfoName.role === 'Student') {
+			console.log('Student role');
+			setcollegeInfo({
+				...collegeInfo,
+				StudentID: userInfoName.guid,
+			});
+		}
+	};
 
-const TabTab = () => {
-    const [inputValue, setInputValue] = useState('');
-    const [role, setRole] = useState();
-    const [college, setcollege] = useState(['college1', 'college2', 'college3']);
-    const [openData, setOpenData] = useState(false);
-    const handleClose = () => {
-        setOpenData(false);
-    };
+	const submitApplication = () => {
+		console.log('submit', collegeInfo);
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+			body: JSON.stringify(collegeInfo),
+		};
 
-    return (
-        <>
-            <Box pt={2} pb={2}>
-                <h5 style={{ fontWeight: 'bold' }}>Prefer College</h5>
-                {/* <BasicSelect style={{ width: '100%' }} /> */}
+		fetch(`${serverUrl}/application/add`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result.length > 0) {
+					const ss = d.result;
+					if(ss === 'Done'){
+						navigate('/applications');
+					}
+					console.log('submit result', ss)
+				}
+			});
+	};
 
-                <Autocomplete
-                    disablePortal
-                    id='combo-box-demo'
-                    options={college}
-                    value={role}
-                    onChange={(event, newValue) => {
-                        setRole(newValue);
-                    }}
-                    inputValue={inputValue}
-                    onInputChange={(event, newInputValue) => {
-                        setInputValue(newInputValue);
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </Box>
-            <Box pt={2} pb={2}>
-                <h5 style={{ fontWeight: 'bold' }}>Prefer Course</h5>
-                <BasicSelect style={{ width: '100%' }} />
-            </Box>
-            <Stack direction='row' justifyContent='space-between' pt={2} pb={4}>
-                <Box mr={2}>
-                    <h5 style={{ fontWeight: 'bold' }}>Intake</h5>
-                    <BasicSelect />
-                </Box>
-                <Box>
-                    <h5 style={{ fontWeight: 'bold' }}>Year</h5>
-                    <BasicSelect />
-                </Box>
-            </Stack>
-            <h5 style={{ fontWeight: 'bold' }}>Remark</h5>
-            <TextField
-                id='outlined-basic'
-                variant='outlined'
-                // label='Multiline'
-                multiline
-                rows={4}
-                // defaultValue='Default Value'
-                fullWidth
-                mt={2}
-            />
-            <Box pt={2}>
-                <Button variant='contained' size='large'>
-                    Add Student Application
-                </Button>
-                {/* <Dialog
-                    maxWidth='lg'
-                    open={openData}
-                    onClose={handleClose}
-                    aria-labelledby='alert-dialog-title'
-                    aria-describedby='alert-dialog-description'>
-                    <DialogTitle id='alert-dialog-title'>
-                        <h3>.</h3>
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText id='alert-dialog-description'>
-                            <h1>You have created your account successfully</h1>
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button onClick={handleClose} color='primary'>
-                            Thank You
-                        </Button>
-                    </DialogActions>
-                </Dialog> */}
-            </Box>
-        </>
-    );
+	useEffect(() => {
+		userInfo();
+	}, []);
+	return (
+		<Stack maxWidth='100%'>
+			<Stack direction='row' justifyContent='space-around'>
+				<Stack>
+					<Box pt={2} pb={2}>
+						<FormGroup id='preferCollege' label='Prefer College' isFloating>
+							<Input
+								onChange={(e) => {
+									setcollegeInfo({ preferCollege: e.target.value });
+								}}
+								disabled
+								placeholder='Prefer College'
+								autoComplete='additional-name'
+								validFeedback='Looks good!'
+								value={collegeInfo.preferCollege}
+							/>
+						</FormGroup>
+					</Box>
+					<Box pt={2} pb={2}>
+						<FormGroup id='preferCourse' label='Prefer Course' isFloating>
+							<Input
+								onChange={(e) => {
+									setcollegeInfo({ preferCourse: e.target.value });
+								}}
+								disabled
+								placeholder='Prefer Course'
+								autoComplete='additional-name'
+								validFeedback='Looks good!'
+								value={collegeInfo.preferCourse}
+							/>
+						</FormGroup>
+					</Box>
+					<Stack direction='row' justifyContent='space-between' pt={2} pb={4}>
+						<Box mr={2}>
+							<FormGroup id='Intake' label='Intake' isFloating>
+								<Input
+									onChange={(e) => {
+										setcollegeInfo({ ...collegeInfo, Intake: e.target.value });
+									}}
+									placeholder='Intake'
+									autoComplete='additional-name'
+									validFeedback='Looks good!'
+									value={collegeInfo.Intake}
+								/>
+							</FormGroup>
+						</Box>
+						<Box>
+							<FormGroup id='Year' label='Year' isFloating>
+								<Input
+									onChange={(e) => {
+										setcollegeInfo({ ...collegeInfo, Year: e.target.value });
+									}}
+									placeholder='Year'
+									autoComplete='additional-name'
+									validFeedback='Looks good!'
+									value={collegeInfo.Year}
+								/>
+							</FormGroup>
+						</Box>
+					</Stack>
+					<h5 style={{ fontWeight: 'bold' }}>Remark</h5>
+					<Textarea
+						aria-label='.form-control-lg example'
+						onChange={(e) => {
+							setcollegeInfo({ ...collegeInfo, remark: e.target.value });
+						}}
+						value={collegeInfo.remark}
+					/>
+					<Box pt={2}>
+						<Button onClick={submitApplication} variant='contained' size='large'>
+							Add Student Application
+						</Button>
+					</Box>
+				</Stack>
+				<Stack minWidth='60%'>
+					<Box p={2} borderBottom='1px solid teal'>
+						<img
+							src='https://app.dfavo.com//uploads/college_logo/130.png'
+							alt='rishav'
+							style={{ width: '150px' }}
+						/>
+						<Typography variant='h4' mb={2}>
+							{one && one.university && one.university.name
+								? one.university.name
+								: 'Academies Australasia Polytechnic'}
+						</Typography>
+						{/* <Typography variant='h5'>College Website</Typography>
+						<Link href='http://www.aapoly.edu.au' variant='h6' mb={2}>
+							http://www.aapoly.edu.au
+						</Link> */}
+					</Box>
+					<Box mt={2} pl={2}>
+						<Typography variant='h4' mb={2}>
+							{one && one.name
+								? one.name
+								: 'Bachelor of Tourism and Hospitality Management'}
+						</Typography>
+						<Link href='https://aapoly.edu.au/courses/bachelor-degree/' variant='h6'>
+							{one && one.website_url
+								? one.website_url
+								: 'https://aapoly.edu.au/courses/bachelor-degree/'}
+						</Link>
+					</Box>
+
+					<Grid container mt={2} p={2}>
+						<Grid item xs={6} variant='h4' mb={2}>
+							Tuition Fee: {one && one.averageFees ? one.averageFees : 'NA'}
+						</Grid>
+						<Grid item xs={6} mb={2}>
+							Application Fee:{' '}
+							{one && one.applicationFees ? one.applicationFees : '0'}
+						</Grid>
+						<Grid item xs={6}>
+							Initial Deposit :{one && one.initialDeposit ? one.initialDeposit : '0'}
+						</Grid>
+						<Grid item xs={6}>
+							Intake:{one && one.intake ? one.intake : 'NA'}
+						</Grid>
+					</Grid>
+				</Stack>
+			</Stack>
+		</Stack>
+	);
 };
 
 export default TabTab;

@@ -1,7 +1,11 @@
 import React from 'react';
 import classNames from 'classnames';
-import Header, { HeaderLeft, HeaderRight } from '../../../layout/Header/Header';
+import Header, { 
+	HeaderLeft
+	// HeaderRight 
+} from '../../../layout/Header/Header';
 import CommonHeaderChat from './CommonHeaderChat';
+import CommonHeaderRight from './CommonHeaderRight';
 import useDarkMode from '../../../hooks/useDarkMode';
 
 const DashboardBookingHeader = () => {
@@ -22,9 +26,10 @@ const DashboardBookingHeader = () => {
 					</div>
 				</div>
 			</HeaderLeft>
-			<HeaderRight>
+			{/* <HeaderRight>
 				<CommonHeaderChat />
-			</HeaderRight>
+			</HeaderRight> */}
+			<CommonHeaderRight  afterChildren={<CommonHeaderChat />} />
 		</Header>
 	);
 };

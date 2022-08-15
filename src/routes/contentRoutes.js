@@ -1,5 +1,14 @@
 import React, { lazy } from 'react';
-import { componentsMenu, dashboardMenu, demoPages, layoutMenu, Pages, AdminPages, Forms } from '../menu';
+import {
+	componentsMenu,
+	dashboardMenu,
+	demoPages,
+	layoutMenu,
+	Pages,
+	AdminPages,
+	Forms,
+	extraMenu,
+} from '../menu';
 import Login from '../pages/presentation/auth/Login';
 import Signup from '../pages/presentation/auth/Signup';
 
@@ -11,6 +20,7 @@ const LANDING = {
 const SINGLE = {
 	BOXED: lazy(() => import('../pages/presentation/single-pages/SingleBoxedPage')),
 	FLUID: lazy(() => import('../pages/presentation/single-pages/SingleFluidPage')),
+	STUDENTPROFILE: lazy(() => import('../pages/presentation/mypages/StudentProfileForm')),
 };
 const LIST = {
 	BOXED: lazy(() => import('../pages/presentation/demo-pages/ListBoxedPage')),
@@ -18,6 +28,7 @@ const LIST = {
 	UNIVERSITY: lazy(() => import('../pages/presentation/mypages/University')),
 	COURSES: lazy(() => import('../pages/presentation/mypages/Courses')),
 	PROGRAMS: lazy(() => import('../pages/presentation/mypages/Programs')),
+	SEARCH: lazy(() => import('../pages/presentation/mypages/ProgramSearch')),
 	SHORTLIST: lazy(() => import('../pages/presentation/mypages/ShortList')),
 	APPFORM: lazy(() => import('../pages/presentation/mypages/AppForm')),
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
@@ -211,7 +222,11 @@ const presentation = [
 	/**
 	 * Pages
 	 */
-
+	{
+		path: extraMenu.Profile.path,
+		element: <SINGLE.STUDENTPROFILE />,
+		exact: true,
+	},
 	/**
 	 * Single Pages
 	 */
@@ -241,6 +256,11 @@ const presentation = [
 	},
 	{
 		path: Pages.Programs.path,
+		element: <LIST.SEARCH />,
+		exact: true,
+	},
+	{
+		path: demoPages.Programs.path,
 		element: <LIST.PROGRAMS />,
 		exact: true,
 	},
@@ -253,7 +273,6 @@ const presentation = [
 		path: Forms.ApplicationsForm.path,
 		element: <LIST.APPFORM />,
 		exact: true,
-
 	},
 
 	{
@@ -951,7 +970,6 @@ const documentation = [
 		element: <EXTRA.HOOKS />,
 		exact: true,
 	},
-
 ];
 const contents = [...presentation, ...documentation];
 
