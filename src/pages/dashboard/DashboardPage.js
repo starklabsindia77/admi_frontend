@@ -1132,7 +1132,7 @@ const DashboardPage = () => {
 							</CardBody>
 						</Card>
 					</div> */}
-					<div className='col-xxl-3'>
+					<div className='col-xxl-12'>
 						<Card stretch>
 							<CardHeader>
 								<CardLabel icon='NotificationsActive' iconColor='warning'>

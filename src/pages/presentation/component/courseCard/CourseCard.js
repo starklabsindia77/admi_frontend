@@ -31,6 +31,7 @@ function CourseCard({ data, wishData }) {
 	// const username = localStorage.getItem('userName');
 	// const role = localStorage.getItem('role');
 	const [wishListData, setWishListData] = useState(wishData);
+	
 
 	const authToken = localStorage.getItem('auth');
 	const UserRole = localStorage.getItem('role');

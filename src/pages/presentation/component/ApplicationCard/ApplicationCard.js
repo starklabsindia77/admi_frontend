@@ -43,6 +43,7 @@ import HorizontalLabelPositionBelowStepper from './appstepper';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function ApplicationCard({ data, wishData }) {
+	console.log('data..........................', data);
 	const navigate = useNavigate();
 	const [state, setState] = useState(false);
 	const { darkModeStatus } = useDarkMode();
@@ -71,6 +72,7 @@ function ApplicationCard({ data, wishData }) {
 	const [stages, setStages] = useState([]);
 	const [statusList, setStatusList] = useState([]);
 	const [status, setStatus] = useState();
+	const [gStatus, setGStatus] = useState();
 	const date = [
 		{ date1: 'xx-xx-xxxx' },
 		{ date1: 'xx-xx-xxxx' },
@@ -81,6 +83,23 @@ function ApplicationCard({ data, wishData }) {
 		{ date1: 'xx-xx-xxxx' },
 		{ date1: 'xx-xx-xxxx' },
 		{ date1: 'xx-xx-xxxx' },
+	];
+	const genStatus = [
+		{ value: 'Started & Submitted for options', text: 'Started & Submitted for options' },
+		{ value: 'Review and Course finalization', text: 'Review and Course finalization' },
+		{ value: 'Application fee Paid', text: 'Application fee Paid' },
+		{ value: 'Submitted', text: 'Submitted' },
+		{ value: 'LOA/OL', text: 'LOA/OL' },
+		{ value: 'Tuition Fee Paid', text: 'Tuition Fee Paid' },
+		{ value: 'Visa Applied', text: 'Visa Applied' },
+		{ value: 'Visa Approved', text: 'Visa Approved' },
+		{ value: 'Cancel Withdrawn', text: 'Cancel Withdrawn' },
+		{ value: 'Refund Required', text: 'Refund Required' },
+		{ value: 'Enrolled & Closed', text: 'Enrolled & Closed' },
+		{ value: 'Offer Letter Expired', text: 'Offer Letter Expired' },
+		{ value: 'Refund & Closed', text: 'Refund & Closed' },
+		{ value: 'Rejection From Institution', text: 'Rejection From Institution' },
+		{ value: 'Cancelled Students', text: 'Cancelled Students' },
 	];
 
 	const userInfo = () => {
@@ -143,7 +162,7 @@ function ApplicationCard({ data, wishData }) {
 					'Content-Type': 'application/json;charset=utf-8',
 					authorization: authToken,
 				},
-				body: JSON.stringify({ value: status, guid: data.guid }),
+				body: JSON.stringify({ value: status, guid: data.guid, appStatus: gStatus }),
 			};
 
 			fetch(`${serverUrl}/application/update`, options)
@@ -155,7 +174,7 @@ function ApplicationCard({ data, wishData }) {
 					} else if (d.result.length > 0) {
 						const ss = d.result;
 						console.log('info', ss);
-						setState(false)
+						setState(false);
 						// if (ss === 'Done') {
 						// 	navigate('/applications');
 						// }
@@ -286,7 +305,9 @@ function ApplicationCard({ data, wishData }) {
 								color: '#000000',
 								height: '20px',
 							}}>
-							Started & Submitted for options
+							{data && data.Application_Status
+								? data.Application_Status
+								: 'Started & Submitted for options'}
 						</Button>
 					</Stack>
 				</Grid>
@@ -319,20 +340,40 @@ function ApplicationCard({ data, wishData }) {
 					<ModalTitle id='exampleModalLabel'>Change Status</ModalTitle>
 				</ModalHeader>
 				<ModalBody>
-					<Select
-						id='preferCourse'
-						size='lg'
-						ariaLabel='preferCourse'
-						placeholder='New Status'
-						list={statusList}
-						className={classNames('rounded-1', {
-							'bg-white': !darkModeStatus,
-						})}
-						onChange={(e) => {
-							setStatus(e.target.value);
-						}}
-						// value={expertCollegeInfo.preferCourse}
-					/>
+					<Grid container spacing={2} p={1}>
+						<Grid item xs={12}>
+							<Select
+								id='preferCourse'
+								size='lg'
+								ariaLabel='preferCourse'
+								placeholder='New Stage'
+								list={statusList}
+								className={classNames('rounded-1', {
+									'bg-white': !darkModeStatus,
+								})}
+								onChange={(e) => {
+									setStatus(e.target.value);
+								}}
+								// value={expertCollegeInfo.preferCourse}
+							/>
+						</Grid>
+						<Grid item xs={12}>
+							<Select
+								id='preferCourse'
+								size='lg'
+								ariaLabel='preferCourse'
+								placeholder='New Status'
+								list={genStatus}
+								className={classNames('rounded-1', {
+									'bg-white': !darkModeStatus,
+								})}
+								onChange={(e) => {
+									setGStatus(e.target.value);
+								}}
+								// value={expertCollegeInfo.preferCourse}
+							/>
+						</Grid>
+					</Grid>
 				</ModalBody>
 				<ModalFooter>
 					<Button
