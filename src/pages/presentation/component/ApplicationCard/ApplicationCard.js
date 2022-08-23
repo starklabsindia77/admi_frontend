@@ -19,6 +19,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 import './ApplicationCard.css';
 import Checkbox from '@mui/material/Checkbox';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
 import FavoriteBorder from '@mui/icons-material/FavoriteBorder';
 import Favorite from '@mui/icons-material/Favorite';
 import { styled } from '@mui/material/styles';
@@ -26,6 +27,17 @@ import { Grid, Divider, Paper, Box, Typography, Button } from '@mui/material';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+// chat import
+import CHATS from '../../../../common/data/chatDummyData';
+
+import OffCanvas, {
+	OffCanvasBody,
+	OffCanvasHeader,
+} from '../../../../components/bootstrap/OffCanvas';
+import Chat, { ChatGroup, ChatHeader } from '../../../../components/Chat';
+import InputGroup from '../../../../components/bootstrap/forms/InputGroup';
+import Textarea from '../../../../components/bootstrap/forms/Textarea';
+import USERS from '../../../../common/data/userDummyData';
 import Icon from '../../../../components/icon/Icon';
 import Select from '../../../../components/bootstrap/forms/Select';
 import useDarkMode from '../../../../hooks/useDarkMode';
@@ -43,8 +55,8 @@ import HorizontalLabelPositionBelowStepper from './appstepper';
 const label = { inputProps: { 'aria-label': 'Checkbox demo' } };
 
 function ApplicationCard({ data, wishData }) {
-	console.log('data..........................', data);
 	const navigate = useNavigate();
+	const [chatState, setChatState] = useState(false);
 	const [state, setState] = useState(false);
 	const { darkModeStatus } = useDarkMode();
 	const [staticBackdropStatus, setStaticBackdropStatus] = useState(false);
@@ -316,16 +328,61 @@ function ApplicationCard({ data, wishData }) {
 				<Grid item xs={12}>
 					<Stack direction='row'>
 						<Stack>
-							<HorizontalLabelPositionBelowStepper data={data} stages={stages} />
+							{stages && stages.length > 0 && (
+								<HorizontalLabelPositionBelowStepper data={data} stages={stages} />
+							)}
 						</Stack>
 					</Stack>
 				</Grid>
-				<Grid item xs={12}>
+				<Grid item xs={11}>
 					<Button variant='text' endIcon={<KeyboardArrowDownIcon />}>
 						View More{' '}
 					</Button>
 				</Grid>
+				<Grid item xs={1}>
+					<Button
+						variant='text'
+						onClick={() => setChatState(true)}
+						startIcon={<ChatBubbleOutlineIcon />}>
+						chat{' '}
+					</Button>
+				</Grid>
 			</Grid>
+			<OffCanvas
+				id='chat'
+				isOpen={chatState}
+				setOpen={setChatState}
+				placement='end'
+				isModalStyle
+				isBackdrop={false}
+				isBodyScroll>
+				<OffCanvasHeader setOpen={setChatState} className='fs-5'>
+					<ChatHeader to={USERS.CHLOE.name} />
+				</OffCanvasHeader>
+				<OffCanvasBody>
+					<Chat>
+						{CHATS.CHLOE_VS_JOHN.map((msg) => (
+							<ChatGroup
+								key={msg.id}
+								messages={msg.messages}
+								user={msg.user}
+								isReply={msg.isReply}
+							/>
+						))}
+					</Chat>
+				</OffCanvasBody>
+				<div className='chat-send-message p-3'>
+					<InputGroup>
+						<Textarea />
+						{/* <Button color='info' icon='Send'>
+							SEND
+						</Button> */}
+						<Button variant='text' startIcon={<ChatBubbleOutlineIcon />}>
+							SEND{' '}
+						</Button>
+					</InputGroup>
+				</div>
+			</OffCanvas>
 			<Modal
 				isOpen={state}
 				setIsOpen={setState}

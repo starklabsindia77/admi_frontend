@@ -9,26 +9,31 @@ import Stepper from '@mui/material/Stepper';
 import Step from '@mui/material/Step';
 import StepLabel from '@mui/material/StepLabel';
 
-// const steps = [
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Select master blaster campaign settings',
-// 	'Create an ad group',
-// 	'Create an ad',
-// ];
+const steps = [
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Select master blaster campaign settings',
+	'Create an ad group',
+	'Create an ad',
+];
 
 const HorizontalLabelPositionBedlowStepper = ({ data, stages }) => {
 	const [countValue, setCountValue] = useState();
 	const getActiveStep = () => {
-		if(stages.indexOf(data.status) >= 0) {
+		// console.log(
+		// 	'stages.indexOf(data.status)',
+		// 	stages.indexOf(data.status),
+		// 	data.status,
+		// 	stages,
+		// );
+		if (stages.indexOf(data.status) >= 0) {
 			setCountValue(stages.indexOf(data.status));
 		}
-	}
-	
+	};
 
 	useEffect(() => {
 		getActiveStep();
@@ -39,11 +44,18 @@ const HorizontalLabelPositionBedlowStepper = ({ data, stages }) => {
 		<Box sx={{ width: '100%' }}>
 			<Stepper activeStep={countValue} alternativeLabel>
 				{stages.map((label) => (
-					<Step key={label}>
+					<Step key={label} >
 						<StepLabel>{label}</StepLabel>
 					</Step>
 				))}
 			</Stepper>
+			{/* <Stepper activeStep={1} alternativeLabel>
+				{steps.map((label) => (
+					<Step key={label}>
+						<StepLabel>{label}</StepLabel>
+					</Step>
+				))}
+			</Stepper> */}
 		</Box>
 	);
 };

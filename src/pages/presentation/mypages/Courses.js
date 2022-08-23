@@ -97,7 +97,7 @@ const Courses = () => {
     // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
     // const serverUrl = "http://localhost:3001/api";
 
-
+    
 
     const [CoursesList, setCoursesList] = useState([]);
     const [state, setState] = useState({ editorState: EditorState.createEmpty() });
@@ -432,6 +432,10 @@ const Courses = () => {
         }
     }
 
+    const [currentPage, setCurrentPage] = useState(1);
+	const [perPage, setPerPage] = useState(PER_COUNT['10']);
+	const { items, requestSort, getClassNamesFor } = useSortableData(CoursesList);
+    // console.log("pagination working test", items, "t1", requestSort,"t3", getClassNamesFor)
     return (
         <PageWrapper title={AdminPages.CoursesManager.subMenu.courses.text}>
             <Page>
@@ -459,9 +463,17 @@ const Courses = () => {
                         </CardActions>
                     </CardHeader>
                     <CardBody className='table-responsive' isScrollable>
-                        {CoursesList.length > 0 && CoursesList.map((item) => (
+                        {CoursesList.length > 0 && dataPagination(items, currentPage, perPage).map((item) => (
                             <CourseCard data={item} wishData={wishData} />
                         ))}
+                        <PaginationButtons
+                            data={items}
+                            label='items'
+                            setCurrentPage={setCurrentPage}
+                            currentPage={currentPage}
+                            perPage={perPage}
+                            setPerPage={setPerPage}
+                        />
                     </CardBody>
 
                 </Card>
