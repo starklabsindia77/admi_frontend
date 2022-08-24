@@ -69,6 +69,7 @@ const Login = ({ isSignUp }) => {
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
+			mode: "cors",
 			body: JSON.stringify(userData),
 		};
 
