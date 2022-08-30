@@ -101,7 +101,6 @@ const Login = ({ isSignUp }) => {
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			mode: 'no-cors',
 			body: JSON.stringify({ email: username, password: newPassword }),
 		};
 
