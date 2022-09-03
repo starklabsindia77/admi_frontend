@@ -147,7 +147,8 @@ const AddUser = () => {
             'password': newPassword, 
             'contact': contact, 
             'centerName': centerName, 
-            'centerCity' : city, 
+            'centerCity' : city,
+            "countries": selected, 
             'role': role 
         };
         // console.log("userdatainput", userData);
@@ -175,7 +176,16 @@ const AddUser = () => {
     }
 
     const updateStudent = () => {
-        const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
+        const userData = { 
+            'name': name, 
+            'email': username, 
+            'password': newPassword, 
+            'contact': contact, 
+            'centerName': centerName, 
+            'centerCity' : city,
+            "countries": selected, 
+            'role': role 
+        };
         console.log("updatedata", userData);
         const options = {
             method: 'PUT',
