@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import Option, { Options } from '../Option';
 import Validation from './Validation';
 
-const Select = forwardRef(
+const NewSelect = forwardRef(
 	(
 		{
 			id,
@@ -34,7 +34,7 @@ const Select = forwardRef(
 			onFocus,
 			onInput,
 			onInvalid,
-			onSelect,
+			onNewSelect,
 			...props
 		},
 		// eslint-disable-next-line no-unused-vars
@@ -42,13 +42,13 @@ const Select = forwardRef(
 	) => {
 		return (
 			<>
-				<Select
+				<NewSelect
 					ref={ref}
 					id={id}
 					className={classNames(
-						'form-Select',
+						'form-NewSelect',
 						{
-							[`form-Select-${size}`]: size,
+							[`form-NewSelect-${size}`]: size,
 							'text-muted': value === '' && placeholder,
 							'is-invalid': !isValid && isTouched && invalidFeedback,
 							'is-valid': !isValid && isTouched && !invalidFeedback,
@@ -70,7 +70,7 @@ const Select = forwardRef(
 					onFocus={onFocus}
 					onInput={onInput}
 					onInvalid={onInvalid}
-					onSelect={onSelect}
+					onNewSelect={onNewSelect}
 					// eslint-disable-next-line react/jsx-props-no-spreading
 					{...props}>
 					{placeholder && (
@@ -79,7 +79,7 @@ const Select = forwardRef(
 						</Option>
 					)}
 					{children || <Options list={list} />}
-				</Select>
+				</NewSelect>
 				{isValidMessage && (
 					<Validation
 						isTouched={isTouched}
@@ -92,7 +92,7 @@ const Select = forwardRef(
 		);
 	},
 );
-Select.propTypes = {
+NewSelect.propTypes = {
 	id: PropTypes.string,
 	className: PropTypes.string,
 	/**
@@ -161,14 +161,14 @@ Select.propTypes = {
 	 */
 	onInvalid: PropTypes.func,
 	/**
-	 * Fires after some text has been Selected in an element
+	 * Fires after some text has been NewSelected in an element
 	 */
-	onSelect: PropTypes.func,
+	onNewSelect: PropTypes.func,
 	/**
 	 * More information, [react-input-mask](https://github.com/sanniassin/react-input-mask#react-input-mask).
 	 */
 };
-Select.defaultProps = {
+NewSelect.defaultProps = {
 	id: null,
 	className: null,
 	name: null,
@@ -195,7 +195,7 @@ Select.defaultProps = {
 	onFocus: null,
 	onInput: null,
 	onInvalid: null,
-	onSelect: null,
+	onNewSelect: null,
 };
 
-export default Select;
+export default NewSelect;

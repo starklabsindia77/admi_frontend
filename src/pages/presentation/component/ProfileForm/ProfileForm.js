@@ -9,11 +9,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IconButton } from '@material-ui/core';
-import { Grid, Divider, Paper, Box, Typography } from '@mui/material';
+import { Grid, Divider, Paper, Box, Typography, Button } from '@mui/material';
 import classNames from 'classnames';
 
 import { FileUploader } from 'react-drag-drop-files';
 import moment from 'moment';
+import { set } from 'date-fns';
 import Card, {
 	CardBody,
 	CardFooter,
@@ -23,7 +24,7 @@ import Card, {
 	CardLabel,
 	CardTitle,
 } from '../../../../components/bootstrap/Card';
-import Button from '../../../../components/bootstrap/Button';
+// import Button from '../../../../components/bootstrap/Button';
 import Wizard, { WizardItem } from '../../../../components/Wizard';
 import FormGroup from '../../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../../components/bootstrap/forms/Input';
@@ -60,10 +61,65 @@ const PreviewItem = ({ title, value }) => {
 };
 const fileTypes = ['JPEG', 'PNG', 'GIF'];
 
-function ProfileForm({ data, wishData }) {
+function ProfileForm() {
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
+	const [profileData, setProfileData] = useState('');
+	const [maleValue, setMaleValue] = useState(false);
+	const [femaleValue, setFemaleValue] = useState(false);
+	const getProfileData = () => {
+		const options = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+		};
 
+		fetch(`${serverUrl}/profile/${contactInformation.email}`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result.length > 0) {
+					const ss = d.result;
+					console.log('userInfo Result', ss);
+					setProfileData(ss[0].guid);
+					if (ss[0].gender === 'male') {
+						setMaleValue(true);
+					} else {
+						setFemaleValue(true);
+					}
+					setPersonalInformation({
+						fName: ss[0].fName,
+						mName: ss[0].mName,
+						lName: ss[0].lName,
+						dob: ss[0].dob,
+						firstLanguages: ss[0].firstLanguages,
+						country: ss[0].country,
+						gender: ss[0].gender,
+						martialStatus: ss[0].martialStatus,
+						passportNumber: ss[0].passportNumber,
+						passportExpiryDate: ss[0].passportExpiryDate,
+					});
+					setAddressInformation({
+						address: ss[0].address,
+						addressLine: ss[0].addressLine,
+						city: ss[0].city,
+						state: ss[0].state,
+						zip: ss[0].zip,
+					});
+					setContactInformation({
+						phoneNumber: ss[0].phoneNumber,
+					});
+				}
+			});
+	};
+
+	useEffect(() => {
+		getProfileData();
+	}, []);
 	const [personalInformation, setPersonalInformation] = useState({
 		fName: '',
 		mName: '',
@@ -80,11 +136,15 @@ function ProfileForm({ data, wishData }) {
 	const [addressInformation, setAddressInformation] = useState({
 		address: '',
 		addressLine: '',
+		city: '',
+		state: '',
+		zip: '',
 	});
 	const [contactInformation, setContactInformation] = useState({
 		email: localStorage.getItem('email'),
 		phoneNumber: '',
 	});
+	const authToken = localStorage.getItem('auth');
 	const [file, setFile] = useState(null);
 	const [testScore, setTestScore] = useState(null);
 	const [workExperience, setWorkExperience] = useState(null);
@@ -112,12 +172,68 @@ function ProfileForm({ data, wishData }) {
 
 	const gernalSubmit = () => {
 		const userInfo = JSON.parse(localStorage.getItem('userInfo'));
-		const info = { 
-			...personalInformation, 
-			...addressInformation, 
+		const info = {
+			...personalInformation,
+			...addressInformation,
 			...contactInformation,
-			userId: userInfo.guid
+			userId: userInfo.guid,
 		};
+
+		const options = {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+			body: JSON.stringify(info),
+		};
+
+		fetch(`${serverUrl}/profile/add`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result) {
+					const ss = d.result;
+					console.log('userInfo Result', ss);
+					navigate('/dashboard');
+					// setApplicationList(ss)
+				}
+			});
+	};
+
+	const genralUpdate = () => {
+		const userInfo = JSON.parse(localStorage.getItem('userInfo'));
+		const info = {
+			...personalInformation,
+			...addressInformation,
+			...contactInformation,
+			userId: userInfo.guid,
+		};
+
+		const options = {
+			method: 'PUT',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+			body: JSON.stringify(info),
+		};
+
+		fetch(`${serverUrl}/profile/update/${contactInformation.email}`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				// console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.result) {
+					const ss = d.result;
+					console.log('userInfo Result', ss);
+					navigate('/dashboard');
+					// setApplicationList(ss)
+				}
+			});
 	};
 
 	return (
@@ -129,7 +245,7 @@ function ProfileForm({ data, wishData }) {
 			// onSubmit={formik.handleSubmit}
 			className='shadow-3d-info'>
 			<WizardItem id='step1' title='General Information'>
-				<Grid container spacing={1} p={1}>
+				<Grid container spacing={1} p={3}>
 					<Grid item xs={12}>
 						<div className='row g-4'>
 							<div className='col-md-12'>
@@ -269,6 +385,7 @@ function ProfileForm({ data, wishData }) {
 													});
 												}
 											}}
+											checked={maleValue}
 										/>
 										<Checks
 											type='radio'
@@ -283,6 +400,7 @@ function ProfileForm({ data, wishData }) {
 													});
 												}
 											}}
+											checked={femaleValue}
 										/>
 									</ChecksGroup>
 								</div>
@@ -368,7 +486,7 @@ function ProfileForm({ data, wishData }) {
 						</div>
 					</Grid>
 				</Grid>
-				<Grid container spacing={1} p={1}>
+				<Grid container spacing={1} p={3}>
 					<Grid item xs={12}>
 						<div className='row g-4'>
 							<div className='col-md-12'>
@@ -425,7 +543,7 @@ function ProfileForm({ data, wishData }) {
 						</div>
 					</Grid>
 				</Grid>
-				<Grid container spacing={1} p={1}>
+				<Grid container spacing={4} p={3}>
 					<Grid item xs={12}>
 						<div className='row g-4'>
 							<div className='col-md-12'>
@@ -453,12 +571,6 @@ function ProfileForm({ data, wishData }) {
 												});
 											}}
 											value={addressInformation.address}
-											// onChange={formik.handleChange}
-											// onBlur={formik.handleBlur}
-											// value={formik.values.addressLine}
-											// isValid={formik.isValid}
-											// isTouched={formik.touched.addressLine}
-											// invalidFeedback={formik.errors.addressLine}
 											validFeedback='Looks good!'
 										/>
 									</FormGroup>
@@ -494,12 +606,6 @@ function ProfileForm({ data, wishData }) {
 												});
 											}}
 											value={addressInformation.city}
-											// onChange={formik.handleChange}
-											// onBlur={formik.handleBlur}
-											// value={formik.values.city}
-											// isValid={formik.isValid}
-											// isTouched={formik.touched.city}
-											// invalidFeedback={formik.errors.city}
 											validFeedback='Looks good!'
 										/>
 									</FormGroup>
@@ -514,12 +620,6 @@ function ProfileForm({ data, wishData }) {
 												});
 											}}
 											value={addressInformation.state}
-											// onChange={formik.handleChange}
-											// onBlur={formik.handleBlur}
-											// value={formik.values.city}
-											// isValid={formik.isValid}
-											// isTouched={formik.touched.city}
-											// invalidFeedback={formik.errors.city}
 											validFeedback='Looks good!'
 										/>
 									</FormGroup>
@@ -534,23 +634,25 @@ function ProfileForm({ data, wishData }) {
 												});
 											}}
 											value={addressInformation.zip}
-											// onChange={formik.handleChange}
-											// onBlur={formik.handleBlur}
-											// value={formik.values.zip}
-											// isValid={formik.isValid}
-											// isTouched={formik.touched.zip}
-											// invalidFeedback={formik.errors.zip}
 										/>
 									</FormGroup>
 								</div>
 							</form>
 						</div>
 					</Grid>
-				</Grid>
-				<Grid>
-				<Button onClick={gernalSubmit} variant='contained' size='large'>
-					SUBMIT
-				</Button>
+					<Grid item xs={5} />
+					<Grid item xs={2}>
+						{profileData.length > 0 ? (
+							<Button onClick={genralUpdate} variant='contained' size='large'>
+								UPDATE
+							</Button>
+						) : (
+							<Button onClick={gernalSubmit} variant='contained' size='large'>
+								SUBMIT
+							</Button>
+						)}
+					</Grid>
+					<Grid item xs={5} />
 				</Grid>
 			</WizardItem>
 			<WizardItem id='step2' title='Education History'>

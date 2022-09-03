@@ -266,6 +266,18 @@ export const extraMenu = {
 		path: 'student/profile',
 		icon: 'menu_book',
 	},
+	UserPofile: {
+		id: 'extraMenu2',
+		text: 'User Profile',
+		path: 'user/profile',
+		icon: 'menu_book',
+	},
+	AddUser: {
+		id: 'extraMenu3',
+		text: 'Add User',
+		path: 'user/add',
+		icon: 'menu_book',
+	},
 };
 
 export const demoPages = {

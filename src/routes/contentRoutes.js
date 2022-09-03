@@ -21,6 +21,7 @@ const SINGLE = {
 	BOXED: lazy(() => import('../pages/presentation/single-pages/SingleBoxedPage')),
 	FLUID: lazy(() => import('../pages/presentation/single-pages/SingleFluidPage')),
 	STUDENTPROFILE: lazy(() => import('../pages/presentation/mypages/StudentProfileForm')),
+	USERPROFILE: lazy(() => import('../pages/presentation/mypages/UserProfileForm')),
 };
 const LIST = {
 	BOXED: lazy(() => import('../pages/presentation/demo-pages/ListBoxedPage')),
@@ -34,6 +35,7 @@ const LIST = {
 	STUDENTS: lazy(() => import('../pages/presentation/mypages/Students')),
 	APPLICATIONS: lazy(() => import('../pages/presentation/mypages/Application')),
 	USERS: lazy(() => import('../pages/presentation/mypages/Users')),
+	ADDUSERS: lazy(() => import('../pages/presentation/mypages/AddUser')),
 	ROLES: lazy(() => import('../pages/presentation/mypages/Roles')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
@@ -227,6 +229,11 @@ const presentation = [
 		element: <SINGLE.STUDENTPROFILE />,
 		exact: true,
 	},
+	{
+		path: extraMenu.UserPofile.path,
+		element: <SINGLE.USERPROFILE />,
+		exact: true,
+	},
 	/**
 	 * Single Pages
 	 */
@@ -294,6 +301,11 @@ const presentation = [
 	{
 		path: AdminPages.user.subMenu.sub.path,
 		element: <LIST.USERS />,
+		exact: true,
+	},
+	{
+		path: extraMenu.AddUser.path,
+		element: <LIST.ADDUSERS />,
 		exact: true,
 	},
 	{
