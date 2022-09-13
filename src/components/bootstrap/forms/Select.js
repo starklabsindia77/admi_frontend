@@ -42,13 +42,13 @@ const Select = forwardRef(
 	) => {
 		return (
 			<>
-				<Select
+				<select
 					ref={ref}
 					id={id}
 					className={classNames(
-						'form-Select',
+						'form-select',
 						{
-							[`form-Select-${size}`]: size,
+							[`form-select-${size}`]: size,
 							'text-muted': value === '' && placeholder,
 							'is-invalid': !isValid && isTouched && invalidFeedback,
 							'is-valid': !isValid && isTouched && !invalidFeedback,
@@ -79,7 +79,7 @@ const Select = forwardRef(
 						</Option>
 					)}
 					{children || <Options list={list} />}
-				</Select>
+				</select>
 				{isValidMessage && (
 					<Validation
 						isTouched={isTouched}

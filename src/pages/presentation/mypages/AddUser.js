@@ -55,7 +55,6 @@ import FormGroup from '../../../components/bootstrap/forms/FormGroup';
 import Label from '../../../components/bootstrap/forms/Label';
 import CommonFilterTag from '../../common/CommonFilterTag';
 import CommonTableRow from '../../common/CommonTableRow';
-import NewSelect from '../../../components/bootstrap/forms/NewSelect';
 import Option, { Options } from '../../../components/bootstrap/Option';
 import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyProductData';
