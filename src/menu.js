@@ -158,6 +158,12 @@ export const AdminPages = {
 				path: 'sub/role',
 				icon: 'ViewDay',
 			},
+			center: {
+				id: 'center',
+				text: 'Center',
+				path: 'sub/centers',
+				icon: 'ViewDay',
+			},
 		},
 	},
 };

@@ -13,6 +13,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
@@ -22,7 +24,6 @@ import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
 import { serverUrl } from '../../../config';
-
 // eslint-disable-next-line react/prop-types
 const LoginHeader = ({ isNewUser }) => {
 	if (isNewUser) {
@@ -41,10 +42,19 @@ const LoginHeader = ({ isNewUser }) => {
 	);
 };
 
+const ToastOptions = {
+	position: "top-center",
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+  }
 const Login = ({ isSignUp }) => {
 	const { darkModeStatus } = useDarkMode();
 	
-
+	
 	const [usernameInput, setUsernameInput] = useState(false);
 	const [isNewUser, setIsNewUser] = useState(isSignUp);
 	const [username, setUsername] = useState();
@@ -52,7 +62,7 @@ const Login = ({ isSignUp }) => {
 	const [contact, setContact] = useState();
 	const [dob, setDob] = useState();
 	const [role, setRole] = useState('Student');
-	const [newPassword, setPassword] = useState();
+	const [newPassword, setPassword] = useState("");
 	const [openData, setOpenData] = useState(false);
 	const [newUser, setNewUser] = useState({});
 	const [Isloader, setIsloader] = useState(false);
@@ -84,6 +94,7 @@ const Login = ({ isSignUp }) => {
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', name);
 					localStorage.setItem('role', role);
+					
 					localStorage.setItem('email', username);
 					setTimeout(() => {
 						setIsloader(false);
@@ -114,12 +125,15 @@ const Login = ({ isSignUp }) => {
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', data.user.name);
 					localStorage.setItem('role', data.user.role);
+					localStorage.setItem('loginUserId', data.user._id);
 					localStorage.setItem('userInfo', JSON.stringify(data.user));
 					localStorage.setItem('email', username);
 					navigate('dashboard');
 					setIsloader(false);
 				}
-			});
+			}).catch(()=>{
+				setIsloader(false);
+			})
 	};
 	// console.log("status", status);
 
@@ -129,7 +143,15 @@ const Login = ({ isSignUp }) => {
 	const handleOnClick = () => {
 		navigate('auth/sign-up');
 	};
+const emailVerify=()=>{
+	if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username)){
 
+		setUsernameInput(true)
+	}
+	else{
+		toast.error("Please enter a valid email ", ToastOptions);
+	}
+}
 	const loader = {
 		position: "fixed",	
 		top: "0",	
@@ -287,6 +309,7 @@ const Login = ({ isSignUp }) => {
 															onChange={(e) =>
 																setPassword(e.target.value)
 															}
+															value={newPassword}
 														/>
 													</FormGroup>
 												)}
@@ -296,7 +319,7 @@ const Login = ({ isSignUp }) => {
 													<Button
 														color='warning'
 														className='w-100 py-3'
-														onClick={() => setUsernameInput(true)}>
+														onClick={emailVerify}>
 														Continue
 													</Button>
 												) : (
@@ -380,6 +403,17 @@ const Login = ({ isSignUp }) => {
 							</a>
 						</div>
 					</div>
+					<div><ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          /></div>
 				</div>
 				<Dialog
 					maxWidth="lg"

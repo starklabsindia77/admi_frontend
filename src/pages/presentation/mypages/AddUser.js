@@ -25,6 +25,7 @@ import countries from 'i18n-iso-countries';
 import enLocale from 'i18n-iso-countries/langs/en.json';
 import itLocale from 'i18n-iso-countries/langs/it.json';
 import Chip from '@mui/material/Chip';
+import { useLocation ,useNavigate} from 'react-router-dom';
 import SubHeader, {
     SubHeaderLeft,
     SubHeaderRight,
@@ -58,7 +59,7 @@ import CommonTableRow from '../../common/CommonTableRow';
 import Option, { Options } from '../../../components/bootstrap/Option';
 import Popovers from '../../../components/bootstrap/Popovers';
 import data from '../../../common/data/dummyProductData';
-import { AdminPages } from '../../../menu';
+import { AdminPages ,extraMenu} from '../../../menu';
 import PaginationButtons, {
     dataPagination,
     PER_COUNT,
@@ -77,7 +78,6 @@ import OffCanvas, {
 import Textarea from '../../../components/bootstrap/forms/Textarea';
 import { serverUrl } from '../../../config';
 
-
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
 const MenuProps = {
@@ -91,6 +91,9 @@ const MenuProps = {
 
 
 const AddUser = () => {
+    const location=useLocation()
+    const navigate = useNavigate();
+    console.log("location::",location)
     countries.registerLocale(enLocale);
     countries.registerLocale(itLocale);
     const countryObj = countries.getNames("en", { select: "official"});
@@ -107,15 +110,28 @@ const AddUser = () => {
     const [name, setName] = useState();
     const [contact, setContact] = useState();
     const [dob, setDob] = useState();
-    const [role, setRole] = useState({});
+    const [role, setRole] = useState(null);
     const [newPassword, setPassword] = useState();
-    const [ centerName, setCenterName] = useState();
+    const [ centerName, setCenterName] = useState(null);
     const [city, setCity] = useState();
     const [inputValue, setInputValue] = useState('');
     const authToken = localStorage.getItem("auth");
     const [roleList, setRoleList] = useState([]);
-
-
+    const [centerList,setCenterlist]=useState([])
+    const [selected, setSelected] = useState([]);
+    console.log("centerName::",centerName)
+    useEffect(()=>{
+if(location.state){
+setName(location.state.name)
+setContact(location.state.contact)
+setUsername(location.state.email)
+setRole(location.state.role)
+setCenterName(location.state.centerName&&location.state.centerName)
+setCity(location.state.centerCity&&location.state.centerCity)
+setSelected(location.state.countries&&location.state.countries)
+setGuid(location.state.guid)
+}
+    },[])
     const getAllRoles = () => {
         const options = {
             method: 'GET',
@@ -137,7 +153,29 @@ const AddUser = () => {
                 }
             });
     }
+    const getCenters = () => {
+        const options = {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8',
+                'authorization': authToken
+            },
+        };
 
+        fetch(`${serverUrl}/auth/allCenter`, options)
+            .then((response) => response.json())
+            .then((d) => {
+                console.log("centerlist",d)
+                setCenterlist(d.results)
+
+                // if (d.error) {
+                //     console.log('error msg', d.error);
+                // } else if (d.user.length > 0) {
+                //     const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase() !== 'agent' && val.role.toString().toLowerCase() !== 'student')
+                //     setStudentList(ss)
+                // }
+            });
+    }
     const saveStudent = () => {
 
         const userData = { 
@@ -169,7 +207,7 @@ const AddUser = () => {
                     // alert('error msg', d.error);
                 }
                 // alert('done', d);
-
+                navigate(`../${AdminPages.user.subMenu.sub.path}`)
             });
 
     }
@@ -202,17 +240,18 @@ const AddUser = () => {
                 if (d.error) {
                     console.log('error msg', d.error);
                 }
-
+                navigate(`../${AdminPages.user.subMenu.sub.path}`)
             });
 
     }
     useEffect(() => {
         getAllRoles();
+        getCenters()
     }, []);
     const { themeStatus, darkModeStatus } = useDarkMode();  
 
     
-    const [selected, setSelected] = useState([]);
+    
     const newHandleChange = (event) => {
         console.log('handleChange', event.target.value)
         const {value} = event.target;
@@ -281,11 +320,31 @@ const AddUser = () => {
                                 </FormGroup>
                             </div>
                             <div className='col-6'>
-                                <FormGroup id='employee' label='Center Name' isFloating>
+                                {/* <FormGroup id='employee' label='Center Name' isFloating>
                                     <Input
                                         placeholder='Center Name'
                                         onChange={(e) => setCenterName(e.target.value)}
                                         value={centerName}
+                                    />
+                                </FormGroup> */}
+                                <FormGroup id='center' isFloating>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        // options={centerList.map((option) => option.centerName)}
+                                        options={centerList}
+                                        getOptionSelected={(option, value) => option.centerName === value.centerName}
+                                        autoHighlight
+                                        getOptionLabel={(option) => option.centerName}
+                                        value={centerName}
+                                        onChange={(event, newValue) => {
+                                            setCenterName(newValue);
+                                        }}
+                                        // inputValue={inputValue}
+                                        // onInputChange={(event, newInputValue) => {
+                                        //     setInputValue(newInputValue);
+                                        // }}
+                                        renderInput={(params) => <TextField {...params} label="Center Name" />}
                                     />
                                 </FormGroup>
                             </div>

@@ -8,6 +8,8 @@ import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Typography, Grid, Link } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
 import FormGroup from '../../../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../../../components/bootstrap/forms/Input';
 import Textarea from '../../../../../components/bootstrap/forms/Textarea';
@@ -18,6 +20,9 @@ const TabTab = (data) => {
 	const [inputValue, setInputValue] = useState('');
 	const [role, setRole] = useState();
 	const [one, setOne] = useState(data.data.data);
+	const [studentList,setStudentList]=useState([])
+	const loginUser=JSON.parse(localStorage.getItem("userInfo"))
+	console.log("loginUser::",loginUser)
 	const [collegeInfo, setcollegeInfo] = useState({
 		country: one.university.country,
 		preferCollege: one.university.name,
@@ -25,18 +30,43 @@ const TabTab = (data) => {
 		Intake: '',
 		Year: '',
 		remark: '',
-		ApplicationID:
+		ApplicationInfo:
 			Math.random().toString(36).substring(2, 15) +
 			Math.random().toString(36).substring(2, 15),
-		StudentID: '',
+	
 		CourseID: one._id,
 		AppType: 'general',
+		AgentId:''
 	});
 	const [openData, setOpenData] = useState(false);
 	const authToken = localStorage.getItem('auth');
+	const [studentData,setStudentData]=useState(null)
 	const handleClose = () => {
 		setOpenData(false);
 	};
+	const getStudent = () => {
+		const options = {
+			method: 'GET',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				'authorization': authToken
+			},
+		};
+
+		fetch(`${serverUrl}/auth/userall`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				} else if (d.user.length > 0) {
+					console.log('result', d.user)
+					const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
+					setStudentList(ss)
+				}
+			});
+	}
+
 	const userInfo = () => {
 		const userInfoName = JSON.parse(localStorage.getItem('userInfo'));
 		if (userInfoName.role === 'Student') {
@@ -74,14 +104,48 @@ const TabTab = (data) => {
 				}
 			});
 	};
-
+console.log("collegeInfo::",collegeInfo)
 	useEffect(() => {
+		if(loginUser.role&&loginUser.role.toLowerCase()==="agent")
+		{
+
+			setcollegeInfo({...collegeInfo,AgentId:loginUser._id})
+		}
 		userInfo();
+		getStudent()
 	}, []);
 	return (
 		<Stack maxWidth='100%'>
 			<Stack direction='row' justifyContent='space-around'>
 				<Stack>
+				<Box pt={2} pb={2}>
+				<FormGroup id='center' isFloating>
+                                    <Autocomplete
+                                        disablePortal
+                                        id="combo-box-demo"
+                                        // options={studentList.map((option) => option)}
+                                        // value={collegeInfo.StudentID}
+										options={studentList}
+										getOptionSelected={(option, value) => option.name === value.name}
+										autoHighlight
+										getOptionLabel={(option) => option.name}
+										// value={windData.loc_id!==0?locationList.filter((value)=>{
+										//   return value._id._str==windData.loc_id._str
+					
+										// }):null}
+										value={studentData}
+                                        onChange={(event, newValue) => {
+                                            setcollegeInfo({...collegeInfo, ApplicationInfo:newValue});
+											setStudentData(newValue)
+                                        }}
+                                        // inputValue={inputValue}
+                                        // onInputChange={(event, newInputValue) => {
+                                        //     setInputValue(newInputValue);
+                                        // }}
+                                        renderInput={(params) => <TextField {...params} label="Student List" />}
+                                    />
+                                </FormGroup>
+</Box>
 					<Box pt={2} pb={2}>
 						<FormGroup id='preferCollege' label='Prefer College' isFloating>
 							<Input

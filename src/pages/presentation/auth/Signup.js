@@ -12,6 +12,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import { createPdfFromHtml } from "./Logic";
@@ -41,7 +43,15 @@ const LoginHeader = ({ isNewUser }) => {
         </>
     );
 };
-
+const ToastOptions = {
+	position: "top-center",
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+  }
 const Signup = ({ isSignUp }) => {
     const { darkModeStatus } = useDarkMode();
 
@@ -64,7 +74,7 @@ const Signup = ({ isSignUp }) => {
     const [contact, setContact] = useState();
     const [image, setImage] = useState();
     const [role, setRole] = useState('Agent');
-    const [newPassword, setPassword] = useState();
+    const [newPassword, setPassword] = useState("");
     const [openData, setOpenData] = useState(false);
     const [newUser, setNewUser] = useState({});
     const [Isloader, setIsloader] = useState(false);
@@ -75,6 +85,8 @@ const Signup = ({ isSignUp }) => {
     const signupClick = () => {
         // setOpenData(true);
         // createPdfFromHtml("<h1>Hello World</h1>");
+        if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username)){
+    
         const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
         console.log("data", userData);
         setIsloader(true);
@@ -105,6 +117,10 @@ const Signup = ({ isSignUp }) => {
                     }, 1000);
                 }
             });
+        }
+        else{
+            toast.error("Please enter a valid email ", ToastOptions);
+        }
     }
 
     const LoginClick = () => {
@@ -129,6 +145,7 @@ const Signup = ({ isSignUp }) => {
                 } else {
                     localStorage.setItem('auth', data.token);
                     localStorage.setItem('userName', data.user.name);
+                    localStorage.setItem('userInfo', JSON.stringify(data.user));
                     localStorage.setItem('role', data.user.role);
                     localStorage.setItem('email', username);
                     navigate('dashboard');
@@ -141,7 +158,15 @@ const Signup = ({ isSignUp }) => {
     const handleClose = () => {
         setOpenData(false);
     };
-
+    const emailVerify=()=>{
+        if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username)){
+    
+            setUsernameInput(true)
+        }
+        else{
+            toast.error("Please enter a valid email ", ToastOptions);
+        }
+    }
     return (
         <PageWrapper
             title={isNewUser ? 'Sign Up' : 'Login'}
@@ -323,6 +348,7 @@ const Signup = ({ isSignUp }) => {
                                                             onChange={(e) =>
                                                                 setPassword(e.target.value)
                                                             }
+                                                            value={newPassword}
                                                         />
                                                     </FormGroup>
                                                 )}
@@ -332,7 +358,7 @@ const Signup = ({ isSignUp }) => {
                                                     <Button
                                                         color='warning'
                                                         className='w-100 py-3'
-                                                        onClick={() => setUsernameInput(true)}>
+                                                      	onClick={emailVerify}>
                                                         Continue
                                                     </Button>
                                                 ) : (

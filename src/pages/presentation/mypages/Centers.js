@@ -66,7 +66,7 @@ const MenuProps = {
     },
   },
 };
-const Users = () => {
+const Centers = () => {
     /**
      * For Tour
      */
@@ -81,7 +81,7 @@ const Users = () => {
             value: key
         }
     })
-    const [studentList, setStudentList] = useState([]);
+    const [centerList, setCenterList] = useState([]);
 
     const [username, setUsername] = useState();
     const [guid, setGuid] = useState();
@@ -90,9 +90,12 @@ const Users = () => {
     const [dob, setDob] = useState();
     const [role, setRole] = useState();
     const [newPassword, setPassword] = useState();
-    const [ centerName, setCenterName] = useState();
-    const [city, setCity] = useState();
-    const [inputValue, setInputValue] = useState('');
+    const [centerData,setCenterData]=useState({
+        centerName:'',
+        pinCode:'',
+        city:'',
+        state:''
+    })   
     const authToken = localStorage.getItem("auth");
     const [roleList, setRoleList] = useState([]);
     const getStudent = () => {
@@ -104,18 +107,26 @@ const Users = () => {
             },
         };
 
-        fetch(`${serverUrl}/auth/userall`, options)
+        fetch(`${serverUrl}/auth/allCenter`, options)
             .then((response) => response.json())
             .then((d) => {
-                if (d.error) {
-                    console.log('error msg', d.error);
-                } else if (d.user.length > 0) {
-                    const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase() !== 'agent' && val.role.toString().toLowerCase() !== 'student')
-                    setStudentList(ss)
-                }
+                console.log("centerlist",d)
+                    setCenterList(d.results)
+
+                // if (d.error) {
+                //     console.log('error msg', d.error);
+                // } else if (d.user.length > 0) {
+                //     const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase() !== 'agent' && val.role.toString().toLowerCase() !== 'student')
+                //     setStudentList(ss)
+                // }
             });
     }
-
+const handleChange=(e)=>{
+    // const name=e.target.name
+    // const value=e.target.value
+    setCenterData((values)=>({...values,[e.target.name]:e.target.value}))
+}
+console.log("centerData:;",centerData)
     const getAllRoles = () => {
         const options = {
             method: 'GET',
@@ -136,16 +147,14 @@ const Users = () => {
             });
     }
 
-    const saveStudent = () => {
+    const saveCenter = () => {
 
-        const userData = { 
-            'name': name, 
-            'email': username, 
-            'password': newPassword, 
-            'contact': contact, 
-            'centerName': centerName, 
-            'centerCity' : city, 
-            'role': role 
+        const payload = { 
+            centerName: centerData.centerName, 
+            pinCode: centerData.pinCode, 
+            city: centerData.city, 
+            state: centerData.state, 
+            
         };
         // console.log("userdatainput", userData);
         const options = {
@@ -154,10 +163,10 @@ const Users = () => {
                 'Content-Type': 'application/json;charset=utf-8',
                 // 'authorization': authToken
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(payload)
         };
 
-        fetch(`${serverUrl}/auth/signup`, options)
+        fetch(`${serverUrl}/auth/createCenter`, options)
             .then((response) => response.json())
             .then((d) => {
                 console.log('data', d);
@@ -237,9 +246,7 @@ const Users = () => {
 
     const editProduct = (guidinfo) => {
         console.log('guid', guidinfo)
-        navigate(`../${extraMenu.AddUser.path}`,{state:guidinfo})
-        // setEditRow(guidinfo)
-        // getSingleStudent(guidinfo);
+        getSingleStudent(guidinfo);
     }
     const [selected, setSelected] = useState([]);
     const newHandleChange = (event) => {
@@ -331,7 +338,7 @@ const Users = () => {
                                     {selectTable.values.selectedList.length
                                         ? `${selectTable.values.selectedList.length} / `
                                         : null}
-                                    {studentList.length}
+                                    {centerList&&centerList.length}
                                 </small>
                             </CardTitle>
                         </CardLabel>
@@ -340,7 +347,8 @@ const Users = () => {
                                 color={darkModeStatus ? 'light' : 'dark'}
                                 isLight
                                 icon='Add'
-                                onClick={() => navigate(`../${extraMenu.AddUser.path}`)}
+                                // onClick={() => navigate(`../${extraMenu.AddUser.path}`)}
+                                onClick={()=>setAddProductEvent(true)}
                             >
                                 Add New
                             </Button>
@@ -351,10 +359,10 @@ const Users = () => {
                             <thead>
                                 <tr>
                                     <th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th>
-                                    <th scope='col'>Name</th>
-                                    <th scope='col'>Email</th>
-                                    <th scope='col'>Role</th>
-                                    <th scope='col'>Contact</th>
+                                    <th scope='col'>Center Name</th>
+                                    <th scope='col'>Pin Code</th>
+                                    <th scope='col'>City</th>
+                                    <th scope='col'>State</th>
                                     <th scope='col' >
                                         Actions
                                     </th>
@@ -362,7 +370,7 @@ const Users = () => {
                             </thead>
                             <tbody>
 
-                                {studentList.length > 0 && studentList.map((item) => (
+                                {centerList&&centerList.length > 0 && centerList.map((item) => (
                                     <tr key={item.guid}>
                                         <td>
                                             <Checkbox
@@ -370,10 +378,10 @@ const Users = () => {
                                                 checked={item.checked}
                                             />
                                         </td>
-                                        <td>{item.name}</td>
-                                        <td>{item.email}</td>
-                                        <td>{item.role}</td>
-                                        <td>{item.contact}</td>
+                                        <td>{item.centerName}</td>
+                                        <td>{item.pinCode}</td>
+                                        <td>{item.city}</td>
+                                        <td>{item.state}</td>
                                         <td>
                                             <Button
                                                 isOutline={!darkModeStatus}
@@ -383,7 +391,7 @@ const Users = () => {
                                                     'border-light': !darkModeStatus,
                                                 })}
                                                 icon='Edit'
-                                                onClick={() => editProduct(item)}
+                                                onClick={() => editProduct(item.guid)}
                                             >
                                                 Edit
                                             </Button>
@@ -433,45 +441,53 @@ const Users = () => {
                     <ModalBody>
                         <div className='row g-4'>
                             <div className='col-6'>
-                                <FormGroup id='customerName' label='Name' isFloating>
+                                <FormGroup id='customerName' label='Center Name' isFloating>
                                     <Input
-                                        placeholder='Name'
-                                        onChange={(e) => setName(e.target.value)}
-                                        value={name}
+                                        placeholder='centerName'
+                                        name="centerName"
+                                        onChange={handleChange}
+                                        value={centerData.centerName}
                                         type='text'
                                     />
                                 </FormGroup>
                             </div>
                             <div className='col-6'>
-                                <FormGroup id='service' label='email' isFloating>
+                                <FormGroup id='service' label='City' isFloating>
                                     <Input
-                                        placeholder='email'
-                                        onChange={(e) => setUsername(e.target.value)}
-                                        value={username}
+                                        placeholder='city'
+                                        name="city"
+                                        onChange={handleChange}
+                                        value={centerData.city}
+                                        type='text'
                                     />
                                 </FormGroup>
                             </div>
                             <div className='col-6'>
-                                <FormGroup id='employee' label='password' isFloating>
+                                <FormGroup id='employee' label='State' isFloating>
                                     <Input
-                                        placeholder='password'
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        value={newPassword}
-                                        type='password'
+                                       placeholder='state'
+                                       name="state"
+                                       onChange={handleChange}
+                                       value={centerData.state}
+                                       type='text'
                                     />
                                 </FormGroup>
                             </div>
                             <div className='col-6'>
-                                <FormGroup id='location' label='contact' isFloating>
+                                <FormGroup id='location' label='Pin Code' isFloating>
                                     <Input
-                                        placeholder='contact'
-                                        onChange={(e) => setContact(e.target.value)}
-                                        value={contact}
+                                        placeholder='pinCode'
+                                        name="pinCode"
+                                        onChange={handleChange}
+                                        value={centerData.pinCode.replace(/[^0-9.]/g, '')}
+                                        type='text'
+                                        maxLength={6}
+                                        
 
                                     />
                                 </FormGroup>
                             </div>
-                            <div className='col-6'>
+                            {/* <div className='col-6'>
                                 <FormGroup id='employee' label='Center Name' isFloating>
                                     <Input
                                         placeholder='Center Name'
@@ -512,7 +528,7 @@ const Users = () => {
                                             </MenuItem>
                                         ))}
                                     </Select>
-                                </FormControl>
+                                </FormControl> */}
                                 {/* <FormGroup id='location' label='Assign Country' isFloating>
                                     <Input
                                         placeholder='Assign Country'
@@ -521,8 +537,8 @@ const Users = () => {
 
                                     />
                                 </FormGroup> */}
-                            </div>                            
-                            <div className='col-6'>
+                            {/* </div>                             */}
+                            {/* <div className='col-6'>
                                 <FormGroup id='role' isFloating>
                                     <Autocomplete
                                         disablePortal
@@ -539,7 +555,7 @@ const Users = () => {
                                         renderInput={(params) => <TextField {...params} label="Role" />}
                                     />
                                 </FormGroup>
-                            </div>
+                            </div> */}
                         </div>
                     </ModalBody>
                     <ModalFooter className='bg-transparent'>
@@ -554,7 +570,7 @@ const Users = () => {
                             <Button
                                 color='info'
                                 className='w-100'
-                                onClick={saveStudent}>
+                                onClick={saveCenter}>
                                 Save
                             </Button>
                         )}
@@ -566,4 +582,4 @@ const Users = () => {
     );
 };
 
-export default Users;
+export default Centers;

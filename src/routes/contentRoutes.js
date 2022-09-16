@@ -37,8 +37,10 @@ const LIST = {
 	USERS: lazy(() => import('../pages/presentation/mypages/Users')),
 	ADDUSERS: lazy(() => import('../pages/presentation/mypages/AddUser')),
 	ROLES: lazy(() => import('../pages/presentation/mypages/Roles')),
+	CENTERS: lazy(() => import('../pages/presentation/mypages/Centers')),
 	AGENTS: lazy(() => import('../pages/presentation/mypages/Agents')),
 	FLUID: lazy(() => import('../pages/presentation/demo-pages/ListFluidPage')),
+
 };
 const GRID = {
 	BOXED: lazy(() => import('../pages/presentation/demo-pages/GridBoxedPage')),
@@ -311,6 +313,11 @@ const presentation = [
 	{
 		path: AdminPages.user.subMenu.role.path,
 		element: <LIST.ROLES />,
+		exact: true,
+	},
+	{
+		path: AdminPages.user.subMenu.center.path,
+		element: <LIST.CENTERS />,
 		exact: true,
 	},
 	{
