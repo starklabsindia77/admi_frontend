@@ -116,7 +116,9 @@ const Signup = ({ isSignUp }) => {
                         navigate('dashboard');
                     }, 1000);
                 }
-            });
+            }).catch(()=>{
+                setIsloader(false);
+            })
         }
         else{
             toast.error("Please enter a valid email ", ToastOptions);

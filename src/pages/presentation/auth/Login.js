@@ -79,12 +79,13 @@ const Login = ({ isSignUp }) => {
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 			},
-			mode: 'no-cors',
+			
 			body: JSON.stringify(userData),
 		};
 
 		fetch(`${serverUrl}/auth/signup`, options)
-			.then((response) => response.json())
+			.then((response) => 
+			response.json())
 			.then((data) => {
 				console.log('data', data);
 				if (data.message !== 'Successfully created a new user') {
