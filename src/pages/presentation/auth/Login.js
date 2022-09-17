@@ -15,6 +15,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
+import axios from 'axios'
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
@@ -106,35 +107,70 @@ const Login = ({ isSignUp }) => {
 	}
 
 	const LoginClick = () => {
-		console.log('username', username, newPassword);
-		setIsloader(true);
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
-			},
-			body: JSON.stringify({ email: username, password: newPassword }),
-		};
+		// console.log('username', username, newPassword);
+		// setIsloader(true);
+		// const options = {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json;charset=utf-8',
+		// 	},
+		// 	body: JSON.stringify({ email: username, password: newPassword }),
+		// };
 
-		fetch(`${serverUrl}/auth/login`, options)
-			.then((response) => response.json())
-			.then((data) => {
-				console.log('data', data);
-				if (data.message) {
-					console.log('error msg', data.message);
-				} else {
-					localStorage.setItem('auth', data.token);
-					localStorage.setItem('userName', data.user.name);
-					localStorage.setItem('role', data.user.role);
-					localStorage.setItem('loginUserId', data.user._id);
-					localStorage.setItem('userInfo', JSON.stringify(data.user));
-					localStorage.setItem('email', username);
-					navigate('dashboard');
-					setIsloader(false);
-				}
-			}).catch(()=>{
+		// fetch(`${serverUrl}/auth/login`, options)
+		// 	.then((response) => response.json())
+		// 	.then((data) => {
+		// 		console.log('data', data);
+		// 		if (data.message) {
+		// 			console.log('error msg', data.message);
+		// 		} else {
+		// 			localStorage.setItem('auth', data.token);
+		// 			localStorage.setItem('userName', data.user.name);
+		// 			localStorage.setItem('role', data.user.role);
+		// 			localStorage.setItem('loginUserId', data.user._id);
+		// 			localStorage.setItem('userInfo', JSON.stringify(data.user));
+		// 			localStorage.setItem('email', username);
+		// 			navigate('dashboard');
+		// 			setIsloader(false);
+		// 		}
+		// 	}).catch(()=>{
+		// 		setIsloader(false);
+		// 	})
+		const payload={
+			 email: username, 
+			 password: newPassword 
+		}
+		return axios.post(`${serverUrl}/auth/login`, payload, {
+          headers: {
+             accept: "*/*",
+            "Access-Control-Allow-Origin": "*",
+            withCredentials: true,
+            "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+            "Access-Control-Allow-Headers":
+              "accept, content-type, x-access-token, x-requested-with",
+          },
+        }).then((res)=>{
+			console.log("res log::",res)
+			if(res.data.success)
+			{
+
+				localStorage.setItem('auth',res.data.token);
+				localStorage.setItem('userName', res.data.user.name);
+				localStorage.setItem('role',res.data.user.role);
+				localStorage.setItem('loginUserId', res.data.user._id);
+				localStorage.setItem('userInfo', JSON.stringify(res.data.user));
+				localStorage.setItem('email', username);
+				navigate('dashboard');
 				setIsloader(false);
-			})
+			}
+			else{
+				toast.error("Please enter a valid email or something went wrong ", ToastOptions);	
+			}
+		}).catch(()=>{
+					setIsloader(false);
+				})
+
+
 	};
 	// console.log("status", status);
 
