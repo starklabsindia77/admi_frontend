@@ -15,7 +15,8 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
-import axios from 'axios'
+import axios from 'axios';
+import { CometChat } from '@cometchat-pro/chat';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 import Page from '../../../layout/Page/Page';
 import Card, { CardBody } from '../../../components/bootstrap/Card';
@@ -24,7 +25,7 @@ import Input from '../../../components/bootstrap/forms/Input';
 import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
-import { serverUrl } from '../../../config';
+import { serverUrl, ChatAuthKey } from '../../../config';
 // eslint-disable-next-line react/prop-types
 const LoginHeader = ({ isNewUser }) => {
 	if (isNewUser) {
@@ -96,7 +97,18 @@ const Login = ({ isSignUp }) => {
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', name);
 					localStorage.setItem('role', role);
-					
+					const UID = userData.email.split("@")[0];
+					const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
+					const chatuser = new CometChat.User(UID);
+					chatuser.setName(userData.name);
+					chatuser.setMetadata(JSON.stringify(metadataObj))
+					CometChat.createUser(chatuser, ChatAuthKey).then(
+						user => {
+							console.log("user created", user);
+						}, error => {
+							console.log("error", error);
+						}
+					)
 					localStorage.setItem('email', username);
 					setTimeout(() => {
 						setIsloader(false);
@@ -160,6 +172,27 @@ const Login = ({ isSignUp }) => {
 				localStorage.setItem('loginUserId', res.data.user._id);
 				localStorage.setItem('userInfo', JSON.stringify(res.data.user));
 				localStorage.setItem('email', username);
+				const UID2 = username.split("@")[0];
+				CometChat.getLoggedinUser().then(
+					user => {
+					  if(!user){
+						CometChat.login(UID2, ChatAuthKey).then(
+						  loginuser => {
+							console.log("Login Successful:", { loginuser });    
+						  },
+						  error => {
+							console.log("Login failed with exception:", { error });    
+						  }
+						);
+					  }else{
+						// User already logged in
+					  }
+					}, error => {
+					  console.log("getLoggedinUser failed with exception:", { error });
+					}
+				);
+				  
+				
 				navigate('dashboard');
 				setIsloader(false);
 			}

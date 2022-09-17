@@ -4,6 +4,7 @@ import { ReactNotifications } from 'react-notifications-component';
 import { useFullscreen } from 'react-use';
 import { Route, Routes } from 'react-router-dom';
 import { ToastProvider } from 'react-toast-notifications';
+import { CometChat } from '@cometchat-pro/chat';
 import { TourProvider } from '@reactour/tour';
 import ThemeContext from '../contexts/themeContext';
 
@@ -16,6 +17,7 @@ import useDarkMode from '../hooks/useDarkMode';
 import COLORS from '../common/data/enumColors';
 import { getOS } from '../helpers/helpers';
 import steps, { styles } from '../steps';
+import { COMETAPP_ID, COMETAPP_REGION } from "../config";
 
 const App = () => {
 	getOS();
@@ -24,6 +26,20 @@ const App = () => {
 	 * Dark Mode
 	 */
 	const { themeStatus, darkModeStatus } = useDarkMode();
+	const appID = COMETAPP_ID;
+	const region = COMETAPP_REGION;
+	const appSetting = new CometChat.AppSettingsBuilder()
+						.subscribePresenceForAllUsers()
+						.setRegion(region)
+						.autoEstablishSocketConnection(true)
+						.build();
+	CometChat.init(appID, appSetting).then(
+	() => {
+		console.log("Initialization completed successfully");
+	}, error => {
+		console.log("Initialization failed with error:", error);
+	}
+	);
 	const theme = {
 		theme: themeStatus,
 		primary: COLORS.PRIMARY.code,

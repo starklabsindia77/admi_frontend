@@ -171,7 +171,7 @@ export const AdminPages = {
 export const AgentPages = {
 	auth: {
 		id: 'auth',
-		text: 'Pages',
+		text: 'Agent Pages',
 		icon: 'Extension',
 	},
 
@@ -201,16 +201,16 @@ export const AgentPages = {
 		path: 'students',
 		icon: 'person',
 	},
-	Agent: {
-		id: 'agents',
-		text: 'Agents',
-		path: 'agents',
-		icon: 'PersonLinesFill',
-	},
+	// Agent: {
+	// 	id: 'agents',
+	// 	text: 'Agents',
+	// 	path: 'agents',
+	// 	icon: 'PersonLinesFill',
+	// },
 	summary: {
 		id: 'summary',
 		text: 'Application',
-		path: 'Application',
+		path: 'applications',
 		icon: 'FileCheck',
 	},
 	crmDashboard: {

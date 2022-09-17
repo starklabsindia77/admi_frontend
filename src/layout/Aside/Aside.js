@@ -58,7 +58,7 @@ const Aside = () => {
 							<NavigationLine />
 							{role === 'admin' ? (
 								<Navigation menu={AdminPages} id='aside-demo-pages' />
-							) : role === 'agent' ? (
+							) : role === 'Agent' ? (
 								<Navigation menu={AgentPages} id='aside-demo-pages' />
 							) : (
 								<Navigation menu={Pages} id='aside-demo-pages' />

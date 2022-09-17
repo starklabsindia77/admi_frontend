@@ -1,3 +1,5 @@
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
@@ -93,40 +95,45 @@ ChatListItem.defaultProps = {
 	lastSeenTime: null,
 };
 
-export const ChatHeader = ({ to }) => {
+export const ChatHeader = () => {
 	return (
 		<>
 			<strong className='me-2'>To:</strong>
-			{to}
+			CHAT
 		</>
 	);
 };
-ChatHeader.propTypes = {
-	to: PropTypes.string.isRequired,
-};
+// ChatHeader.propTypes = {
+// 	to: PropTypes.string,
+// };
 
 export const ChatMessages = ({ messages, isReply, ...props }) => {
+	// console.log('single', messages);
 	return (
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div className='chat-messages' {...props}>
-			{messages.map((i) => (
+			<div className={classNames('chat-message', { 'chat-message-reply': isReply })}>
+				{messages}
+			</div>
+			{/* {messages.map((i) => (
 				<div
 					key={i.id}
 					className={classNames('chat-message', { 'chat-message-reply': isReply })}>
 					{i.message}
 				</div>
-			))}
+			))} */}
 		</div>
 	);
 };
 ChatMessages.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types
-	messages: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-			message: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-		}),
-	).isRequired,
+	messages: PropTypes.string.isRequired,
+	// messages: PropTypes.arrayOf(
+	// 	PropTypes.shape({
+	// 		id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	// 		message: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	// 	}),
+	// ).isRequired,
 	isReply: PropTypes.bool,
 };
 ChatMessages.defaultProps = {
@@ -184,15 +191,27 @@ ChatAvatar.defaultProps = {
 };
 
 export const ChatGroup = ({ isReply, messages, isOnline, color, user, ...props }) => {
+	const userInfo = {
+		color: 'primary',
+		id: 1,
+		isOnline: true,
+		isReply: true,
+		name: user.name,
+		position: 'CEO, Founder',
+		src: '/static/media/wanna1.79eba30dc8a426b1aa69.png',
+		srcSet: '/static/media/wanna1.1bb1bac56f17740197c9.webp',
+		surname: 'Doe',
+		username: user.uid,
+	};
 	const _Avatar = (
 		<ChatAvatar
-			src={user.src}
-			srcSet={user.srcSet}
-			username={user.username}
-			name={user.name}
-			surname={user.surname}
-			isOnline={user.isOnline}
-			color={user.color}
+			src={userInfo.src}
+			srcSet={userInfo.srcSet}
+			username={userInfo.username}
+			name={userInfo.name}
+			surname={userInfo.surname}
+			isOnline={userInfo.isOnline}
+			color={userInfo.color}
 		/>
 	);
 	return (
@@ -206,12 +225,13 @@ export const ChatGroup = ({ isReply, messages, isOnline, color, user, ...props }
 };
 ChatGroup.propTypes = {
 	isReply: PropTypes.bool,
-	messages: PropTypes.arrayOf(
-		PropTypes.shape({
-			id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-			message: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-		}),
-	).isRequired,
+	messages: PropTypes.string.isRequired,
+	// messages: PropTypes.arrayOf(
+	// 	PropTypes.shape({
+	// 		id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	// 		message: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+	// 	}),
+	// ).isRequired,
 	isOnline: PropTypes.bool,
 	color: PropTypes.string,
 	user: PropTypes.shape({
@@ -219,6 +239,7 @@ ChatGroup.propTypes = {
 		srcSet: PropTypes.string,
 		username: PropTypes.string,
 		name: PropTypes.string,
+		uid: PropTypes.string,
 		surname: PropTypes.string,
 		isOnline: PropTypes.bool,
 		color: PropTypes.string,

@@ -27,6 +27,7 @@ import { Grid, Divider, Paper, Box, Typography, Button } from '@mui/material';
 import TextSnippetIcon from '@mui/icons-material/TextSnippet';
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder';
 import BookmarkIcon from '@mui/icons-material/Bookmark';
+import { CometChat } from '@cometchat-pro/chat';
 // chat import
 import CHATS from '../../../../common/data/chatDummyData';
 
@@ -67,7 +68,9 @@ function ApplicationCard({ data, wishData }) {
 	const [animationStatus, setAnimationStatus] = useState(true);
 	const [longContentStatus, setLongContentStatus] = useState(false);
 	const [headerCloseStatus, setHeaderCloseStatus] = useState(true);
-
+	const [singleChatMessage, setSingleChatMessageStatus] = useState({});
+	const [messageText, setMessageTextStatus] = useState('');
+	const [messageList, setMessageListStatus] = useState([]);
 	const initialStatus = () => {
 		setStaticBackdropStatus(false);
 		setScrollableStatus(false);
@@ -194,7 +197,126 @@ function ApplicationCard({ data, wishData }) {
 				});
 		}
 	};
+	const chatFunctions = (data2) => {
+		const GUID = data2.ApplicationID;
+		// const GUID2 = 'supergroup';
+		CometChat.getGroup(GUID).then(
+			(group) => {
+				console.log('Group details fetched successfully:', group);
+				setSingleChatMessageStatus(data2);
+				getChatMessage(data2.ApplicationID);
+				setChatState(true);
+			},
+			(error) => {
+				if (error.code === 'ERR_GUID_NOT_FOUND') {
+					// const UID = localStorage.getItem('email');
+					console.log('Email group create karo');
+					const groupName = data2.ApplicationID;
+					const groupType = CometChat.GROUP_TYPE.PUBLIC;
+					const group = new CometChat.Group(GUID, groupName, groupType);
+					const username = localStorage.getItem('email');
+					const UID2 = username.split('@')[0];
+					const members = [
+						new CometChat.GroupMember(UID2, CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT),
+					];
+					// if (data2 && data2.agent && data2.agent.email) {
+					// 	members.push(
+					// 		new CometChat.GroupMember(
+					// 			data2.agent.email,
+					// 			CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT,
+					// 		),
+					// 	);
+					// }
+					// if (data2 && data2.student && data2.student.email) {
+					// 	members.push(
+					// 		new CometChat.GroupMember(
+					// 			data2.student.email,
+					// 			CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT,
+					// 		),
+					// 	);
+					// }
+					// if (data2 && data2.manager && data2.manager.email) {
+					// 	members.push(
+					// 		new CometChat.GroupMember(
+					// 			data2.cro.email,
+					// 			CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT,
+					// 		),
+					// 	);
+					// }
+					// if (data2 && data2.cro && data2.cro.email) {
+					// 	members.push(
+					// 		new CometChat.GroupMember(
+					// 			data2.cro.email,
+					// 			CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT,
+					// 		),
+					// 	);
+					// }
+					// if (data2 && data2.admin && data2.cro.admin) {
+					// 	members.push(
+					// 		new CometChat.GroupMember(
+					// 			data2.admin.email,
+					// 			CometChat.GROUP_MEMBER_SCOPE.PARTICIPANT,
+					// 		),
+					// 	);
+					// }
 
+					CometChat.createGroupWithMembers(group, members).then(
+						(response) => {
+							console.log('Group created successfully', response.group.guid);
+							setChatState(true);
+							setSingleChatMessageStatus(data2);
+							getChatMessage(response.group.guid);
+						},
+						(error2) => {
+							console.log('Some error occured while creating group', error2);
+						},
+					);
+				}
+				console.log('Group details fetching failed with exception:', error);
+			},
+		);
+	};
+	const getChatMessage = async (GID) => {
+		const GUID = GID;
+		// const GUID = 'supergroup'
+		const limit = 30;
+		const latestId = await CometChat.getLastDeliveredMessageId();
+		console.log('chat guid', GUID);
+		console.log('chat latestId', latestId);
+		const messagesRequest = new CometChat.MessagesRequestBuilder()
+			.setGUID(GUID)
+			.setMessageId(latestId)
+			.setLimit(limit)
+			.build();
+
+		messagesRequest.fetchPrevious().then(
+			(messages) => {
+				console.log('Message list fetched:', messages);
+				setMessageListStatus(messages);
+			},
+			(error) => {
+				console.log('Message fetching failed with error:', error);
+			},
+		);
+	};
+	const sendMessage = () => {
+		if (messageText.length > 0) {
+			const receiverID = singleChatMessage.ApplicationID;
+			const receiverType = CometChat.RECEIVER_TYPE.GROUP;
+			console.log('receiverType', receiverType);
+			const textMessage = new CometChat.TextMessage(receiverID, messageText, receiverType);
+
+			CometChat.sendMessage(textMessage).then(
+				(message) => {
+					console.log('Message sent successfully:', message);
+					getChatMessage(singleChatMessage.ApplicationID);
+				},
+				(error) => {
+					console.log('Message sending failed with error:', error);
+				},
+			);
+		}
+	};
 	useEffect(() => {
 		userInfo();
 		getStages();
@@ -342,7 +464,10 @@ function ApplicationCard({ data, wishData }) {
 				<Grid item xs={1}>
 					<Button
 						variant='text'
-						onClick={() => setChatState(true)}
+						onClick={() => {
+							// setChatState(true);
+							chatFunctions(data);
+						}}
 						startIcon={<ChatBubbleOutlineIcon />}>
 						chat{' '}
 					</Button>
@@ -357,27 +482,39 @@ function ApplicationCard({ data, wishData }) {
 				isBackdrop={false}
 				isBodyScroll>
 				<OffCanvasHeader setOpen={setChatState} className='fs-5'>
-					<ChatHeader to={USERS.CHLOE.name} />
+					<ChatHeader to={singleChatMessage.ApplicationID} />
 				</OffCanvasHeader>
 				<OffCanvasBody>
 					<Chat>
-						{CHATS.CHLOE_VS_JOHN.map((msg) => (
+						{/* {CHATS.CHLOE_VS_JOHN.map((msg) => (
 							<ChatGroup
 								key={msg.id}
 								messages={msg.messages}
 								user={msg.user}
 								isReply={msg.isReply}
 							/>
-						))}
+						))} */}
+						{messageList &&
+							messageList.map((msg) => (
+								<ChatGroup
+									key={msg.id}
+									messages={msg.text}
+									user={msg.data.entities.sender.entity}
+									isReply
+								/>
+							))}
 					</Chat>
 				</OffCanvasBody>
 				<div className='chat-send-message p-3'>
 					<InputGroup>
-						<Textarea />
+						<Textarea onChange={(e) => setMessageTextStatus(e.target.value)} />
 						{/* <Button color='info' icon='Send'>
 							SEND
 						</Button> */}
-						<Button variant='text' startIcon={<ChatBubbleOutlineIcon />}>
+						<Button
+							variant='text'
+							onClick={sendMessage}
+							startIcon={<ChatBubbleOutlineIcon />}>
 							SEND{' '}
 						</Button>
 					</InputGroup>
