@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import classNames from 'classnames';
+import { CometChat } from '@cometchat-pro/chat';
 import USERS from '../../common/data/userDummyData';
 import { demoPages, extraMenu } from '../../menu';
 import { DropdownItem, DropdownMenu } from '../../components/bootstrap/Dropdown';
@@ -33,6 +34,20 @@ const User = () => {
 	const { t } = useTranslation(['translation', 'menu']);
 	const username = localStorage.getItem('userName');
 	const role = localStorage.getItem('role');
+	const userLogout = () => {
+		CometChat.logout().then(
+			() => {
+				console.log('Logout completed successfully');
+				localStorage.clear();
+				navigate(`../${demoPages.login.path}`)
+			},
+			(error) => {
+				console.log('Logout failed with exception:', { error });
+				localStorage.clear();
+				navigate(`../${demoPages.login.path}`)
+			},
+		);
+	};
 
 	return (
 		<>
@@ -115,7 +130,7 @@ const User = () => {
 						<div
 							role='presentation'
 							className='navigation-item cursor-pointer'
-							onClick={() => navigate(`../${demoPages.login.path}`)}>
+							onClick={() => userLogout()}>
 							<span className='navigation-link navigation-link-pill'>
 								<span className='navigation-link-info'>
 									<Icon icon='Logout' className='navigation-icon' />

@@ -71,6 +71,8 @@ function ApplicationCard({ data, wishData }) {
 	const [singleChatMessage, setSingleChatMessageStatus] = useState({});
 	const [messageText, setMessageTextStatus] = useState('');
 	const [messageList, setMessageListStatus] = useState([]);
+
+	const userUID = localStorage.getItem('email').split('@')[0];
 	const initialStatus = () => {
 		setStaticBackdropStatus(false);
 		setScrollableStatus(false);
@@ -205,7 +207,6 @@ function ApplicationCard({ data, wishData }) {
 				console.log('Group details fetched successfully:', group);
 				setSingleChatMessageStatus(data2);
 				getChatMessage(data2.ApplicationID);
-				setChatState(true);
 			},
 			(error) => {
 				if (error.code === 'ERR_GUID_NOT_FOUND') {
@@ -292,10 +293,33 @@ function ApplicationCard({ data, wishData }) {
 		messagesRequest.fetchPrevious().then(
 			(messages) => {
 				console.log('Message list fetched:', messages);
-				setMessageListStatus(messages);
+				messagesRequest.fetchNext().then(
+					(messages2) => {
+						console.log('Message list fetched Next:', messages2);
+						setMessageListStatus(messages2);
+						setChatState(true);
+					},
+					(error2) => {
+						console.log('Message fetching Next failed with error:', error2);
+					},
+				);
 			},
 			(error) => {
 				console.log('Message fetching failed with error:', error);
+				if (error.code === 'ERR_GROUP_NOT_JOINED') {
+					const password = '';
+					const groupType = CometChat.GROUP_TYPE.PUBLIC;
+					CometChat.joinGroup(GUID, groupType, password).then(
+						(group) => {
+							console.log('Group joined successfully:', group);
+							getChatMessage(GUID);
+							// setChatState(true);
+						},
+						(newerror) => {
+							console.log('Group joining failed with exception:', newerror);
+						},
+					);
+				}
 			},
 		);
 	};
@@ -309,6 +333,7 @@ function ApplicationCard({ data, wishData }) {
 			CometChat.sendMessage(textMessage).then(
 				(message) => {
 					console.log('Message sent successfully:', message);
+					setMessageTextStatus('');
 					getChatMessage(singleChatMessage.ApplicationID);
 				},
 				(error) => {
@@ -495,19 +520,34 @@ function ApplicationCard({ data, wishData }) {
 							/>
 						))} */}
 						{messageList &&
-							messageList.map((msg) => (
-								<ChatGroup
-									key={msg.id}
-									messages={msg.text}
-									user={msg.data.entities.sender.entity}
-									isReply
-								/>
-							))}
+							messageList.map((msg) => {
+								if (msg.type === 'text' && msg.text !== undefined) {
+									let value = false;
+									if (msg.sender.uid === userUID) {
+										value = true;
+									}
+									return (
+										<ChatGroup
+											key={msg.id}
+											messages={msg.text}
+											user={msg.sender}
+											time={msg.sentAt}
+											isReply={value}
+										/>
+									);
+								}
+								return null;
+							})}
 					</Chat>
 				</OffCanvasBody>
 				<div className='chat-send-message p-3'>
 					<InputGroup>
-						<Textarea onChange={(e) => setMessageTextStatus(e.target.value)} />
+						<Textarea
+							size='sm'
+							value={messageText}
+							rows={1}
+							onChange={(e) => setMessageTextStatus(e.target.value)}
+						/>
 						{/* <Button color='info' icon='Send'>
 							SEND
 						</Button> */}
