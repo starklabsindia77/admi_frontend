@@ -178,10 +178,36 @@ const Login = ({ isSignUp }) => {
 					  if(!user){
 						CometChat.login(UID2, ChatAuthKey).then(
 						  loginuser => {
-							console.log("Login Successful:", { loginuser });    
+							console.log("Login Successful:", { loginuser });
+							navigate('dashboard');  
 						  },
 						  error => {
-							console.log("Login failed with exception:", { error });    
+							console.log("Login failed with exception:", { error });
+							if(error.code === 'ERR_UID_NOT_FOUND'){
+								const metadataObj = {"email":username, "contactNumber":res.data.user.contact}
+
+								const userinfo = new CometChat.User(UID2);
+
+								userinfo.setName(res.data.user.name);
+								userinfo.setRole(res.data.user.role);
+								userinfo.setMetadata(JSON.stringify(metadataObj))
+								CometChat.createUser(userinfo, ChatAuthKey).then(
+									user2 => {
+										console.log("user created", user2);
+										CometChat.login(UID2, ChatAuthKey).then(
+											loginuser2 => {
+											  console.log("Login Successful:", { loginuser2 });    
+											  navigate('dashboard');
+											}, loginerror => {
+												console.log("Login failed with exception:", { loginerror });
+											})
+										
+									}, error1 => {
+										console.log("user ---- error", error1);
+										navigate('dashboard');
+									}
+								)
+							}
 						  }
 						);
 					  }else{
@@ -193,7 +219,7 @@ const Login = ({ isSignUp }) => {
 				);
 				  
 				
-				navigate('dashboard');
+				
 				setIsloader(false);
 			}
 			else{

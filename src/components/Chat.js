@@ -3,6 +3,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import moment from 'moment';
 import Avatar from './Avatar';
 import useDarkMode from '../hooks/useDarkMode';
 
@@ -107,13 +108,19 @@ export const ChatHeader = () => {
 // 	to: PropTypes.string,
 // };
 
-export const ChatMessages = ({ messages, isReply, ...props }) => {
+export const ChatMessages = ({ messages, isReply, user, time, ...props }) => {
 	// console.log('single', messages);
 	return (
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div className='chat-messages' {...props}>
 			<div className={classNames('chat-message', { 'chat-message-reply': isReply })}>
+				<p style={{ fontSize: '7px', marginBottom: '3px' }}>
+					{user.name} - ( {user.role} )
+				</p>
 				{messages}
+				<p style={{ fontSize: '7px', marginBottom: '3px' }}>
+					{moment(time).format('MM/DD/YYYY HH:mm a')}
+				</p>
 			</div>
 			{/* {messages.map((i) => (
 				<div
@@ -128,6 +135,14 @@ export const ChatMessages = ({ messages, isReply, ...props }) => {
 ChatMessages.propTypes = {
 	// eslint-disable-next-line react/forbid-prop-types
 	messages: PropTypes.string.isRequired,
+	time: PropTypes.number.isRequired,
+	user: PropTypes.objectOf(
+		PropTypes.shape({
+			uid: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+			role: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+		}),
+	),
 	// messages: PropTypes.arrayOf(
 	// 	PropTypes.shape({
 	// 		id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -190,18 +205,18 @@ ChatAvatar.defaultProps = {
 	size: 45,
 };
 
-export const ChatGroup = ({ isReply, messages, isOnline, color, user, ...props }) => {
+export const ChatGroup = ({ isReply, messages, isOnline, color, user, time, ...props }) => {
 	const userInfo = {
 		color: 'primary',
 		id: 1,
-		isOnline: true,
+		isOnline: user.status === 'online',
 		isReply: true,
 		name: user.name,
 		position: 'CEO, Founder',
 		src: '/static/media/wanna1.79eba30dc8a426b1aa69.png',
 		srcSet: '/static/media/wanna1.1bb1bac56f17740197c9.webp',
 		surname: 'Doe',
-		username: user.uid,
+		username: 'John',
 	};
 	const _Avatar = (
 		<ChatAvatar
@@ -218,7 +233,9 @@ export const ChatGroup = ({ isReply, messages, isOnline, color, user, ...props }
 		// eslint-disable-next-line react/jsx-props-no-spreading
 		<div className={classNames('chat-group', { 'chat-group-reply': isReply })} {...props}>
 			{!isReply && _Avatar}
-			<ChatMessages messages={messages} isReply={isReply} />
+			{/* {!isReply} */}
+			<ChatMessages messages={messages} isReply={isReply} user={user} time={time} />
+			{/* {isReply} */}
 			{isReply && _Avatar}
 		</div>
 	);
@@ -226,6 +243,7 @@ export const ChatGroup = ({ isReply, messages, isOnline, color, user, ...props }
 ChatGroup.propTypes = {
 	isReply: PropTypes.bool,
 	messages: PropTypes.string.isRequired,
+	time: PropTypes.number.isRequired,
 	// messages: PropTypes.arrayOf(
 	// 	PropTypes.shape({
 	// 		id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -240,7 +258,7 @@ ChatGroup.propTypes = {
 		username: PropTypes.string,
 		name: PropTypes.string,
 		uid: PropTypes.string,
-		surname: PropTypes.string,
+		status: PropTypes.string,
 		isOnline: PropTypes.bool,
 		color: PropTypes.string,
 	}).isRequired,
