@@ -546,6 +546,17 @@ const Signup = ({ isSignUp }) => {
                             </a>
                         </div>
                     </div>
+                    <div><ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          /></div>
                 </div>
                 <Dialog
                     maxWidth="lg"

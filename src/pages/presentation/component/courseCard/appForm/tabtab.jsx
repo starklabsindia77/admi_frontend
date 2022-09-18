@@ -10,11 +10,22 @@ import { useNavigate } from 'react-router-dom';
 import { Stack, Button, Typography, Grid, Link } from '@mui/material';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import FormGroup from '../../../../../components/bootstrap/forms/FormGroup';
 import Input from '../../../../../components/bootstrap/forms/Input';
 import Textarea from '../../../../../components/bootstrap/forms/Textarea';
 import { serverUrl } from '../../../../../config';
 
+const ToastOptions = {
+	position: "top-center",
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+  }
 const TabTab = (data) => {
 	const navigate = useNavigate();
 	const [inputValue, setInputValue] = useState('');
@@ -64,8 +75,14 @@ const TabTab = (data) => {
 				} else if (d.user.length > 0) {
 					console.log('result', d.user)
 					const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
-					setStudentList(ss)
-				}
+					// setStudentList(ss)
+					if(loginUser.role === 'Agent') {
+						const filterData= ss.filter(val => val.agentId && val.agentId.toString().toLowerCase().includes(loginUser._id.toLowerCase()))
+						 console.log("filterData::",filterData)
+						setStudentList(filterData)
+					 }
+				 }
+				
 			});
 	}
 
@@ -86,6 +103,10 @@ const TabTab = (data) => {
 				// setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
 				collegeInfo.studentInfo=loginUser
 			}
+			if(Object.keys(collegeInfo.studentInfo).length>0)
+			{
+
+			
 			console.log('submit', collegeInfo);
 		const options = {
 			method: 'POST',
@@ -113,6 +134,11 @@ const TabTab = (data) => {
 					console.log('submit result', ss)
 				}
 			});
+		}
+		else
+		{
+			toast.error("Please select Student ! ", ToastOptions);
+		}
 	};
 console.log("collegeInfo::",collegeInfo)
 	useEffect(() => {
@@ -279,6 +305,17 @@ console.log("collegeInfo::",collegeInfo)
 					</Grid>
 				</Stack>
 			</Stack>
+			<div><ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          /></div>
 		</Stack>
 	);
 };
