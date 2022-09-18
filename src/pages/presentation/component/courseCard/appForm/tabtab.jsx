@@ -81,11 +81,11 @@ const TabTab = (data) => {
 	};
 
 	const submitApplication = () => {
-		// if(loginUser.role.toLowerCase()==="student")
-		// {
-			// 	setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
-			// }
-			collegeInfo.studentInfo=loginUser
+		if(loginUser.role.toLowerCase()==="student")
+		{
+				// setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
+				collegeInfo.studentInfo=loginUser
+			}
 			console.log('submit', collegeInfo);
 		const options = {
 			method: 'POST',

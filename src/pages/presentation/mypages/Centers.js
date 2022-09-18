@@ -245,8 +245,10 @@ console.log("centerData:;",centerData)
     }
 
     const editProduct = (guidinfo) => {
-        console.log('guid', guidinfo)
-        getSingleStudent(guidinfo);
+        // console.log('guid', guidinfo)
+        // getSingleStudent(guidinfo);
+        setCenterData(guidinfo)
+        setAddProductEvent(true)
     }
     const [selected, setSelected] = useState([]);
     const newHandleChange = (event) => {
@@ -391,7 +393,7 @@ console.log("centerData:;",centerData)
                                                     'border-light': !darkModeStatus,
                                                 })}
                                                 icon='Edit'
-                                                onClick={() => editProduct(item.guid)}
+                                                onClick={() => editProduct(item)}
                                             >
                                                 Edit
                                             </Button>
@@ -432,9 +434,9 @@ console.log("centerData:;",centerData)
                     size='lg'>
                     <ModalHeader setIsOpen={setAddProductEvent}>
                         {guid && guid.length > 0 ? (
-                            <OffCanvasTitle id='upcomingEdit'>Edit Sub User</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Edit Center User</OffCanvasTitle>
                         ) : (
-                            <OffCanvasTitle id='upcomingEdit'>Add Sub User</OffCanvasTitle>
+                            <OffCanvasTitle id='upcomingEdit'>Add Center User</OffCanvasTitle>
                         )}
 
                     </ModalHeader>

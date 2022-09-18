@@ -40,11 +40,13 @@ const User = () => {
 				console.log('Logout completed successfully');
 				localStorage.clear();
 				navigate(`../${demoPages.login.path}`)
+				window.location.reload();
 			},
 			(error) => {
 				console.log('Logout failed with exception:', { error });
 				localStorage.clear();
 				navigate(`../${demoPages.login.path}`)
+				window.location.reload();
 			},
 		);
 	};

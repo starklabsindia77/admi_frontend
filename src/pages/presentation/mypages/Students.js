@@ -85,6 +85,7 @@ const Students = () => {
     const authToken = localStorage.getItem("auth");
     const UserRole = localStorage.getItem("role");
     const AgentId = localStorage.getItem("email")
+    const loginUser=JSON.parse(localStorage.getItem("userInfo"))
     const getStudent = () => {
         const options = {
             method: 'GET',
@@ -104,9 +105,10 @@ const Students = () => {
                     const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
                     if (UserRole === 'admin') {
                         setStudentList(ss)
-                    } else {
-                        ss.filter(val => val.AgentId && val.AgentId.toString().toLowerCase().includes(AgentId.toLowerCase()))
-                        setStudentList(ss)
+                    } else if(UserRole === 'Agent') {
+                       const filterData= ss.filter(val => val.agentId && val.agentId.toString().toLowerCase().includes(loginUser._id.toLowerCase()))
+                        console.log("filterData::",filterData)
+                       setStudentList(filterData)
                     }
                 }
             });
@@ -117,8 +119,8 @@ const Students = () => {
         if (UserRole === 'admin') {
             setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role });
             console.log("data", userData);
-        } else if (UserRole === 'agent') {
-            setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role, 'AgentId': AgentId });
+        } else if (UserRole === 'Agent') {
+            setUserData({ 'name': name, 'email': username, 'password': newPassword, 'dob': dob, 'contact': contact, 'role': role, 'AgentId': loginUser._id });
             console.log("data", userData);
         }
 
@@ -142,6 +144,11 @@ const Students = () => {
                 }
                 // alert('done', d);
                 getStudent();
+                setUsername("")
+                setName("")
+                setDob("")
+                setContact("")
+                set
                 setAddProductEvent(false)
                 
             });

@@ -153,7 +153,7 @@ const Application = () => {
 
     useEffect(() => {
         if(userInfoName.role === 'Student'){
-            getApplication();
+            getAllApplication();
         }else if (userInfoName.role === 'admin'){
             getAllApplication();
         }else if (userInfoName.role === 'Agent'){
