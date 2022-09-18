@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import Brand from '../Brand/Brand';
 import Navigation, { NavigationLine } from '../Navigation/Navigation';
 import User from '../User/User';
-import { dashboard, Pages, AdminPages, AgentPages } from '../../menu';
+import { dashboard, Pages, AdminPages, AgentPages, OtherPages } from '../../menu';
 import ThemeContext from '../../contexts/themeContext';
 import Card, { CardBody } from '../../components/bootstrap/Card';
 
@@ -60,8 +60,10 @@ const Aside = () => {
 								<Navigation menu={AdminPages} id='aside-demo-pages' />
 							) : role === 'Agent' ? (
 								<Navigation menu={AgentPages} id='aside-demo-pages' />
-							) : (
+							) : role === 'Student' ? (
 								<Navigation menu={Pages} id='aside-demo-pages' />
+							): (
+								<Navigation menu={OtherPages} id='aside-demo-pages' />
 							)}
 
 							<NavigationLine />

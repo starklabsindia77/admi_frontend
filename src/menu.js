@@ -168,6 +168,92 @@ export const AdminPages = {
 	},
 };
 
+export const OtherPages = {
+	auth: {
+		id: 'auth',
+		text: 'Pages',
+		icon: 'Extension',
+	},
+	Communication: {
+		id: 'Communication',
+		text: 'Communication',
+		path: 'Communication',
+		icon: 'Forum',
+
+	},
+
+	CoursesManager: {
+		id: 'CoursesManagerPage',
+		text: 'Programs',
+		icon: 'menu_book',
+		path: 'ProductManagerPage',
+		subMenu: {
+			university: {
+				id: 'listBoxed',
+				text: 'university',
+				path: 'university',
+				icon: 'ViewArray',
+			},
+			courses: {
+				id: 'listFluid',
+				text: 'courses',
+				path: 'courses',
+				icon: 'ViewDay',
+			},
+		},
+	},
+	Student: {
+		id: 'students',
+		text: 'Students',
+		path: 'students',
+		icon: 'person',
+	},
+	Agent: {
+		id: 'agents',
+		text: 'Agents',
+		path: 'agents',
+		icon: 'PersonLinesFill',
+	},
+	Application: {
+		id: 'application',
+		text: 'Applications',
+		path: 'applications',
+		icon: 'InsertDriveFile',
+	},
+	// Commission: {
+	// 	id: 'commission',
+	// 	text: 'commission',
+	// 	path: 'commission',
+	// 	icon: 'AttachMoney',
+	// },
+	// user: {
+	// 	id: 'user',
+	// 	text: 'user',
+	// 	path: 'user',
+	// 	icon: 'SupervisedUserCircle',
+	// 	subMenu: {
+	// 		sub: {
+	// 			id: 'sub',
+	// 			text: 'Sub User',
+	// 			path: 'sub/user',
+	// 			icon: 'ViewArray',
+	// 		},
+	// 		role: {
+	// 			id: 'role',
+	// 			text: 'Role',
+	// 			path: 'sub/role',
+	// 			icon: 'ViewDay',
+	// 		},
+	// 		center: {
+	// 			id: 'center',
+	// 			text: 'Center',
+	// 			path: 'sub/centers',
+	// 			icon: 'ViewDay',
+	// 		},
+	// 	},
+	// },
+};
+
 export const AgentPages = {
 	auth: {
 		id: 'auth',
