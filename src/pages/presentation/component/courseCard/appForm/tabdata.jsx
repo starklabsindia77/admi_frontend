@@ -17,6 +17,7 @@ import useDarkMode from '../../../../../hooks/useDarkMode';
 const TabData = () => {
 	const navigate = useNavigate();
 	const { darkModeStatus } = useDarkMode();
+	const loginUser=JSON.parse(localStorage.getItem("userInfo"))
 	const [expertCollegeInfo, setExpertCollegeInfo] = useState({
 		country: '',
 		preferCollege: '',
@@ -30,8 +31,10 @@ const TabData = () => {
 		StudentID: '',
 		CourseID: '',
 		AppType: 'ExpertAdvise',
+		studentInfo:{},
+		stdId:Math.floor(Math.random() * (99999-20000+ 1))
 	});
-
+console.log("expertCollegeInfo::",expertCollegeInfo)
 	const [countryList, setCountryList] = useState([]);
 	const [universityList, setUniversityList] = useState([]);
 	const [courseList, setCourseList] = useState([]);
@@ -172,7 +175,7 @@ const TabData = () => {
 
 	const userInfo = () => {
 		const userInfoName = JSON.parse(localStorage.getItem('userInfo'));
-		if (userInfoName.role === 'Student') {
+		if (userInfoName.role === 'Student'||userInfoName.role === 'Agent') {
 			setExpertCollegeInfo({
 				...expertCollegeInfo,
 				StudentID: userInfoName.guid,
@@ -183,6 +186,10 @@ const TabData = () => {
 	useEffect(() => {
 		getCountry();
 		userInfo();
+		setExpertCollegeInfo({
+			...expertCollegeInfo,
+			studentInfo:loginUser
+		});
 	}, []);
 
 	return (

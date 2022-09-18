@@ -119,14 +119,18 @@ function ApplicationCard({ data, wishData }) {
 
 	const userInfo = () => {
 		const options = {
-			method: 'GET',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 				authorization: authToken,
 			},
+			body:JSON.stringify({
+				stdId:data.StudentID,role:userInfoName.role,agentId:data.AgentId
+			})
 		};
+		
 
-		fetch(`${serverUrl}/auth/user/${data.StudentID}`, options)
+		fetch(`${serverUrl}/auth/roleUser`, options)
 			.then((response) => response.json())
 			.then((d) => {
 				// console.log('data', d);
@@ -334,7 +338,8 @@ function ApplicationCard({ data, wishData }) {
 				<Grid item xs={8}>
 					<div style={{ marginBottom: '-5px' }}>
 						<h5>
-							{userData && userData.name ? userData.name : 'Sahil Batra'}
+							{/* {userData && userData.name ? userData.name : 'Sahil Batra'} */}
+							{data && data.studentInfo&&data.studentInfo.name ? data.studentInfo.name : 'NA'}
 							<Button
 								variant='contained'
 								style={{
@@ -343,7 +348,7 @@ function ApplicationCard({ data, wishData }) {
 									color: '#000000',
 									height: '20px',
 								}}>
-								Student ID:275885
+								Student ID:{data && data.stdId ? data.stdId : 'NA'}
 							</Button>
 							<Button
 								variant='contained'
@@ -363,13 +368,15 @@ function ApplicationCard({ data, wishData }) {
 					</div>
 					<Stack direction='row'>
 						<Button variant='text' size='medium' startIcon={<LocalPhoneIcon />}>
-							{userData && userData.contact ? userData.contact : '9999219809'}
+							{data &&data.studentInfo&& data.studentInfo.contact ? data.studentInfo.contact : '9999219809'}
 						</Button>
 						<Button variant='text' size='medium' startIcon={<EmailIcon />}>
-							{userData && userData.email ? userData.email : 'sahil@yopmail.com'}
+							{/* {userData && userData.email ? userData.email : 'sahil@yopmail.com'} */}
+							{data&&data.studentInfo&& data.studentInfo.email ? data.studentInfo.email : 'NA'}
 						</Button>
 						<Button variant='text' size='medium' startIcon={<CalendarMonthIcon />}>
-							{userData && userData.dob ? userData.dob : 'NA'}
+							{/* {userData && userData.dob ? userData.dob : 'NA'} */}
+							{data &&data.studentInfo&& data.studentInfo.dob ? data.studentInfo.dob : 'NA'}
 						</Button>
 					</Stack>
 					<div style={{ marginBottom: '-5px' }}>
@@ -381,7 +388,7 @@ function ApplicationCard({ data, wishData }) {
 				</Grid>
 				<Grid item xs={3}>
 					<Stack direction='row' justifyContent='flex-end' p={1}>
-						{userInfoName.role === 'Student' && data && data.status === 'new' ? (
+						{data&&data.studentInfo&&data.studentInfo.role === 'Student' && data && data.status === 'new' ? (
 							<Button
 								style={{ width: '180px', height: '50px', mt: '30px' }}
 								variant='outlined'
@@ -389,7 +396,7 @@ function ApplicationCard({ data, wishData }) {
 								startIcon={<EditIcon />}>
 								Edit Application
 							</Button>
-						) : userInfoName.role === 'admin' ? (
+						) :data&&data.studentInfo&& data.studentInfo.role === 'admin' ? (
 							<Button
 								style={{ width: '180px', height: '50px', mt: '30px' }}
 								variant='outlined'

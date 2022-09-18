@@ -103,19 +103,26 @@ const Signup = ({ isSignUp }) => {
             .then((response) => response.json())
             .then((data) => {
                 console.log('data', data);
-                if (data.message !== 'Successfully created a new Agent') {
-                    console.log('error msg', data.message);
-                } else {
-                    setOpenData(true);
-                    localStorage.setItem('auth', data.token);
-                    localStorage.setItem('userName', name);
-                    localStorage.setItem('role', role);
-                    localStorage.setItem('email', username);
-                    setTimeout(() => {
+              
+                if(data.success)
+                {
+                        setOpenData(true);
+                        localStorage.setItem('userInfo', JSON.stringify(data.result));
+                        localStorage.setItem('auth', data.token);
+                        localStorage.setItem('userName', name);
+                        localStorage.setItem('role', role);
+                        localStorage.setItem('email', username);
+                        // setTimeout(() => {
+                            setIsloader(false);
+                            navigate('/dashboard');
+                    }
+                    else
+                    {
+                        toast.error("New Agent is not created ! ", ToastOptions);
                         setIsloader(false);
-                        navigate('dashboard');
-                    }, 1000);
-                }
+                    }
+                    // }, 1000);
+                
             }).catch(()=>{
                 setIsloader(false);
             })
@@ -150,7 +157,7 @@ const Signup = ({ isSignUp }) => {
                     localStorage.setItem('userInfo', JSON.stringify(data.user));
                     localStorage.setItem('role', data.user.role);
                     localStorage.setItem('email', username);
-                    navigate('dashboard');
+                    navigate('/dashboard');
                     setIsloader(false);
                 }
             });

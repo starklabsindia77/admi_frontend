@@ -30,13 +30,15 @@ const TabTab = (data) => {
 		Intake: '',
 		Year: '',
 		remark: '',
-		ApplicationInfo:
+		ApplicationID:
 			Math.random().toString(36).substring(2, 15) +
 			Math.random().toString(36).substring(2, 15),
 	
 		CourseID: one._id,
 		AppType: 'general',
-		AgentId:''
+		AgentId:'',
+		studentInfo:{},
+		stdId:Math.floor(Math.random() * (99999-20000+ 1))
 	});
 	const [openData, setOpenData] = useState(false);
 	const authToken = localStorage.getItem('auth');
@@ -79,7 +81,12 @@ const TabTab = (data) => {
 	};
 
 	const submitApplication = () => {
-		console.log('submit', collegeInfo);
+		// if(loginUser.role.toLowerCase()==="student")
+		// {
+			// 	setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
+			// }
+			collegeInfo.studentInfo=loginUser
+			console.log('submit', collegeInfo);
 		const options = {
 			method: 'POST',
 			headers: {
@@ -98,7 +105,10 @@ const TabTab = (data) => {
 				} else if (d.result.length > 0) {
 					const ss = d.result;
 					if(ss === 'Done'){
-						navigate('/applications');
+						setTimeout(()=>{
+
+							navigate('/applications');
+						},1000)
 					}
 					console.log('submit result', ss)
 				}
@@ -111,6 +121,10 @@ console.log("collegeInfo::",collegeInfo)
 
 			setcollegeInfo({...collegeInfo,AgentId:loginUser._id})
 		}
+	 if(loginUser.role.toLowerCase()==="student")
+		{
+			setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
+		}
 		userInfo();
 		getStudent()
 	}, []);
@@ -118,6 +132,7 @@ console.log("collegeInfo::",collegeInfo)
 		<Stack maxWidth='100%'>
 			<Stack direction='row' justifyContent='space-around'>
 				<Stack>
+					{loginUser.role&&loginUser.role.toLowerCase()==="agent"&&
 				<Box pt={2} pb={2}>
 				<FormGroup id='center' isFloating>
                                     <Autocomplete
@@ -135,7 +150,7 @@ console.log("collegeInfo::",collegeInfo)
 										// }):null}
 										value={studentData}
                                         onChange={(event, newValue) => {
-                                            setcollegeInfo({...collegeInfo, ApplicationInfo:newValue});
+                                            setcollegeInfo({...collegeInfo, studentInfo:newValue});
 											setStudentData(newValue)
                                         }}
                                         // inputValue={inputValue}
@@ -146,6 +161,7 @@ console.log("collegeInfo::",collegeInfo)
                                     />
                                 </FormGroup>
 </Box>
+}
 					<Box pt={2} pb={2}>
 						<FormGroup id='preferCollege' label='Prefer College' isFloating>
 							<Input

@@ -130,11 +130,12 @@ const Application = () => {
 
     const getAllApplication = () => {
         const options = {
-			method: 'GET',
+			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 				authorization: authToken,
 			},
+            body:JSON.stringify({role:userInfoName.role,id:userInfoName._id})
 		};
 
 		fetch(`${serverUrl}/application`, options)
@@ -154,6 +155,8 @@ const Application = () => {
         if(userInfoName.role === 'Student'){
             getApplication();
         }else if (userInfoName.role === 'admin'){
+            getAllApplication();
+        }else if (userInfoName.role === 'Agent'){
             getAllApplication();
         }
         
@@ -186,11 +189,13 @@ const Application = () => {
                         </CardActions> */}
                     </CardHeader>
                     <CardBody className='table-responsive' isScrollable>
-                        {applicationList && applicationList.length > 0 && applicationList.map((item, index) => (
+                        {applicationList && applicationList.length > 0 ? applicationList.map((item, index) => (
                              <div key={index}>
                                 <ApplicationCard data={item} />
                              </div>                            
-                        ))}
+                        )):<div style={{display:'flex',justifyContent:'center',marginTop:'15%'}}>
+                            <b>No Application Available</b>
+                            </div>}
                         
                     </CardBody>
                 </Card>

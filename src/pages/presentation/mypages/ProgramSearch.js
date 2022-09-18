@@ -7,6 +7,8 @@ import classNames from 'classnames';
 import _ from 'underscore';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import Page from '../../../layout/Page/Page';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
 // import Input from '../../../components/bootstrap/forms/Input';
@@ -69,14 +71,22 @@ const Item = ({ id, image, title, description, tags, color }) => {
 		</Card>
 	);
 };
-
+const ToastOptions = {
+	position: "top-center",
+	autoClose: 5000,
+	hideProgressBar: true,
+	closeOnClick: true,
+	pauseOnHover: true,
+	draggable: true,
+	progress: undefined,
+  }
 const ProgramSearch = () => {
 	const { darkModeStatus } = useDarkMode();
 	const navigate = useNavigate();
 	const [studyAreaList, setStudyAreaList] = useState([]);
 	const [countryList, setCountryList] = useState([]);
-	const [country, setCountry] = useState();
-	const [studyArea, setStudyArea] = useState();
+	const [country, setCountry] = useState("");
+	const [studyArea, setStudyArea] = useState("");
 	const [filterableData, setFilterableData] = useState(data);
 	const authToken = localStorage.getItem('auth');
 	const getCourses = () => {
@@ -164,7 +174,22 @@ const ProgramSearch = () => {
 		});
 	};
 	const programs = () => {
-		navigate('/programs', { state: { country, studyArea } });
+		if(!country.length>0)
+		{
+			toast.error("Please select country ", ToastOptions);	
+
+		}
+		else if(!studyArea.length>0)
+		{
+			toast.error("Please select studyArea ", ToastOptions);	
+
+			
+		}
+		else
+		{
+
+			navigate('/programs', { state: { country, studyArea } });
+		}
 	};
 
 	const debounce = (func, wait) => {
@@ -301,7 +326,7 @@ const ProgramSearch = () => {
 							<div className='col-md-2'>
 								<Button
 									size='lg'
-									icon='Close'
+									icon='Search'
 									color='primary'
 									className='w-100'
 									rounded={1}
@@ -319,6 +344,17 @@ const ProgramSearch = () => {
 						</div>
 					))}
 				</div>
+				<div><ToastContainer
+            position="top-center"
+            autoClose={5000}
+            hideProgressBar
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          /></div>
 			</Page>
 		</PageWrapper>
 	);
