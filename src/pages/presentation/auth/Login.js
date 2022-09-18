@@ -94,9 +94,12 @@ const Login = ({ isSignUp }) => {
 					console.log('error msg', data.message);
 				} else {
 					setOpenData(true);
+					
+					localStorage.setItem('userInfo', JSON.stringify(data.result));
 					localStorage.setItem('auth', data.token);
 					localStorage.setItem('userName', name);
 					localStorage.setItem('role', role);
+					localStorage.setItem('email', username);
 					const UID = userData.email.split("@")[0];
 					const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
 					const chatuser = new CometChat.User(UID);

@@ -148,7 +148,7 @@ const Students = () => {
                 setName("")
                 setDob("")
                 setContact("")
-                set
+               
                 setAddProductEvent(false)
                 
             });
