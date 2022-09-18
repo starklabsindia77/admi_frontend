@@ -1,4 +1,3 @@
-
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
@@ -71,54 +70,90 @@ const Login = ({ isSignUp }) => {
 	// // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
 	// const serverUrl = "http://localhost:3001/api";
 	const navigate = useNavigate();
-	// const handleOnClick = useCallback(() => navigate('dashboard'), [navigate]);
+	// const handleOnClick = useCallback(() => navigate('/dashboard'), [navigate]);
 	const signup = () => {
 		const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
 		console.log("data", userData);
-		setIsloader(true);
-		const options = {
-			method: 'POST',
+		return axios.post(`${serverUrl}/auth/signup`, userData, {
 			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
+			   accept: "*/*",
+			  "Access-Control-Allow-Origin": "*",
+			  withCredentials: true,
+			  "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+			  "Access-Control-Allow-Headers":
+				"accept, content-type, x-access-token, x-requested-with",
 			},
-			
-			body: JSON.stringify(userData),
-		};
+		  }).then((res)=>{
+			if(res.data.success){
+				const {data} = res;
+				setOpenData(true);
+				localStorage.setItem('auth', data.token);
+				localStorage.setItem('userName', name);
+				localStorage.setItem('role', role);
+				const UID = userData.email.split("@")[0];
+				const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
+				const chatuser = new CometChat.User(UID);
+				chatuser.setName(userData.name);
+				chatuser.setMetadata(JSON.stringify(metadataObj))
+				CometChat.createUser(chatuser, ChatAuthKey).then(
+					user => {
+						console.log("user created", user);
+					}, error => {
+						console.log("error", error);
+					}
+				)
+				localStorage.setItem('email', username);
+				setTimeout(() => {
+					setIsloader(false);
+					navigate('/dashboard');
+				}, 1000);
+			}else{
+				toast.error("Please enter a valid email or something went wrong ", ToastOptions);
+			}
+		  }).catch(()=>{
+			setIsloader(false);
+		})
 
-		fetch(`${serverUrl}/auth/signup`, options)
-			.then((response) => 
-			response.json())
-			.then((data) => {
-				console.log('data', data);
-				if (data.message !== 'Successfully created a new user') {
-					console.log('error msg', data.message);
-				} else {
-					setOpenData(true);
-					
-					localStorage.setItem('userInfo', JSON.stringify(data.result));
-					localStorage.setItem('auth', data.token);
-					localStorage.setItem('userName', name);
-					localStorage.setItem('role', role);
-					localStorage.setItem('email', username);
-					const UID = userData.email.split("@")[0];
-					const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
-					const chatuser = new CometChat.User(UID);
-					chatuser.setName(userData.name);
-					chatuser.setMetadata(JSON.stringify(metadataObj))
-					CometChat.createUser(chatuser, ChatAuthKey).then(
-						user => {
-							console.log("user created", user);
-						}, error => {
-							console.log("error", error);
-						}
-					)
-					localStorage.setItem('email', username);
-					setTimeout(() => {
-						setIsloader(false);
-						navigate('dashboard');
-					}, 1000);
-				}
-			});
+		// const options = {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json;charset=utf-8',
+		// 	},
+			
+		// 	body: JSON.stringify(userData),
+		// };
+
+		// fetch(`${serverUrl}/auth/signup`, options)
+		// 	.then((response) => 
+		// 	response.json())
+		// 	.then((data) => {
+		// 		console.log('data', data);
+		// 		if (data.message !== 'Successfully created a new user') {
+		// 			console.log('error msg', data.message);
+		// 		} else {
+		// 			setOpenData(true);
+		// 			localStorage.setItem('auth', data.token);
+		// 			localStorage.setItem('userName', name);
+		// 			localStorage.setItem('role', role);
+		// 			const UID = userData.email.split("@")[0];
+		// 			const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
+		// 			const chatuser = new CometChat.User(UID);
+		// 			chatuser.setName(userData.name);
+		// 			chatuser.setMetadata(JSON.stringify(metadataObj))
+		// 			CometChat.createUser(chatuser, ChatAuthKey).then(
+		// 				user => {
+		// 					console.log("user created", user);
+		// 				}, error => {
+		// 					console.log("error", error);
+		// 				}
+		// 			)
+		// 			localStorage.setItem('email', username);
+		// 			setTimeout(() => {
+		// 				setIsloader(false);
+		// 				navigate('/dashboard');
+		// 			}, 1000);
+		// 		}
+		// 	});
 	}
 
 	const LoginClick = () => {
@@ -145,7 +180,7 @@ const Login = ({ isSignUp }) => {
 		// 			localStorage.setItem('loginUserId', data.user._id);
 		// 			localStorage.setItem('userInfo', JSON.stringify(data.user));
 		// 			localStorage.setItem('email', username);
-		// 			navigate('dashboard');
+		// 			navigate('/dashboard');
 		// 			setIsloader(false);
 		// 		}
 		// 	}).catch(()=>{
@@ -168,7 +203,7 @@ const Login = ({ isSignUp }) => {
 			console.log("res log::",res)
 			if(res.data.success)
 			{
-
+				console.log('0');
 				localStorage.setItem('auth',res.data.token);
 				localStorage.setItem('userName', res.data.user.name);
 				localStorage.setItem('role',res.data.user.role);
@@ -177,12 +212,13 @@ const Login = ({ isSignUp }) => {
 				localStorage.setItem('email', username);
 				const UID2 = username.split("@")[0];
 				CometChat.getLoggedinUser().then(
-					user => {
+					user => {						
 					  if(!user){
 						CometChat.login(UID2, ChatAuthKey).then(
 						  loginuser => {
 							console.log("Login Successful:", { loginuser });
-							navigate('dashboard');  
+							console.log('2');
+							navigate('/dashboard');  
 						  },
 						  error => {
 							console.log("Login failed with exception:", { error });
@@ -200,14 +236,14 @@ const Login = ({ isSignUp }) => {
 										CometChat.login(UID2, ChatAuthKey).then(
 											loginuser2 => {
 											  console.log("Login Successful:", { loginuser2 });    
-											  navigate('dashboard');
+											  navigate('/dashboard');
 											}, loginerror => {
 												console.log("Login failed with exception:", { loginerror });
 											})
 										
 									}, error1 => {
 										console.log("user ---- error", error1);
-										navigate('dashboard');
+										navigate('/dashboard');
 									}
 								)
 							}
@@ -215,6 +251,8 @@ const Login = ({ isSignUp }) => {
 						);
 					  }else{
 						// User already logged in
+						navigate('/dashboard');
+						console.log("User already logged in");
 					  }
 					}, error => {
 					  console.log("getLoggedinUser failed with exception:", { error });

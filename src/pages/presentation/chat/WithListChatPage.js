@@ -1,5 +1,8 @@
-import React, { useContext, useState } from 'react';
+/* eslint-disable eslint-comments/disable-enable-pair */
+/* eslint-disable no-unused-vars */
+import React, { useContext, useState, useEffect } from 'react';
 import moment from 'moment';
+import { CometChat } from '@cometchat-pro/chat';
 // import { useNavigate } from 'react-router-dom';
 // import SubHeader, { SubHeaderLeft, SubHeaderRight } from '../../../layout/SubHeader/SubHeader';
 import Button from '../../../components/bootstrap/Button';
@@ -36,7 +39,26 @@ const WithListChatPage = () => {
 		ELLA: USERS.ELLA,
 		SAM: USERS.SAM,
 	};
+
 	const [activeTab, setActiveTab] = useState(TABS.CHLOE);
+	const [lists, setLists] = useState([]);
+	const GroupLists = () => {
+		const limit = 30;
+		const groupsRequest = new CometChat.GroupsRequestBuilder()
+			.setLimit(limit)
+			.joinedOnly(true)
+			.build();
+
+		groupsRequest.fetchNext().then(
+			(groupList) => {
+				console.log('Groups list fetched successfully', groupList);
+				setLists(groupList);
+			},
+			(error) => {
+				console.log('Groups list fetching failed with error', error);
+			},
+		);
+	};
 
 	function getMessages(ACTIVE_TAB) {
 		if (ACTIVE_TAB === USERS.CHLOE) {
@@ -70,6 +92,10 @@ const WithListChatPage = () => {
 			setListShow(false);
 		}
 	};
+
+	useEffect(() => {
+		GroupLists();
+	}, []);
 
 	return (
 		<PageWrapper title={demoPages.chat.subMenu.withListChat.text}>
@@ -107,28 +133,36 @@ const WithListChatPage = () => {
 									<Card shadow='none' className='mb-0'>
 										<CardHeader className='sticky-top'>
 											<CardLabel icon='AccountCircle' iconColor='success'>
-												<CardTitle>Online</CardTitle>
-												<CardSubTitle>3 users</CardSubTitle>
+												<CardTitle>Groups</CardTitle>
+												{/* <CardSubTitle>3 users</CardSubTitle> */}
 											</CardLabel>
 										</CardHeader>
 										<CardBody className='border-bottom border-light'>
 											<div className='row'>
-												<ChatListItem
-													onClick={() => getListShow(TABS.CHLOE)}
-													isActive={activeTab === TABS.CHLOE}
-													src={USERS.CHLOE.src}
-													srcSet={USERS.CHLOE.srcSet}
-													name={USERS.CHLOE.name}
-													surname={USERS.CHLOE.surname}
-													isOnline={USERS.CHLOE.isOnline}
-													color={USERS.CHLOE.color}
-													lastSeenTime={moment()
-														.add(-1, 'week')
-														.fromNow()}
-													latestMessage={
-														"I think it's really starting to shine."
-													}
-												/>
+												{/* {lists &&
+													lists.map((user) => {
+														return (
+															<ChatListItem
+																onClick={() =>
+																	getListShow(TABS.CHLOE)
+																}
+																isActive={activeTab === TABS.CHLOE}
+																src={USERS.CHLOE.src}
+																srcSet={USERS.CHLOE.srcSet}
+																name={USERS.CHLOE.name}
+																surname={USERS.CHLOE.surname}
+																isOnline={USERS.CHLOE.isOnline}
+																color={USERS.CHLOE.color}
+																lastSeenTime={moment()
+																	.add(-1, 'week')
+																	.fromNow()}
+																latestMessage={
+																	"I think it's really starting to shine."
+																}
+															/>
+														);
+													})} */}
+
 												<ChatListItem
 													onClick={() => getListShow(TABS.GRACE)}
 													isActive={activeTab === TABS.GRACE}
@@ -162,7 +196,7 @@ const WithListChatPage = () => {
 											</div>
 										</CardBody>
 									</Card>
-									<Card shadow='none' className='mb-0'>
+									{/* <Card shadow='none' className='mb-0'>
 										<CardHeader className='sticky-top'>
 											<CardLabel icon='AccountCircle' iconColor='danger'>
 												<CardTitle>Offline</CardTitle>
@@ -211,7 +245,7 @@ const WithListChatPage = () => {
 												/>
 											</div>
 										</CardBody>
-									</Card>
+									</Card> */}
 								</CardBody>
 								{/* <CardFooter>
 									<CardFooterLeft className='w-100'>
@@ -247,18 +281,18 @@ const WithListChatPage = () => {
 								</CardHeader>
 								<CardBody isScrollable>
 									<Chat>
-										{getMessages(activeTab).map((msg) => (
+										{/* {getMessages(activeTab).map((msg) => (
 											<ChatGroup
 												messages={msg.messages}
 												user={msg.user}
 												isReply={msg.isReply}
 											/>
-										))}
+										))} */}
 									</Chat>
 								</CardBody>
 								<CardFooter className='d-block'>
 									<InputGroup>
-										<Textarea />
+										<Textarea row={1} />
 										<Button color='info' icon='Send'>
 											SEND
 										</Button>

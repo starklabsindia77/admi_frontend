@@ -19,6 +19,8 @@ import draftToHtml from 'draftjs-to-html';
 import Checkbox from '@material-ui/core/Checkbox';
 import htmlToDraft from 'html-to-draftjs';
 import { Editor } from "react-draft-wysiwyg";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.min.css';
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
@@ -97,7 +99,15 @@ const Courses = () => {
     // // const serverUrl = "https://salty-scrubland-03771.herokuapp.com/api";
     // const serverUrl = "http://localhost:3001/api";
 
-    
+    const ToastOptions = {
+        position: "top-center",
+        autoClose: 5000,
+        hideProgressBar: true,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+      }
 
     const [CoursesList, setCoursesList] = useState([]);
     const [state, setState] = useState({ editorState: EditorState.createEmpty() });
@@ -337,24 +347,27 @@ const Courses = () => {
     const reloadFun = () => {
         window.location.reload();
     };
-
+    
     const updateData = (result) => {
         const { data } = result;
         const finalData = [];
-        console.log("result data ::", data);
-
-        data.map((dat) => {
-            finalData.push({
-                "Course name": dat.Course,
-                "Application Fees": dat["Application Fees"],
-                "Study Level": dat["Study Level"],
-                "University": dat["Name of University/college"],
+        console.log("result data ::", data[0].Course , data[0]["Application Fees"]);
+        if(data[0].Course !== undefined && data[0]["Application Fees"] !== undefined ) { 
+            data.map((dat) => {
+                finalData.push({
+                    "Course name": dat.Course,
+                    "Application Fees": dat["Application Fees"],
+                    "Study Level": dat["Study Level"],
+                    "University": dat["Name of University/college"],
+                })
             })
-        })
-
-        setUploadedData(finalData);
-        setUploadedData2(data);
-        setOpenData(true);
+    
+            setUploadedData(finalData);
+            setUploadedData2(data);
+            setOpenData(true);
+        }
+        toast.warn("Please Import correct excel format with correct headers ", ToastOptions);
+        
 
     }
 
@@ -477,6 +490,17 @@ const Courses = () => {
                     </CardBody>
 
                 </Card>
+                <div><ToastContainer
+                    position="top-center"
+                    autoClose={5000}
+                    hideProgressBar
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                /></div>
                 <Modal
                     setIsOpen={setAddProductEvent}
                     isOpen={addProductEvent}

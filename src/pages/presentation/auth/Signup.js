@@ -12,6 +12,8 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
+import axios from 'axios';
+import { CometChat } from '@cometchat-pro/chat';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 import PageWrapper from '../../../layout/PageWrapper/PageWrapper';
@@ -24,7 +26,7 @@ import Button from '../../../components/bootstrap/Button';
 import Logo from '../../../components/Logo';
 import useDarkMode from '../../../hooks/useDarkMode';
 import PlaceholderImage from '../../../components/extras/PlaceholderImage';
-import { serverUrl } from '../../../config';
+import { serverUrl, ChatAuthKey } from '../../../config';
 
 // eslint-disable-next-line react/prop-types
 const LoginHeader = ({ isNewUser }) => {
@@ -111,10 +113,27 @@ const Signup = ({ isSignUp }) => {
                         localStorage.setItem('auth', data.token);
                         localStorage.setItem('userName', name);
                         localStorage.setItem('role', role);
+                        const UID = userData.email.split("@")[0];
+                        const metadataObj = {"email":userData.email, "contactNumber":userData.contact}
+                        const chatuser = new CometChat.User(UID);
+                        chatuser.setName(userData.name);
+                        chatuser.setMetadata(JSON.stringify(metadataObj))
+                        CometChat.createUser(chatuser, ChatAuthKey).then(
+                            user => {
+                                console.log("user created", user);
+                            }, error => {
+                                console.log("error", error);
+                            }
+                        )
                         localStorage.setItem('email', username);
-                        // setTimeout(() => {
+                        setTimeout(() => {
                             setIsloader(false);
                             navigate('/dashboard');
+                        }, 1000);
+                        // localStorage.setItem('email', username);
+                        // // setTimeout(() => {
+                        //     setIsloader(false);
+                        //     navigate('//dashboard');
                     }
                     else
                     {
@@ -133,34 +152,117 @@ const Signup = ({ isSignUp }) => {
     }
 
     const LoginClick = () => {
-        console.log('username', username, newPassword);
-        setIsloader(true);
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json;charset=utf-8',
-            },
-            mode: "cors",
-            body: JSON.stringify({ email: username, password: newPassword }),
-        };
+        // console.log('username', username, newPassword);
+        // setIsloader(true);
+        // const options = {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json;charset=utf-8',
+        //     },
+        //     mode: "cors",
+        //     body: JSON.stringify({ email: username, password: newPassword }),
+        // };
 
-        fetch(`${serverUrl}/auth/login`, options)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log('data', data);
-                if (data.message) {
+        // fetch(`${serverUrl}/auth/login`, options)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log('data', data);
+        //         if (data.message) {
 
-                    console.log('error msg', data.message);
-                } else {
-                    localStorage.setItem('auth', data.token);
-                    localStorage.setItem('userName', data.user.name);
-                    localStorage.setItem('userInfo', JSON.stringify(data.user));
-                    localStorage.setItem('role', data.user.role);
-                    localStorage.setItem('email', username);
-                    navigate('/dashboard');
-                    setIsloader(false);
-                }
-            });
+        //             console.log('error msg', data.message);
+        //         } else {
+        //             localStorage.setItem('auth', data.token);
+        //             localStorage.setItem('userName', data.user.name);
+        //             localStorage.setItem('userInfo', JSON.stringify(data.user));
+        //             localStorage.setItem('role', data.user.role);
+        //             localStorage.setItem('email', username);
+        //             navigate('//dashboard');
+        //             setIsloader(false);
+        //         }
+        //     });
+        const payload={
+            email: username, 
+            password: newPassword 
+       }
+       return axios.post(`${serverUrl}/auth/login`, payload, {
+         headers: {
+            accept: "*/*",
+           "Access-Control-Allow-Origin": "*",
+           withCredentials: true,
+           "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,OPTIONS",
+           "Access-Control-Allow-Headers":
+             "accept, content-type, x-access-token, x-requested-with",
+         },
+       }).then((res)=>{
+           console.log("res log::",res)
+           if(res.data.success)
+           {
+
+               localStorage.setItem('auth',res.data.token);
+               localStorage.setItem('userName', res.data.user.name);
+               localStorage.setItem('role',res.data.user.role);
+               localStorage.setItem('loginUserId', res.data.user._id);
+               localStorage.setItem('userInfo', JSON.stringify(res.data.user));
+               localStorage.setItem('email', username);
+               const UID2 = username.split("@")[0];
+               CometChat.getLoggedinUser().then(
+					user => {						
+					  if(!user){
+						CometChat.login(UID2, ChatAuthKey).then(
+						  loginuser => {
+							console.log("Login Successful:", { loginuser });
+							console.log('2');
+							navigate('/dashboard');  
+						  },
+						  error => {
+							console.log("Login failed with exception:", { error });
+							if(error.code === 'ERR_UID_NOT_FOUND'){
+								const metadataObj = {"email":username, "contactNumber":res.data.user.contact}
+
+								const userinfo = new CometChat.User(UID2);
+
+								userinfo.setName(res.data.user.name);
+								userinfo.setRole(res.data.user.role);
+								userinfo.setMetadata(JSON.stringify(metadataObj))
+								CometChat.createUser(userinfo, ChatAuthKey).then(
+									user2 => {
+										console.log("user created", user2);
+										CometChat.login(UID2, ChatAuthKey).then(
+											loginuser2 => {
+											  console.log("Login Successful:", { loginuser2 });    
+											  navigate('/dashboard');
+											}, loginerror => {
+												console.log("Login failed with exception:", { loginerror });
+											})
+										
+									}, error1 => {
+										console.log("user ---- error", error1);
+										navigate('/dashboard');
+									}
+								)
+							}
+						  }
+						);
+					  }else{
+						// User already logged in
+						navigate('/dashboard');
+						console.log("User already logged in");
+					  }
+					}, error => {
+					  console.log("getLoggedinUser failed with exception:", { error });
+					}
+				);
+                 
+               
+               
+               setIsloader(false);
+           }
+           else{
+               toast.error("Please enter a valid email or something went wrong ", ToastOptions);	
+           }
+       }).catch(()=>{
+                   setIsloader(false);
+               })
     };
     // console.log("status", status);
 
