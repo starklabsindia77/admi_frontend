@@ -80,6 +80,7 @@
 		"i18next-http-backend": "^1.4.0",
 		"jsx-to-string": "^1.4.0",
 		"moment": "^2.29.4",
+		"multiselect-react-dropdown": "^2.0.25",
 		"papaparse": "^5.3.2",
 		"pascalcase": "^2.0.0",
 		"payment": "^2.4.6",

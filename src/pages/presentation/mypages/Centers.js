@@ -126,7 +126,7 @@ const handleChange=(e)=>{
     // const value=e.target.value
     setCenterData((values)=>({...values,[e.target.name]:e.target.value}))
 }
-console.log("centerData:;",centerData)
+// console.log("centerData:;",centerData)
     const getAllRoles = () => {
         const options = {
             method: 'GET',
@@ -176,6 +176,12 @@ console.log("centerData:;",centerData)
                 }
                 // alert('done', d);
                 getStudent();
+                setCenterData({
+                    centerName:'',
+                    pinCode:'',
+                    city:'',
+                    state:''
+                })
                 setAddProductEvent(false)
 
             });

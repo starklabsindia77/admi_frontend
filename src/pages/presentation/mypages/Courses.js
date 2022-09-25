@@ -1,3 +1,4 @@
+
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-unused-vars */
@@ -8,6 +9,7 @@
 /* eslint-disable array-callback-return */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable vars-on-top */
+/* eslint-disable no-plusplus */
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import Papa from 'papaparse';
@@ -353,20 +355,30 @@ const Courses = () => {
         const finalData = [];
         console.log("result data ::", data[0].Course , data[0]["Application Fees"]);
         if(data[0].Course !== undefined && data[0]["Application Fees"] !== undefined ) { 
-            data.map((dat) => {
+            for (let i=0; data.length-1 > i; i++) {
                 finalData.push({
-                    "Course name": dat.Course,
-                    "Application Fees": dat["Application Fees"],
-                    "Study Level": dat["Study Level"],
-                    "University": dat["Name of University/college"],
+                    "Course name": data[i].Course,
+                    "Application Fees": data[i]["Application Fees"],
+                    "Study Level": data[i]["Study Level"],
+                    "University": data[i]["Name of University/college"],
                 })
-            })
+            }
+            // data.map((dat) => {
+            //     finalData.push({
+            //         "Course name": dat.Course,
+            //         "Application Fees": dat["Application Fees"],
+            //         "Study Level": dat["Study Level"],
+            //         "University": dat["Name of University/college"],
+            //     })
+            // })
     
             setUploadedData(finalData);
             setUploadedData2(data);
             setOpenData(true);
+        }else{
+            toast.warn("Please Import correct excel format with correct headers ", ToastOptions);
         }
-        toast.warn("Please Import correct excel format with correct headers ", ToastOptions);
+        
         
 
     }

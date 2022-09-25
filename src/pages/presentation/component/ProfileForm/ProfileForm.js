@@ -68,53 +68,86 @@ function ProfileForm() {
 	const [maleValue, setMaleValue] = useState(false);
 	const [femaleValue, setFemaleValue] = useState(false);
 	const getProfileData = () => {
-		const options = {
-			method: 'GET',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
-				authorization: authToken,
-			},
-		};
-
-		fetch(`${serverUrl}/profile/${contactInformation.email}`, options)
-			.then((response) => response.json())
-			.then((d) => {
-				// console.log('data', d);
-				if (d.error) {
-					console.log('error msg', d.error);
-				} else if (d.result.length > 0) {
-					const ss = d.result;
-					console.log('userInfo Result', ss);
-					setProfileData(ss[0].guid);
-					if (ss[0].gender === 'male') {
-						setMaleValue(true);
-					} else {
-						setFemaleValue(true);
-					}
-					setPersonalInformation({
-						fName: ss[0].fName,
-						mName: ss[0].mName,
-						lName: ss[0].lName,
-						dob: ss[0].dob,
-						firstLanguages: ss[0].firstLanguages,
-						country: ss[0].country,
-						gender: ss[0].gender,
-						martialStatus: ss[0].martialStatus,
-						passportNumber: ss[0].passportNumber,
-						passportExpiryDate: ss[0].passportExpiryDate,
-					});
-					setAddressInformation({
-						address: ss[0].address,
-						addressLine: ss[0].addressLine,
-						city: ss[0].city,
-						state: ss[0].state,
-						zip: ss[0].zip,
-					});
-					setContactInformation({
-						phoneNumber: ss[0].phoneNumber,
-					});
-				}
+		const ss = JSON.parse(localStorage.getItem('userInfo')).profile;
+		const isEmpty = Object.keys(ss).length === 0;
+		if (isEmpty) {
+			setProfileData(ss.guid);
+			if (ss.gender === 'male') {
+				setMaleValue(true);
+			} else {
+				setFemaleValue(true);
+			}
+			setPersonalInformation({
+				fName: ss.fName,
+				mName: ss.mName,
+				lName: ss.lName,
+				dob: ss.dob,
+				firstLanguages: ss.firstLanguages,
+				country: ss.country,
+				gender: ss.gender,
+				martialStatus: ss.martialStatus,
+				passportNumber: ss.passportNumber,
+				passportExpiryDate: ss.passportExpiryDate,
 			});
+			setAddressInformation({
+				address: ss.address,
+				addressLine: ss.addressLine,
+				city: ss.city,
+				state: ss.state,
+				zip: ss.zip,
+			});
+			setContactInformation({
+				phoneNumber: ss.phoneNumber,
+			});
+		}
+
+		// const options = {
+		// 	method: 'GET',
+		// 	headers: {
+		// 		'Content-Type': 'application/json;charset=utf-8',
+		// 		authorization: authToken,
+		// 	},
+		// };
+
+		// fetch(`${serverUrl}/profile/${contactInformation.email}`, options)
+		// 	.then((response) => response.json())
+		// 	.then((d) => {
+		// 		// console.log('data', d);
+		// 		if (d.error) {
+		// 			console.log('error msg', d.error);
+		// 		} else if (d.result.length > 0) {
+		// 			const ss = d.result;
+		// 			console.log('userInfo Result', ss);
+		// 			setProfileData(ss[0].guid);
+		// 			if (ss[0].gender === 'male') {
+		// 				setMaleValue(true);
+		// 			} else {
+		// 				setFemaleValue(true);
+		// 			}
+		// 			setPersonalInformation({
+		// 				fName: ss[0].fName,
+		// 				mName: ss[0].mName,
+		// 				lName: ss[0].lName,
+		// 				dob: ss[0].dob,
+		// 				firstLanguages: ss[0].firstLanguages,
+		// 				country: ss[0].country,
+		// 				gender: ss[0].gender,
+		// 				martialStatus: ss[0].martialStatus,
+		// 				passportNumber: ss[0].passportNumber,
+		// 				passportExpiryDate: ss[0].passportExpiryDate,
+		// 			});
+		// 			setAddressInformation({
+		// 				address: ss[0].address,
+		// 				addressLine: ss[0].addressLine,
+		// 				city: ss[0].city,
+		// 				state: ss[0].state,
+		// 				zip: ss[0].zip,
+		// 			});
+		// 			setContactInformation({
+		// 				phoneNumber: ss[0].phoneNumber,
+		// 			});
+		// 		}
+		// 	});
 	};
 
 	useEffect(() => {
@@ -178,29 +211,32 @@ function ProfileForm() {
 			...contactInformation,
 			userId: userInfo.guid,
 		};
+		try {
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8',
+					authorization: authToken,
+				},
+				body: JSON.stringify(info),
+			};
 
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
-				authorization: authToken,
-			},
-			body: JSON.stringify(info),
-		};
-
-		fetch(`${serverUrl}/profile/add`, options)
-			.then((response) => response.json())
-			.then((d) => {
-				// console.log('data', d);
-				if (d.error) {
-					console.log('error msg', d.error);
-				} else if (d.result) {
-					const ss = d.result;
-					console.log('userInfo Result', ss);
-					navigate('/dashboard');
-					// setApplicationList(ss)
-				}
-			});
+			fetch(`${serverUrl}/profile/add`, options)
+				.then((response) => response.json())
+				.then((d) => {
+					// console.log('data', d);
+					if (d.error) {
+						console.log('error msg', d.error);
+					} else if (d.result) {
+						const ss = d.result;
+						console.log('userInfo Result', ss);
+						navigate('/dashboard');
+						// setApplicationList(ss)
+					}
+				});
+		} catch (err) {
+			console.log('error msg', err);
+		}
 	};
 
 	const genralUpdate = () => {

@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-useless-escape */
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -86,7 +87,8 @@ const Login = ({ isSignUp }) => {
 		  }).then((res)=>{
 			if(res.data.success){
 				const {data} = res;
-				setOpenData(true);
+				// setOpenData(true);
+				toast.success("Account Created Successfully", ToastOptions);
 				localStorage.setItem('auth', data.token);
 				localStorage.setItem('userName', name);
 				localStorage.setItem('role', role);
@@ -157,35 +159,6 @@ const Login = ({ isSignUp }) => {
 	}
 
 	const LoginClick = () => {
-		// console.log('username', username, newPassword);
-		// setIsloader(true);
-		// const options = {
-		// 	method: 'POST',
-		// 	headers: {
-		// 		'Content-Type': 'application/json;charset=utf-8',
-		// 	},
-		// 	body: JSON.stringify({ email: username, password: newPassword }),
-		// };
-
-		// fetch(`${serverUrl}/auth/login`, options)
-		// 	.then((response) => response.json())
-		// 	.then((data) => {
-		// 		console.log('data', data);
-		// 		if (data.message) {
-		// 			console.log('error msg', data.message);
-		// 		} else {
-		// 			localStorage.setItem('auth', data.token);
-		// 			localStorage.setItem('userName', data.user.name);
-		// 			localStorage.setItem('role', data.user.role);
-		// 			localStorage.setItem('loginUserId', data.user._id);
-		// 			localStorage.setItem('userInfo', JSON.stringify(data.user));
-		// 			localStorage.setItem('email', username);
-		// 			navigate('/dashboard');
-		// 			setIsloader(false);
-		// 		}
-		// 	}).catch(()=>{
-		// 		setIsloader(false);
-		// 	})
 		const payload={
 			 email: username, 
 			 password: newPassword 
@@ -204,6 +177,7 @@ const Login = ({ isSignUp }) => {
 			if(res.data.success)
 			{
 				console.log('0');
+				toast.success("Login Successfully", ToastOptions);
 				localStorage.setItem('auth',res.data.token);
 				localStorage.setItem('userName', res.data.user.name);
 				localStorage.setItem('role',res.data.user.role);
@@ -280,15 +254,18 @@ const Login = ({ isSignUp }) => {
 	const handleOnClick = () => {
 		navigate('auth/sign-up');
 	};
-const emailVerify=()=>{
-	if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username)){
+	 
+	const emailVerify=()=>{
+		const verify = username.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) 
+        console.log("email verify", verify)
+		if(verify){
 
-		setUsernameInput(true)
+			setUsernameInput(true)
+		}
+		else{
+			toast.error("Please enter a valid email ", ToastOptions);
+		}
 	}
-	else{
-		toast.error("Please enter a valid email ", ToastOptions);
-	}
-}
 	const loader = {
 		position: "fixed",	
 		top: "0",	
@@ -456,7 +433,9 @@ const emailVerify=()=>{
 													<Button
 														color='warning'
 														className='w-100 py-3'
-														onClick={emailVerify}>
+														// onClick={() => setUsernameInput(true)}
+														onClick={emailVerify}
+														>
 														Continue
 													</Button>
 												) : (

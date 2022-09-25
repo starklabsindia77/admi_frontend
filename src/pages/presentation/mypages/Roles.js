@@ -192,6 +192,7 @@ const Roles = () => {
 
     const editProduct = (guidinfo) => {
         console.log('guid', guidinfo)
+        setName('');
         getSingleStudent(guidinfo);
     }
 
@@ -200,6 +201,7 @@ const Roles = () => {
         setUpcomingEventsEditOffcanvas(!upcomingEventsEditOffcanvas);
     };
     const handleAddProduct = () => {
+        setName('');
         setAddProductEvent(!addProductEvent);
     }
     // END :: Upcoming Events

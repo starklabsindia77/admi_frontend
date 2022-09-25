@@ -1,7 +1,9 @@
+
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable no-console */
 /* eslint-disable no-unused-vars */
 /* eslint-disable prettier/prettier */
+/* eslint-disable no-useless-escape */
 import React, { useState, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import PropTypes from 'prop-types';
@@ -87,7 +89,11 @@ const Signup = ({ isSignUp }) => {
     const signupClick = () => {
         // setOpenData(true);
         // createPdfFromHtml("<h1>Hello World</h1>");
-        if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username)){
+        const verify = username.match(/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/) 
+        console.log("email verify", verify) 
+        // if(/^\w+([-]?\w+)*@\w+([-]?\w+)*(\.\w{2,3})+$/.test(username))
+        if(verify !== null)
+        {
     
         const userData = { 'name': name, 'email': username, 'password': newPassword, 'contact': contact, 'role': role };
         console.log("data", userData);
@@ -108,7 +114,8 @@ const Signup = ({ isSignUp }) => {
               
                 if(data.success)
                 {
-                        setOpenData(true);
+                        // setOpenData(true);
+                        toast.success("Account Created Successfully", ToastOptions);
                         localStorage.setItem('userInfo', JSON.stringify(data.result));
                         localStorage.setItem('auth', data.token);
                         localStorage.setItem('userName', name);
@@ -197,7 +204,7 @@ const Signup = ({ isSignUp }) => {
            console.log("res log::",res)
            if(res.data.success)
            {
-
+                toast.success("Login Successfully", ToastOptions);
                localStorage.setItem('auth',res.data.token);
                localStorage.setItem('userName', res.data.user.name);
                localStorage.setItem('role',res.data.user.role);

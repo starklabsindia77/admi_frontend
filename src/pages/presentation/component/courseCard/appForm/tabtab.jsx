@@ -1,4 +1,3 @@
-
 /* eslint-disable eslint-comments/disable-enable-pair */
 /* eslint-disable react/destructuring-assignment */
 /* eslint-disable react-hooks/exhaustive-deps */
@@ -18,22 +17,22 @@ import Textarea from '../../../../../components/bootstrap/forms/Textarea';
 import { serverUrl } from '../../../../../config';
 
 const ToastOptions = {
-	position: "top-center",
+	position: 'top-center',
 	autoClose: 5000,
 	hideProgressBar: true,
 	closeOnClick: true,
 	pauseOnHover: true,
 	draggable: true,
 	progress: undefined,
-  }
+};
 const TabTab = (data) => {
 	const navigate = useNavigate();
 	const [inputValue, setInputValue] = useState('');
 	const [role, setRole] = useState();
 	const [one, setOne] = useState(data.data.data);
-	const [studentList,setStudentList]=useState([])
-	const loginUser=JSON.parse(localStorage.getItem("userInfo"))
-	console.log("loginUser::",loginUser)
+	const [studentList, setStudentList] = useState([]);
+	const loginUser = JSON.parse(localStorage.getItem('userInfo'));
+	console.log('loginUser::', loginUser);
 	const [collegeInfo, setcollegeInfo] = useState({
 		country: one.university.country,
 		preferCollege: one.university.name,
@@ -44,16 +43,16 @@ const TabTab = (data) => {
 		ApplicationID:
 			Math.random().toString(36).substring(2, 15) +
 			Math.random().toString(36).substring(2, 15),
-	
+
 		CourseID: one._id,
 		AppType: 'general',
-		AgentId:'',
-		studentInfo:{},
-		stdId:Math.floor(Math.random() * (99999-20000+ 1))
+		AgentId: '',
+		studentInfo: {},
+		stdId: Math.floor(Math.random() * (99999 - 20000 + 1)),
 	});
 	const [openData, setOpenData] = useState(false);
 	const authToken = localStorage.getItem('auth');
-	const [studentData,setStudentData]=useState(null)
+	const [studentData, setStudentData] = useState(null);
 	const handleClose = () => {
 		setOpenData(false);
 	};
@@ -62,7 +61,7 @@ const TabTab = (data) => {
 			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
-				'authorization': authToken
+				authorization: authToken,
 			},
 		};
 
@@ -73,18 +72,26 @@ const TabTab = (data) => {
 				if (d.error) {
 					console.log('error msg', d.error);
 				} else if (d.user.length > 0) {
-					console.log('result', d.user)
-					const ss = d.user.filter(val => val.role && val.role.toString().toLowerCase().includes("student"))
+					console.log('result', d.user);
+					const ss = d.user.filter(
+						(val) => val.role && val.role.toString().toLowerCase().includes('student'),
+					);
 					// setStudentList(ss)
-					if(loginUser.role === 'Agent') {
-						const filterData= ss.filter(val => val.agentId && val.agentId.toString().toLowerCase().includes(loginUser._id.toLowerCase()))
-						 console.log("filterData::",filterData)
-						setStudentList(filterData)
-					 }
-				 }
-				
+					if (loginUser.role === 'Agent') {
+						const filterData = ss.filter(
+							(val) =>
+								val.agentId &&
+								val.agentId
+									.toString()
+									.toLowerCase()
+									.includes(loginUser._id.toLowerCase()),
+						);
+						console.log('filterData::', filterData);
+						setStudentList(filterData);
+					}
+				}
 			});
-	}
+	};
 
 	const userInfo = () => {
 		const userInfoName = JSON.parse(localStorage.getItem('userInfo'));
@@ -98,96 +105,90 @@ const TabTab = (data) => {
 	};
 
 	const submitApplication = () => {
-		if(loginUser.role.toLowerCase()==="student")
-		{
-				// setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
-				collegeInfo.studentInfo=loginUser
-			}
-			if(Object.keys(collegeInfo.studentInfo).length>0)
-			{
-
-			
-			console.log('submit', collegeInfo);
-		const options = {
-			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json;charset=utf-8',
-				authorization: authToken,
-			},
-			body: JSON.stringify(collegeInfo),
-		};
-
-		fetch(`${serverUrl}/application/add`, options)
-			.then((response) => response.json())
-			.then((d) => {
-				// console.log('data', d);
-				if (d.error) {
-					console.log('error msg', d.error);
-				} else if (d.result.length > 0) {
-					const ss = d.result;
-					if(ss === 'Done'){
-						setTimeout(()=>{
-
-							navigate('/applications');
-						},1000)
-					}
-					console.log('submit result', ss)
-				}
-			});
+		if (loginUser.role.toLowerCase() === 'student') {
+			// setcollegeInfo({...collegeInfo,studentInfo:loginUser})
+			collegeInfo.studentInfo = loginUser;
 		}
-		else
-		{
-			toast.error("Please select Student ! ", ToastOptions);
+		if (Object.keys(collegeInfo.studentInfo).length > 0) {
+			console.log('submit', collegeInfo);
+			const options = {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json;charset=utf-8',
+					authorization: authToken,
+				},
+				body: JSON.stringify(collegeInfo),
+			};
+
+			fetch(`${serverUrl}/application/add`, options)
+				.then((response) => response.json())
+				.then((d) => {
+					// console.log('data', d);
+					if (d.error) {
+						console.log('error msg', d.error);
+					} else if (d.result.length > 0) {
+						const ss = d.result;
+						if (ss === 'Done') {
+							setTimeout(() => {
+								navigate('/applications');
+							}, 1000);
+						}
+						console.log('submit result', ss);
+					}
+				});
+		} else {
+			toast.error('Please select Student ! ', ToastOptions);
 		}
 	};
-console.log("collegeInfo::",collegeInfo)
+	console.log('collegeInfo::', collegeInfo);
 	useEffect(() => {
-		if(loginUser.role&&loginUser.role.toLowerCase()==="agent")
-		{
-
-			setcollegeInfo({...collegeInfo,AgentId:loginUser._id})
+		if (loginUser.role && loginUser.role.toLowerCase() === 'agent') {
+			setcollegeInfo({ ...collegeInfo, AgentId: loginUser._id });
 		}
-	 if(loginUser.role.toLowerCase()==="student")
-		{
-			setcollegeInfo({...collegeInfo,studentInfo:loginUser})	
+		if (loginUser.role.toLowerCase() === 'student') {
+			setcollegeInfo({ ...collegeInfo, studentInfo: loginUser });
 		}
 		userInfo();
-		getStudent()
+		getStudent();
 	}, []);
 	return (
 		<Stack maxWidth='100%'>
 			<Stack direction='row' justifyContent='space-around'>
 				<Stack>
-					{loginUser.role&&loginUser.role.toLowerCase()==="agent"&&
-				<Box pt={2} pb={2}>
-				<FormGroup id='center' isFloating>
-                                    <Autocomplete
-                                        disablePortal
-                                        id="combo-box-demo"
-                                        // options={studentList.map((option) => option)}
-                                        // value={collegeInfo.StudentID}
-										options={studentList}
-										getOptionSelected={(option, value) => option.name === value.name}
-										autoHighlight
-										getOptionLabel={(option) => option.name}
-										// value={windData.loc_id!==0?locationList.filter((value)=>{
-										//   return value._id._str==windData.loc_id._str
-					
-										// }):null}
-										value={studentData}
-                                        onChange={(event, newValue) => {
-                                            setcollegeInfo({...collegeInfo, studentInfo:newValue});
-											setStudentData(newValue)
-                                        }}
-                                        // inputValue={inputValue}
-                                        // onInputChange={(event, newInputValue) => {
-                                        //     setInputValue(newInputValue);
-                                        // }}
-                                        renderInput={(params) => <TextField {...params} label="Student List" />}
-                                    />
-                                </FormGroup>
-</Box>
-}
+					{loginUser.role && loginUser.role.toLowerCase() === 'agent' && (
+						<Box pt={2} pb={2}>
+							<FormGroup id='center' isFloating>
+								<Autocomplete
+									disablePortal
+									id='combo-box-demo'
+									// options={studentList.map((option) => option)}
+									// value={collegeInfo.StudentID}
+									options={studentList}
+									getOptionSelected={(option, value) =>
+										option.name === value.name
+									}
+									autoHighlight
+									getOptionLabel={(option) => option.name}
+									// value={windData.loc_id!==0?locationList.filter((value)=>{
+									//   return value._id._str==windData.loc_id._str
+
+									// }):null}
+									value={studentData}
+									onChange={(event, newValue) => {
+										setcollegeInfo({ ...collegeInfo, studentInfo: newValue });
+										setStudentData(newValue);
+									}}
+									// inputValue={inputValue}
+									// onInputChange={(event, newInputValue) => {
+									//     setInputValue(newInputValue);
+									// }}
+									renderInput={(params) => (
+										<TextField {...params} label='Student List' />
+									)}
+								/>
+							</FormGroup>
+						</Box>
+					)}
 					<Box pt={2} pb={2}>
 						<FormGroup id='preferCollege' label='Prefer College' isFloating>
 							<Input
@@ -305,17 +306,19 @@ console.log("collegeInfo::",collegeInfo)
 					</Grid>
 				</Stack>
 			</Stack>
-			<div><ToastContainer
-            position="top-center"
-            autoClose={5000}
-            hideProgressBar
-            newestOnTop={false}
-            closeOnClick
-            rtl={false}
-            pauseOnFocusLoss
-            draggable
-            pauseOnHover
-          /></div>
+			<div>
+				<ToastContainer
+					position='top-center'
+					autoClose={5000}
+					hideProgressBar
+					newestOnTop={false}
+					closeOnClick
+					rtl={false}
+					pauseOnFocusLoss
+					draggable
+					pauseOnHover
+				/>
+			</div>
 		</Stack>
 	);
 };

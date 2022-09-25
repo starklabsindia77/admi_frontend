@@ -9,6 +9,7 @@ import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { useFormik } from 'formik';
 import { Calendar as DatePicker } from 'react-date-range';
+import { Grid, Divider, Paper, Box, Typography } from '@mui/material';
 import classNames from 'classnames';
 import Checkbox from '@material-ui/core/Checkbox';
 import SubHeader, {
@@ -81,6 +82,14 @@ const Agents = () => {
 	const [role, setRole] = useState('Agent');
 	const [newPassword, setPassword] = useState();
 	const authToken = localStorage.getItem("auth");
+	const [deleteProductEvent, setDeleteProductEvent] = useState(false);
+	const deleteProduct = (guidinfo) => {
+		console.log('guid', guidinfo);
+		setGuid('');
+		
+		getSingleStudent(guidinfo);
+		setDeleteProductEvent(!deleteProductEvent);
+	};
 	const getStudent = () => {
 		const options = {
 			method: 'GET',
@@ -156,6 +165,27 @@ const Agents = () => {
 			});
 
 	}
+
+	const deleteStudent = () => {
+		const options = {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json;charset=utf-8',
+				authorization: authToken,
+			},
+		};
+
+		fetch(`${serverUrl}/auth/user/${guid}`, options)
+			.then((response) => response.json())
+			.then((d) => {
+				console.log('data', d);
+				if (d.error) {
+					console.log('error msg', d.error);
+				}
+				getStudent();
+				setDeleteProductEvent(false);
+			});
+	};
 	useEffect(() => {
 		getStudent();
 	}, []);
@@ -178,24 +208,30 @@ const Agents = () => {
 		fetch(`${serverUrl}/auth/user/${guidinfo}`, options)
 			.then((response) => response.json())
 			.then((d) => {
-				console.log('data single', d);
+				console.log('data single........................', d);
 				if (d.error) {
 					console.log('error msg', d.error);
-				} else if (d.result.length > 0) {
+				} else if (d.success) {
 
-					setGuid(d.result[0].guid)
-					setName(d.result[0].name);
-					setUsername(d.result[0].email);
-					setDob(d.result[0].dob);
-					setContact(d.result[0].contact);
-					setAddProductEvent(!addProductEvent);
+					setGuid(d.result.guid)
+					setName(d.result.name);
+					setUsername(d.result.email);
+					setDob(d.result.dob);
+					setContact(d.result.contact);
+					// setAddProductEvent(!addProductEvent);
 				}
 			});
 	}
 
 	const editProduct = (guidinfo) => {
 		console.log('guid', guidinfo)
+		setGuid('')
+		setName('');
+		setUsername('');
+		setDob('');
+		setContact('');
 		getSingleStudent(guidinfo);
+		setAddProductEvent(!addProductEvent);
 	}
 
 	const [upcomingEventsEditOffcanvas, setUpcomingEventsEditOffcanvas] = useState(false);
@@ -203,6 +239,11 @@ const Agents = () => {
 		setUpcomingEventsEditOffcanvas(!upcomingEventsEditOffcanvas);
 	};
 	const handleAddProduct = () => {
+		setGuid('')
+		setName('');
+		setUsername('');
+		setDob('');
+		setContact('');
 		setAddProductEvent(!addProductEvent);
 	}
 	// END :: Upcoming Events
@@ -245,9 +286,9 @@ const Agents = () => {
 	const [currentPage, setCurrentPage] = useState(1);
 	const [perPage, setPerPage] = useState(PER_COUNT['10']);
 
-	const { items, requestSort, getClassNamesFor } = useSortableData(filteredData);
-	const onCurrentPageItems = dataPagination(items, currentPage, perPage);
-	const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
+	const { items, requestSort, getClassNamesFor } = useSortableData(studentList);
+	// const onCurrentPageItems = dataPagination(items, currentPage, perPage);
+	// const { selectTable, SelectAllCheck } = useSelectTable(onCurrentPageItems);
 
 	return (
 		<PageWrapper title={demoPages.listPages.subMenu.listBoxed.text}>
@@ -258,58 +299,14 @@ const Agents = () => {
 							<CardTitle>
 								Rows:{' '}
 								<small className='ms-2'>
-									{selectTable.values.selectedList.length
+									{/* {selectTable.values.selectedList.length
 										? `${selectTable.values.selectedList.length} / `
-										: null}
+										: null} */}
 									{studentList.length}
 								</small>
 							</CardTitle>
 						</CardLabel>
 						<CardActions>
-							{/* <Dropdown isButtonGroup>
-                                <Popovers
-                                    desc={
-                                        <DatePicker
-                                            onChange={(item) => setDate(item)}
-                                            date={date}
-                                            color={process.env.REACT_APP_PRIMARY_COLOR}
-                                        />
-                                    }
-                                    placement='bottom-end'
-                                    className='mw-100'
-                                    trigger='click'>
-                                    <Button color='success' isLight icon='WaterfallChart'>
-                                        {moment(date).format('MMM Do')}
-                                    </Button>
-                                </Popovers>
-                                <DropdownToggle>
-                                    <Button color='success' isLight />
-                                </DropdownToggle>
-                                <DropdownMenu isAlignmentEnd>
-                                    <DropdownItem>
-                                        <span>Last Hour</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Day</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Week</span>
-                                    </DropdownItem>
-                                    <DropdownItem>
-                                        <span>Last Month</span>
-                                    </DropdownItem>
-                                </DropdownMenu>
-                            </Dropdown>
-                            <Button
-                                color='info'
-                                icon='CloudDownload'
-                                isLight
-                                tag='a'
-                                to='/somefile.txt'
-                                target='_blank'
-                                download>
-                                Export
-                            </Button> */}
 							<Button
 								color={darkModeStatus ? 'light' : 'dark'}
 								isLight
@@ -318,31 +315,19 @@ const Agents = () => {
 							>
 								Add New
 							</Button>
-							{/* <Dropdown className='d-inline'>
-								<DropdownToggle hasIcon={false}>
-									<Button color={themeStatus} icon='MoreHoriz' />
-								</DropdownToggle>
-								<DropdownMenu isAlignmentEnd>
-									<DropdownItem>
-										<Button icon='Edit'>Edit</Button>
-									</DropdownItem>
-									<DropdownItem>
-										<Button icon='Delete'>Delete</Button>
-									</DropdownItem>
-								</DropdownMenu>
-							</Dropdown> */}
+							
 						</CardActions>
 					</CardHeader>
 					<CardBody className='table-responsive' isScrollable>
 						<table className='table table-modern table-hover'>
 							<thead>
 								<tr>
-									<th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th>
+									{/* <th scope='col' style={{ width: 60 }}>{SelectAllCheck}</th> */}
 
 
 									<th scope='col'>Name</th>
 									<th scope='col'>Email</th>
-									<th scope='col'>DOB</th>
+									{/* <th scope='col'>DOB</th> */}
 									<th scope='col'>Contact</th>
 									<th scope='col' >
 										Actions
@@ -351,17 +336,17 @@ const Agents = () => {
 							</thead>
 							<tbody>
 
-								{studentList.length > 0 && studentList.map((item) => (
+								{studentList.length > 0 && dataPagination(items, currentPage, perPage).map((item) => (
 									<tr key={item.guid}>
-										<td>
+										{/* <td>
 											<Checkbox
 												id="myCheck"
 												checked={item.checked}
 											/>
-										</td>
+										</td> */}
 										<td>{item.name}</td>
 										<td>{item.email}</td>
-										<td>{item.dob}</td>
+										{/* <td>{item.dob}</td> */}
 										<td>{item.contact}</td>
 										<td>
 											<Button
@@ -376,6 +361,18 @@ const Agents = () => {
 											>
 												Edit
 											</Button>
+											<Button
+													isOutline={!darkModeStatus}
+													color='dark'
+													isLight={darkModeStatus}
+													className={classNames('text-nowrap', {
+														'border-light': !darkModeStatus,
+													})}
+													icon='Delete'
+													style={{ marginLeft: 10 }}
+													onClick={() => deleteProduct(item.guid)}>
+														Delete
+												</Button>
 										</td>
 									</tr>
 								))}
@@ -447,7 +444,7 @@ const Agents = () => {
 									/>
 								</FormGroup>
 							</div>
-							<div className='col-6'>
+							{/* <div className='col-6'>
 								<FormGroup id='date' label='DOB' isFloating>
 									<Input
 										placeholder='DOB'
@@ -457,7 +454,7 @@ const Agents = () => {
 
 									/>
 								</FormGroup>
-							</div>
+							</div> */}
 							{/* <div className='col-6'>
                                 <FormGroup id='time' label='UPC' isFloating>
                                     <Input
@@ -636,6 +633,32 @@ const Agents = () => {
 							</Button>
 						)}
 
+					</ModalFooter>
+				</Modal>
+				<Modal
+					setIsOpen={setDeleteProductEvent}
+					isOpen={deleteProductEvent}
+					titleId='upcomingEdit'
+					isCentered
+					isScrollable
+					size='lg'>
+					<ModalHeader setIsOpen={setDeleteProductEvent}>
+						
+							<OffCanvasTitle id='upcomingEdit'>Delete Agent</OffCanvasTitle>
+						
+						{/* <OffCanvasTitle id='upcomingEdit'>Add Product</OffCanvasTitle> */}
+					</ModalHeader>
+					<ModalBody>
+						<Grid container spacing={1} p={2}>
+								Are You Sure to Delete the Agent account					
+						</Grid>
+					</ModalBody>
+					<ModalFooter className='bg-transparent'>
+					
+							<Button color='info' className='w-100' onClick={deleteStudent}>
+								Delete
+							</Button>
+						
 					</ModalFooter>
 				</Modal>
 			</Page>

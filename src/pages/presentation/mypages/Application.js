@@ -130,15 +130,15 @@ const Application = () => {
 
     const getAllApplication = () => {
         const options = {
-			method: 'POST',
+			method: 'GET',
 			headers: {
 				'Content-Type': 'application/json;charset=utf-8',
 				authorization: authToken,
 			},
-            body:JSON.stringify({role:userInfoName.role,id:userInfoName._id})
+            // body:JSON.stringify({role:userInfoName.role,id:userInfoName._id})
 		};
 
-		fetch(`${serverUrl}/application`, options)
+		fetch(`${serverUrl}/application/${userInfoName.role}/${userInfoName._id}`, options)
 			.then((response) => response.json())
 			.then((d) => {
 				// console.log('data', d);
@@ -157,6 +157,10 @@ const Application = () => {
         }else if (userInfoName.role === 'admin'){
             getAllApplication();
         }else if (userInfoName.role === 'Agent'){
+            getAllApplication();
+        }else if (userInfoName.role === 'Manager'){
+            getAllApplication();
+        }else if (userInfoName.role === 'CRO'){
             getAllApplication();
         }
         

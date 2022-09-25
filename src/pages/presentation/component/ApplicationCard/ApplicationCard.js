@@ -126,11 +126,12 @@ function ApplicationCard({ data, wishData }) {
 				'Content-Type': 'application/json;charset=utf-8',
 				authorization: authToken,
 			},
-			body:JSON.stringify({
-				stdId:data.StudentID,role:userInfoName.role,agentId:data.AgentId
-			})
+			body: JSON.stringify({
+				stdId: data.StudentID,
+				role: userInfoName.role,
+				agentId: data.AgentId,
+			}),
 		};
-		
 
 		fetch(`${serverUrl}/auth/roleUser`, options)
 			.then((response) => response.json())
@@ -159,7 +160,7 @@ function ApplicationCard({ data, wishData }) {
 		fetch(`${serverUrl}/stages/${data.country}`, options)
 			.then((response) => response.json())
 			.then((d) => {
-				// console.log('data', d);
+				console.log('data', d);
 				if (d.error) {
 					console.log('error msg', d.error);
 				} else if (d.result.length > 0) {
@@ -364,7 +365,9 @@ function ApplicationCard({ data, wishData }) {
 					<div style={{ marginBottom: '-5px' }}>
 						<h5>
 							{/* {userData && userData.name ? userData.name : 'Sahil Batra'} */}
-							{data && data.studentInfo&&data.studentInfo.name ? data.studentInfo.name : 'NA'}
+							{data && data.studentInfo && data.studentInfo.name
+								? data.studentInfo.name
+								: 'NA'}
 							<Button
 								variant='contained'
 								style={{
@@ -393,27 +396,41 @@ function ApplicationCard({ data, wishData }) {
 					</div>
 					<Stack direction='row'>
 						<Button variant='text' size='medium' startIcon={<LocalPhoneIcon />}>
-							{data &&data.studentInfo&& data.studentInfo.contact ? data.studentInfo.contact : '9999219809'}
+							{data && data.studentInfo && data.studentInfo.contact
+								? data.studentInfo.contact
+								: '9999219809'}
 						</Button>
 						<Button variant='text' size='medium' startIcon={<EmailIcon />}>
 							{/* {userData && userData.email ? userData.email : 'sahil@yopmail.com'} */}
-							{data&&data.studentInfo&& data.studentInfo.email ? data.studentInfo.email : 'NA'}
+							{data && data.studentInfo && data.studentInfo.email
+								? data.studentInfo.email
+								: 'NA'}
 						</Button>
-						<Button variant='text' size='medium' startIcon={<CalendarMonthIcon />}>
-							{/* {userData && userData.dob ? userData.dob : 'NA'} */}
-							{data &&data.studentInfo&& data.studentInfo.dob ? data.studentInfo.dob : 'NA'}
-						</Button>
+						{data && data.studentInfo && data.studentInfo.dob ? (
+							<Button variant='text' size='medium' startIcon={<CalendarMonthIcon />}>
+								{data.studentInfo.dob}
+							</Button>
+						) : (
+							''
+						)}
 					</Stack>
 					<div style={{ marginBottom: '-5px' }}>
 						<p>
-							Indu Sharma (Study Advisor)
-							<small className='ms-2'>+1 Study Advisor</small>
+							{data && data.CRO && data.CRO.name
+								? data.CRO.name
+								: 'No one is assigned till now'}{' '}
+							(Study Advisor)
+							{/* <small className='ms-2'>+1 Study Advisor</small> */}
 						</p>
 					</div>
 				</Grid>
 				<Grid item xs={3}>
 					<Stack direction='row' justifyContent='flex-end' p={1}>
-						{data&&data.studentInfo&&data.studentInfo.role === 'Student' && data && data.status === 'new' ? (
+						{data &&
+						data.studentInfo &&
+						data.studentInfo.role === 'Student' &&
+						data &&
+						data.status === 'new' ? (
 							<Button
 								style={{ width: '180px', height: '50px', mt: '30px' }}
 								variant='outlined'
@@ -421,7 +438,7 @@ function ApplicationCard({ data, wishData }) {
 								startIcon={<EditIcon />}>
 								Edit Application
 							</Button>
-						) :data&&data.studentInfo&& data.studentInfo.role === 'admin' ? (
+						) : data && data.studentInfo && data.studentInfo.role === 'admin' ? (
 							<Button
 								style={{ width: '180px', height: '50px', mt: '30px' }}
 								variant='outlined'
